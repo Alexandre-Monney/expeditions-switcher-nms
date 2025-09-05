@@ -73,6 +73,9 @@ body {
     cursor: pointer;
     transition: all 0.2s ease;
     text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 16px;
 }
 
 .platform-btn:hover {
@@ -84,6 +87,45 @@ body {
     border-color: #2a5298;
     background: #2a5298;
     color: white;
+}
+
+.platform-logo {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.platform-logo img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    filter: brightness(0.8);
+    transition: filter 0.2s ease;
+}
+
+.platform-btn[data-platform="msstore"] .platform-logo img {
+    max-width: 70%;
+    max-height: 70%;
+}
+
+.platform-btn[data-platform="gog"] .platform-logo img {
+    max-width: 120%;
+    max-height: 120%;
+}
+
+.platform-btn:hover .platform-logo img {
+    filter: brightness(1);
+}
+
+.platform-btn.selected .platform-logo img {
+    filter: brightness(0) invert(1);
+}
+
+.platform-info {
+    flex: 1;
 }
 
 .platform-btn strong {
