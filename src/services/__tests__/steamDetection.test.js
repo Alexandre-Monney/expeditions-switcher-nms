@@ -8,6 +8,7 @@ jest.mock('fs');
 jest.mock('path');
 jest.mock('os');
 
+
 describe('SteamDetection', () => {
   let mockHomedir = '/mock/home';
   let mockAppDataPath = '/mock/appdata';
