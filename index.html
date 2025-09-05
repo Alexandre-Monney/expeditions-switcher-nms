@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NMS Expedition Manager</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Setup Screen -->
+        <div id="setup-screen" class="screen hidden">
+            <div class="setup-container">
+                <h1>🚀 NMS Expedition Manager</h1>
+                <p class="setup-description">Configurons votre plateforme de jeu pour commencer</p>
+                
+                <div class="platform-selection">
+                    <h3>Sélectionnez votre plateforme :</h3>
+                    <div class="platform-options">
+                        <button class="platform-btn" data-platform="steam">
+                            <strong>Steam</strong>
+                            <span>Version Steam de No Man's Sky</span>
+                        </button>
+                        <button class="platform-btn" data-platform="msstore">
+                            <strong>Microsoft Store</strong>
+                            <span>Version Windows Store</span>
+                        </button>
+                        <button class="platform-btn" data-platform="gog">
+                            <strong>GOG</strong>
+                            <span>Version GOG de No Man's Sky</span>
+                        </button>
+                        <button class="platform-btn" data-platform="gamepass">
+                            <strong>Xbox Game Pass</strong>
+                            <span>Version Game Pass PC</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Steam ID Selection -->
+                <div id="steam-section" class="steam-section hidden">
+                    <h3>Configuration Steam :</h3>
+                    <div id="steam-detection" class="steam-detection">
+                        <button id="detect-steam-btn" class="detect-btn">🔍 Détecter automatiquement</button>
+                        <div id="steam-results" class="steam-results"></div>
+                    </div>
+                </div>
+
+                <div class="setup-actions">
+                    <button id="setup-continue-btn" class="continue-btn" disabled>Continuer</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Screen -->
+        <div id="main-screen" class="screen hidden">
+            <div class="main-header">
+                <h1>🚀 NMS Expedition Manager</h1>
+                <div class="current-platform">
+                    <span id="current-platform-info">Chargement...</span>
+                    <button id="change-platform-btn" class="change-platform-btn">⚙️ Changer de plateforme</button>
+                </div>
+            </div>
+            <div id="main-content">
+                <!-- Contenu principal sera ajouté ici -->
+                <p>Application configurée avec succès !</p>
+                <p>Prochaines fonctionnalités à venir...</p>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div id="loading-screen" class="screen">
+            <div class="loading-container">
+                <h1>🚀 NMS Expedition Manager</h1>
+                <div class="loading-spinner"></div>
+                <p>Chargement de la configuration...</p>
+            </div>
+        </div>
+    </div>
+    <script src="renderer.js"></script>
+</body>
+</html>
