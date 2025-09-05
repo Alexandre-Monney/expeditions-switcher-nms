@@ -13,5 +13,6 @@ module.exports = {
   clearMocks: true,
   resetMocks: true,
   restoreMocks: true,
-  verbose: true
+  verbose: true,
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js']
 };

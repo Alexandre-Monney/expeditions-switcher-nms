@@ -8,6 +8,7 @@ jest.mock('fs');
 jest.mock('path');
 jest.mock('os');
 
+
 describe('ConfigManager', () => {
   let configManager;
   let mockHomedir = '/mock/home';
@@ -129,6 +130,103 @@ describe('ConfigManager', () => {
       const result = configManager.buildCachePath('invalid');
       
       expect(result).toBeNull();
+    });
+  });
+
+  describe('Platform Change Functionality', () => {
+    test('should handle platform change by overwriting existing config', () => {
+      // Setup: existing Steam config
+      const existingConfig = {
+        platform: 'steam',
+        steamId: '76561198123456789',
+        firstSetup: false,
+        cachePath: '/old/steam/path'
+      };
+      
+      // New GOG config
+      const newConfig = {
+        platform: 'gog',
+        steamId: null,
+        firstSetup: false,
+        cachePath: '/new/gog/path'
+      };
+
+      fs.existsSync.mockReturnValue(true);
+      fs.mkdirSync.mockReturnValue(undefined);
+      fs.writeFileSync.mockReturnValue(undefined);
+      
+      const result = configManager.saveConfig(newConfig);
+      
+      expect(fs.writeFileSync).toHaveBeenCalledWith(
+        mockConfigFile,
+        JSON.stringify(newConfig, null, 2)
+      );
+      expect(result).toBe(true);
+    });
+
+    test('should reset Steam ID when changing from Steam to non-Steam platform', () => {
+      Object.defineProperty(process, 'platform', { value: 'win32' });
+      
+      // Change from Steam to GOG - steamId should be null
+      const newCachePath = configManager.buildCachePath('gog');
+      
+      expect(newCachePath).toBe('/mock/appdata/HelloGames/NMS/cache');
+      expect(newCachePath).not.toContain('76561198');
+    });
+
+    test('should preserve Steam ID when changing from non-Steam to Steam platform', () => {
+      Object.defineProperty(process, 'platform', { value: 'win32' });
+      
+      // Change from GOG to Steam - should accept new steamId
+      const newSteamId = '76561198987654321';
+      const newCachePath = configManager.buildCachePath('steam', newSteamId);
+      
+      expect(newCachePath).toBe('/mock/appdata/HelloGames/NMS/76561198987654321/cache');
+      expect(newCachePath).toContain(newSteamId);
+    });
+
+    test('should handle platform change between non-Steam platforms', () => {
+      Object.defineProperty(process, 'platform', { value: 'win32' });
+      
+      // Change from MS Store to Game Pass - both should have same cache path
+      const msStorePath = configManager.buildCachePath('msstore');
+      const gamePassPath = configManager.buildCachePath('gamepass');
+      
+      expect(msStorePath).toBe('/mock/appdata/HelloGames/NMS/cache');
+      expect(gamePassPath).toBe('/mock/appdata/HelloGames/NMS/cache');
+      expect(msStorePath).toEqual(gamePassPath);
+    });
+
+    test('should clear firstSetup flag when changing platform', () => {
+      const platformChangeConfig = {
+        platform: 'gog',
+        steamId: null,
+        firstSetup: false, // Should remain false after platform change
+        cachePath: '/new/path'
+      };
+
+      fs.existsSync.mockReturnValue(true);
+      fs.writeFileSync.mockReturnValue(undefined);
+      
+      const result = configManager.saveConfig(platformChangeConfig);
+      
+      expect(result).toBe(true);
+      expect(fs.writeFileSync).toHaveBeenCalledWith(
+        mockConfigFile,
+        expect.stringContaining('"firstSetup": false')
+      );
+    });
+
+    test('should handle save errors gracefully during platform change', () => {
+      const newConfig = { platform: 'gamepass' };
+      
+      fs.writeFileSync.mockImplementation(() => {
+        throw new Error('Disk full');
+      });
+      
+      const result = configManager.saveConfig(newConfig);
+      
+      expect(result).toBe(false);
     });
   });
 });
