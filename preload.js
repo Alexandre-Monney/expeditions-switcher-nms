@@ -8,4 +8,18 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // Steam detection
   detectSteamIds: () => ipcRenderer.invoke('steam:detect'),
   getMainSteamId: () => ipcRenderer.invoke('steam:getMain'),
+  
+  // Process monitoring
+  isNMSRunning: () => ipcRenderer.invoke('process:isNMSRunning'),
+  getNMSProcessInfo: () => ipcRenderer.invoke('process:getNMSProcessInfo'),
+  startNMSMonitoring: (interval) => ipcRenderer.invoke('process:startMonitoring', interval),
+  stopNMSMonitoring: () => ipcRenderer.invoke('process:stopMonitoring'),
+  
+  // Process monitoring events
+  onNMSStatusChange: (callback) => {
+    ipcRenderer.on('nms-status-changed', (event, isRunning) => callback(isRunning));
+  },
+  removeNMSStatusListener: () => {
+    ipcRenderer.removeAllListeners('nms-status-changed');
+  }
 });
