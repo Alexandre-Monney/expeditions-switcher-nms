@@ -70,7 +70,17 @@ window.electronAPI = {
   
   // Steam detection
   detectSteamIds: () => Promise<SteamData[]>,
-  getMainSteamId: () => Promise<SteamData>
+  getMainSteamId: () => Promise<SteamData>,
+  
+  // Process monitoring
+  isNMSRunning: () => Promise<boolean>,
+  getNMSProcessInfo: () => Promise<ProcessInfo>,
+  startNMSMonitoring: (interval) => Promise<boolean>,
+  stopNMSMonitoring: () => Promise<boolean>,
+  
+  // Process monitoring events
+  onNMSStatusChange: (callback) => void,
+  removeNMSStatusListener: () => void
 }
 ```
 
@@ -90,12 +100,27 @@ window.electronAPI = {
 # Lancement
 npm start
 
-# Structure créée pour futurs tests
-npm test  # À configurer
+# Tests
+npm test                # Lancer tous les tests (32 tests)
+npm run test:watch      # Mode watch avec relance automatique
+npm run test:coverage   # Avec rapport de couverture
 
 # Build (à configurer)
 npm run build
 ```
+
+## 📊 État des Tests
+
+### Couverture actuelle
+- **ConfigManager**: 11 tests ✅
+- **SteamDetection**: 7 tests ✅  
+- **ProcessMonitor**: 16 tests ✅
+- **Total**: 34 tests, tous passés ✅
+
+### Frameworks utilisés
+- **Jest** pour les tests unitaires
+- **Mocking** des modules fs, path, os, child_process
+- **Coverage** intégré et configuré
 
 ## 📋 Variables d'Environnement
 Aucune pour le moment - Configuration stockée localement.

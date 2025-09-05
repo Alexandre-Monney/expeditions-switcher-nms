@@ -28,14 +28,41 @@ No Man's Sky propose des expéditions événementielles limitées dans le temps.
 - **Communication sécurisée** via `contextBridge` et IPC
 - **Support multi-plateformes** Windows/Mac avec chemins appropriés
 
+## ✅ Fonctionnalités Implémentées
+
+### 🔍 **Système de détection de processus NMS**
+- ✅ Détection multi-plateforme (Windows, macOS, Linux)
+- ✅ Support multiples noms de processus (NMS.exe, NoMansSky.exe, No Man's Sky)
+- ✅ Surveillance temps réel avec callbacks configurables
+- ✅ Extraction informations processus (PID, mémoire, heure de démarrage)
+- ✅ APIs IPC sécurisées pour communication main/renderer
+
+### 🎮 **Interface utilisateur complète**
+- ✅ Setup initial avec sélection de plateforme
+- ✅ Logos officiels des plateformes de jeu intégrés
+- ✅ Détection automatique des Steam IDs
+- ✅ Interface responsive avec effets visuels
+- ✅ Changement de plateforme post-configuration
+
+### 📦 **Bibliothèque d'expéditions**
+- ✅ Métadonnées complètes de **18 expéditions** (2021-2025)
+- ✅ **Fichiers JSON d'expéditions inclus** - Prêt à l'emploi !
+- ✅ Images officielles des posters d'expéditions
+- ✅ Structure organisée et documentée
+- ✅ Validation et gestion d'erreurs
+
+### 🧪 **Framework de tests robuste**
+- ✅ Jest configuré avec **32 tests unitaires**
+- ✅ Couverture complète des services backend
+- ✅ Mocking approprié des modules système
+- ✅ Tests pour tous les cas d'erreur et edge cases
+
 ## 🚧 Fonctionnalités À Développer
 
-### Phase 1 - Fonctionnalités Core
-- [ ] **Détection processus NMS** - Vérifier si le jeu est en cours d'exécution
+### Phase 2 - Fonctionnalités Core
 - [ ] **Détection état fichiers** - Identifier si on est en mode online/offline
 - [ ] **Système de swap fichiers** - Logique de remplacement sécurisé avec backups
-- [ ] **Bibliothèque expéditions** - Gestion des fichiers JSON d'expéditions
-- [ ] **Interface principale** - Select d'expéditions + boutons d'action
+- [ ] **Interface principale dynamique** - Select d'expéditions + boutons d'action
 
 ### Phase 2 - Améliorations UX  
 - [ ] **Validation sécurité** - Vérifications avant manipulation fichiers
@@ -73,25 +100,47 @@ No Man's Sky propose des expéditions événementielles limitées dans le temps.
 - Node.js 16+
 - No Man's Sky installé sur une des plateformes supportées
 
+### Installation
+```bash
+git clone https://github.com/Alexandre-Monney/expeditions-switcher-nms.git
+cd expeditions-switcher-nms
+npm install
+```
+
 ### Lancement
 ```bash
-npm install
 npm start
+```
+
+### Tests
+```bash
+npm test                # Lancer tous les tests
+npm run test:watch      # Mode watch avec relance automatique
+npm run test:coverage   # Avec rapport de couverture
+```
+
+### Développement
+```bash
+npm run test:watch      # Tests en mode watch pendant le développement
 ```
 
 ### Structure du Projet
 ```
 src/
 ├── services/
-│   ├── configManager.js      # Configuration utilisateur
-│   ├── steamDetection.js     # Détection Steam IDs
-│   ├── processMonitor.js     # Détection processus NMS (à venir)
-│   ├── fileManager.js        # Gestion fichiers + swapping (à venir)
-│   └── expeditionLibrary.js  # Bibliothèque expéditions (à venir)
-├── ui/                       # Composants interface (à venir)
+│   ├── configManager.js         # Configuration utilisateur
+│   ├── steamDetection.js        # Détection automatique Steam IDs
+│   ├── processMonitor.js        # Surveillance processus NMS
+│   └── __tests__/               # Tests unitaires (32 tests)
 └── data/
-    └── expeditions/          # Fichiers JSON expéditions
-assets/images/                # Logos plateformes (à remplir)
+    └── expeditions/
+        ├── expeditions-metadata.json  # Métadonnées de 18 expéditions
+        ├── 01_pioneers.json           # Fichiers JSON d'expéditions
+        ├── 02_beachhead.json          # (18 fichiers inclus)
+        └── ...                        # Prêt à l'emploi !
+assets/images/
+├── platform-logos/              # Steam, MS Store, GOG, Game Pass
+└── expeditions/                 # 18 posters officiels d'expéditions
 ```
 
 ## 🔮 Idées Futures
