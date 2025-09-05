@@ -1,0 +1,10 @@
+# Expedition Files Directory
+
+This file ensures the expeditions directory is tracked by Git.
+Add your expedition JSON files here following the naming convention: expedition_name.json
+
+Examples:
+- pioneer.json
+- emergence.json
+- cartographers.json
+- etc.
