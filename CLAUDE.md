@@ -94,6 +94,13 @@ window.electronAPI = {
 - **Setup**: Sélection plateforme + détection Steam ID si nécessaire
 - **Main**: Interface principale avec info plateforme + bouton changement
 
+### Fonctionnalité de changement de plateforme
+- **Bouton "Changer plateforme"** dans l'écran principal
+- **Retour au setup** pour nouvelle sélection
+- **Sauvegarde automatique** de la nouvelle configuration
+- **Gestion Steam ID** (reset pour non-Steam, conservation pour Steam)
+- **Mise à jour UI** temps réel avec nouvelles informations plateforme
+
 ## 🚀 Commandes de Développement
 
 ```bash
@@ -101,7 +108,7 @@ window.electronAPI = {
 npm start
 
 # Tests
-npm test                # Lancer tous les tests (32 tests)
+npm test                # Lancer tous les tests (53 tests)
 npm run test:watch      # Mode watch avec relance automatique
 npm run test:coverage   # Avec rapport de couverture
 
@@ -112,15 +119,23 @@ npm run build
 ## 📊 État des Tests
 
 ### Couverture actuelle
-- **ConfigManager**: 11 tests ✅
+- **ConfigManager**: 17 tests (11 + 6 platform change) ✅
 - **SteamDetection**: 7 tests ✅  
 - **ProcessMonitor**: 16 tests ✅
-- **Total**: 34 tests, tous passés ✅
+- **UI Tests (Renderer)**: 15 tests ✅
+- **Total**: 53 tests, tous passés ✅
 
 ### Frameworks utilisés
 - **Jest** pour les tests unitaires
+- **jsdom** pour les tests UI/DOM
 - **Mocking** des modules fs, path, os, child_process
 - **Coverage** intégré et configuré
+- **Console.error supprimé** pour un output propre
+
+### Tests de changement de plateforme
+- **Backend**: 6 tests couvrant la logique de ConfigManager
+- **Frontend**: 15 tests couvrant l'interface utilisateur
+- **Cas couverts**: Switching platforms, Steam ID handling, UI states, error cases
 
 ## 📋 Variables d'Environnement
 Aucune pour le moment - Configuration stockée localement.

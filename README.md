@@ -19,8 +19,9 @@ No Man's Sky propose des expéditions événementielles limitées dans le temps.
 - **Détection automatique Steam ID** avec scan des dossiers utilisateur
 - **Configuration persistante** stockée dans `~/.nms-utils/config.json`
 - **Interface utilisateur** moderne et responsive
-- **Changement de plateforme** via bouton dans l'interface principale
+- **Changement de plateforme** via bouton dans l'interface principale *(entièrement testé)*
 - **Gestion multi-écrans** (Loading, Setup, Main)
+- **Tests complets** couvrant backend + frontend (53 tests)
 
 ### 🔧 Architecture Technique
 - **Electron** avec sécurité renforcée (`contextIsolation`, `nodeIntegration: false`)
@@ -52,9 +53,12 @@ No Man's Sky propose des expéditions événementielles limitées dans le temps.
 - ✅ Validation et gestion d'erreurs
 
 ### 🧪 **Framework de tests robuste**
-- ✅ Jest configuré avec **32 tests unitaires**
-- ✅ Couverture complète des services backend
+- ✅ Jest configuré avec **53 tests** (unitaires + UI)
+- ✅ Tests UI avec jsdom pour le DOM
+- ✅ Couverture complète backend + frontend
+- ✅ Tests du changement de plateforme (21 nouveaux tests)
 - ✅ Mocking approprié des modules système
+- ✅ Console.error supprimé pour un output propre
 - ✅ Tests pour tous les cas d'erreur et edge cases
 
 ## 🚧 Fonctionnalités À Développer
@@ -114,7 +118,7 @@ npm start
 
 ### Tests
 ```bash
-npm test                # Lancer tous les tests
+npm test                # Lancer tous les tests (53 tests)
 npm run test:watch      # Mode watch avec relance automatique
 npm run test:coverage   # Avec rapport de couverture
 ```
@@ -131,7 +135,9 @@ src/
 │   ├── configManager.js         # Configuration utilisateur
 │   ├── steamDetection.js        # Détection automatique Steam IDs
 │   ├── processMonitor.js        # Surveillance processus NMS
-│   └── __tests__/               # Tests unitaires (32 tests)
+│   │   └── __tests__/               # Tests services (36 tests)
+├── __tests__/                   # Tests UI (15 tests)
+└── jest.setup.js                # Configuration Jest globale
 └── data/
     └── expeditions/
         ├── expeditions-metadata.json  # Métadonnées de 18 expéditions
