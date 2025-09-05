@@ -1,0 +1,12 @@
+# Expedition Images Directory
+
+This file ensures the expedition images directory is tracked by Git.
+Add your expedition poster/banner images here following the naming convention.
+
+Examples:
+- 01_pioneers.jpg
+- 02_beachhead.png  
+- 03_cartographers.jpg
+- etc.
+
+Recommended size: 400-800px width, <500KB
