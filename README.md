@@ -80,23 +80,76 @@ No Man's Sky propose des expéditions événementielles limitées dans le temps.
 - [ ] **Import/Export** - Partage de configurations entre utilisateurs
 - [ ] **Auto-update** - Mise à jour automatique de la bibliothèque d'expéditions
 
+## 🔄 Méthode de Switch des Expéditions
+
+### Principe Technique
+L'application utilise une méthode de **swap sécurisé** des fichiers de cache NMS pour activer les expéditions hors ligne.
+
+### Fichier Cible : `SEASON_DATA_CACHE.JSON`
+- **Localisation** : `{cachePath}/SEASON_DATA_CACHE.JSON`
+- **Rôle** : Contient les données de progression de l'expédition active
+- **Format** : JSON avec structure complexe de sauvegarde NMS
+
+### Workflow de Switch (3 étapes)
+
+#### 1. **Backup Sécurisé**
+```
+SEASON_DATA_CACHE.JSON → SEASON_DATA_CACHE_original.JSON
+```
+- Sauvegarde automatique du fichier original
+- Vérification d'intégrité avant backup
+- Gestion des erreurs si le fichier est verrouillé (NMS en cours)
+
+#### 2. **Activation Expédition**
+```
+src/data/expeditions/{expedition}.json → SEASON_DATA_CACHE.JSON
+```
+- Copie du fichier d'expédition choisi
+- Remplacement du cache actuel
+- Validation du format JSON avant activation
+
+#### 3. **Restauration Online**
+```
+SEASON_DATA_CACHE_original.JSON → SEASON_DATA_CACHE.JSON
+```
+- Restauration du fichier original pour retour online
+- Nettoyage automatique du backup
+- Vérification de la cohérence des données
+
+### Sécurités Implémentées
+- **Détection processus NMS** : Empêche les modifications si le jeu tourne
+- **Validation JSON** : Vérification de l'intégrité avant chaque opération
+- **Backup automatique** : Aucune perte de données possible
+- **Rollback d'urgence** : Restauration en cas d'erreur
+
+### Bibliothèque d'Expéditions Intégrée
+- **18 expéditions** prêtes à l'emploi (2021-2025)
+- **Fichiers JSON** validés et testés
+- **Métadonnées** : Noms, descriptions, dates, récompenses
+- **Images** : Posters officiels de chaque expédition
+
 ## 🎮 Workflow Utilisateur Cible
 
 ### Premier Lancement
 1. Sélection de la plateforme (Steam, MS Store, etc.)
 2. Détection automatique Steam ID si applicable
-3. Validation de la configuration
+3. Validation de la configuration et du cache path
 
 ### Utilisation Normale
 1. **Mode Online Actuel** :
-   - Liste déroulante des expéditions disponibles
-   - Bouton "Passer à cette expédition"
+   - Liste déroulante des 18 expéditions disponibles
+   - Bouton "Passer à cette expédition" (avec backup auto)
    - Message "Switch effectué, passer hors ligne pour jouer"
+   - **Sécurité** : Vérification que NMS n'est pas en cours
 
 2. **Mode Offline Expédition** :
-   - Affichage de l'expédition active
-   - Bouton "Revenir en mode online"
-   - Restauration automatique de la configuration originale
+   - Affichage de l'expédition active avec poster et métadonnées
+   - Bouton "Revenir en mode online" (restauration backup)
+   - **Sécurité** : Validation de l'intégrité avant restauration
+
+3. **Changement d'Expédition** :
+   - Switch direct entre expéditions (sans retour online)
+   - Backup intelligent : garde l'original, remplace juste l'expédition active
 
 ## 🛠️ Installation & Développement
 
