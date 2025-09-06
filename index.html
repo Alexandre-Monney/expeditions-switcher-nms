@@ -81,9 +81,77 @@
                 </div>
             </div>
             <div id="main-content">
-                <!-- Contenu principal sera ajouté ici -->
-                <p>Application configurée avec succès !</p>
-                <p>Prochaines fonctionnalités à venir...</p>
+                <!-- Status Section -->
+                <div id="status-section" class="status-section">
+                    <div id="current-status" class="current-status">
+                        <div class="status-header">
+                            <h2>📊 État Actuel</h2>
+                            <button id="refresh-status-btn" class="refresh-btn">🔄</button>
+                        </div>
+                        <div id="status-info" class="status-info">
+                            <div class="loading-spinner"></div>
+                            <span>Vérification de l'état...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Expedition Selection Section -->
+                <div id="expedition-section" class="expedition-section">
+                    <div class="expedition-header">
+                        <h2>🌌 Gestion des Expéditions</h2>
+                        <div id="nms-status" class="nms-status">
+                            <span class="status-indicator" id="nms-status-indicator">●</span>
+                            <span id="nms-status-text">Vérification...</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Online Mode Controls -->
+                    <div id="online-controls" class="controls-section hidden">
+                        <div class="expedition-selector">
+                            <label for="expedition-select">Choisir une expédition :</label>
+                            <select id="expedition-select" class="expedition-select">
+                                <option value="">Chargement des expéditions...</option>
+                            </select>
+                        </div>
+                        <div class="expedition-preview" id="expedition-preview">
+                            <!-- Preview will be populated here -->
+                        </div>
+                        <div class="action-buttons">
+                            <button id="activate-expedition-btn" class="action-btn primary" disabled>
+                                🚀 Activer cette Expédition
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Expedition Mode Controls -->
+                    <div id="expedition-controls" class="controls-section hidden">
+                        <div class="current-expedition" id="current-expedition">
+                            <!-- Current expedition info will be populated here -->
+                        </div>
+                        <div class="action-buttons">
+                            <button id="restore-original-btn" class="action-btn secondary">
+                                🔄 Retour Mode Online
+                            </button>
+                            <button id="switch-expedition-btn" class="action-btn primary">
+                                🔀 Changer d'Expédition
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Error State -->
+                    <div id="error-state" class="error-state hidden">
+                        <div class="error-content">
+                            <h3>⚠️ Problème de Configuration</h3>
+                            <p id="error-message">Une erreur s'est produite</p>
+                            <button id="retry-btn" class="action-btn secondary">Réessayer</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Messages Section -->
+                <div id="messages-section" class="messages-section">
+                    <div id="message-container" class="message-container"></div>
+                </div>
             </div>
         </div>
 
