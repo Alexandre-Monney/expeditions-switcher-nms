@@ -98,16 +98,12 @@ describe('ConfigManager', () => {
   });
 
   describe('buildCachePath', () => {
-    beforeEach(() => {
-      process.env.APPDATA = '/mock/appdata';
-    });
-
     test('should build Steam cache path on Windows', () => {
       Object.defineProperty(process, 'platform', { value: 'win32' });
       
       const result = configManager.buildCachePath('steam', '76561198123456789');
       
-      expect(result).toBe('/mock/appdata/HelloGames/NMS/76561198123456789/cache');
+      expect(result).toBe('/mock/home/AppData/Roaming/HelloGames/NMS/76561198123456789/cache');
     });
 
     test('should build Steam cache path on Mac', () => {
@@ -123,7 +119,7 @@ describe('ConfigManager', () => {
       
       const result = configManager.buildCachePath('msstore');
       
-      expect(result).toBe('/mock/appdata/HelloGames/NMS/cache');
+      expect(result).toBe('/mock/home/AppData/Roaming/HelloGames/NMS/cache');
     });
 
     test('should return null for invalid platform', () => {
@@ -170,7 +166,7 @@ describe('ConfigManager', () => {
       // Change from Steam to GOG - steamId should be null
       const newCachePath = configManager.buildCachePath('gog');
       
-      expect(newCachePath).toBe('/mock/appdata/HelloGames/NMS/cache');
+      expect(newCachePath).toBe('/mock/home/AppData/Roaming/HelloGames/NMS/cache');
       expect(newCachePath).not.toContain('76561198');
     });
 
@@ -181,7 +177,7 @@ describe('ConfigManager', () => {
       const newSteamId = '76561198987654321';
       const newCachePath = configManager.buildCachePath('steam', newSteamId);
       
-      expect(newCachePath).toBe('/mock/appdata/HelloGames/NMS/76561198987654321/cache');
+      expect(newCachePath).toBe('/mock/home/AppData/Roaming/HelloGames/NMS/76561198987654321/cache');
       expect(newCachePath).toContain(newSteamId);
     });
 
@@ -192,8 +188,8 @@ describe('ConfigManager', () => {
       const msStorePath = configManager.buildCachePath('msstore');
       const gamePassPath = configManager.buildCachePath('gamepass');
       
-      expect(msStorePath).toBe('/mock/appdata/HelloGames/NMS/cache');
-      expect(gamePassPath).toBe('/mock/appdata/HelloGames/NMS/cache');
+      expect(msStorePath).toBe('/mock/home/AppData/Roaming/HelloGames/NMS/cache');
+      expect(gamePassPath).toBe('/mock/home/AppData/Roaming/HelloGames/NMS/cache');
       expect(msStorePath).toEqual(gamePassPath);
     });
 

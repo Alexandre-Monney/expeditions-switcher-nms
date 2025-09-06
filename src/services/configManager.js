@@ -51,15 +51,18 @@ class ConfigManager {
   }
 
   buildCachePath(platform, steamId = null) {
+    // Platform-specific base paths
     const appDataPath = process.platform === 'win32' 
-      ? process.env.APPDATA 
+      ? path.join(os.homedir(), 'AppData/Roaming')
       : path.join(os.homedir(), 'Library/Application Support');
 
     switch (platform) {
       case 'steam':
         if (process.platform === 'darwin') {
+          // Steam Mac: ~/Library/Application Support/HelloGames/NMS/cache
           return path.join(appDataPath, 'HelloGames/NMS/cache');
         } else {
+          // Steam PC: %APPDATA%\HelloGames\NMS\{steam id}\cache
           return steamId 
             ? path.join(appDataPath, 'HelloGames/NMS', steamId, 'cache')
             : null;
@@ -67,6 +70,7 @@ class ConfigManager {
       case 'msstore':
       case 'gog':
       case 'gamepass':
+        // MS Store/GOG/Xbox Game Pass PC: %APPDATA%\HelloGames\NMS\cache
         return path.join(appDataPath, 'HelloGames/NMS/cache');
       default:
         return null;
