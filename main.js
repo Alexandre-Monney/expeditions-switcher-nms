@@ -3,16 +3,25 @@ const path = require('path');
 const ConfigManager = require('./src/services/configManager');
 const SteamDetection = require('./src/services/steamDetection');
 const ProcessMonitor = require('./src/services/processMonitor');
+const ExpeditionManager = require('./src/services/expeditionManager');
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 800,
+    width: 1400,
+    height: 900,
+    minWidth: 1200,
+    minHeight: 800,
+    show: false, // Don't show until ready
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
       preload: path.join(__dirname, 'preload.js')
     }
+  });
+
+  // Show window when ready to prevent visual flash
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show();
   });
 
   mainWindow.loadFile('index.html');
@@ -88,4 +97,45 @@ ipcMain.handle('process:stopMonitoring', () => {
     return true;
   }
   return false;
+});
+
+// Expedition management IPC handlers
+const expeditionManager = new ExpeditionManager();
+
+ipcMain.handle('expedition:getCurrentState', async () => {
+  return expeditionManager.getCurrentState();
+});
+
+ipcMain.handle('expedition:getAvailableExpeditions', async () => {
+  return expeditionManager.getAvailableExpeditions();
+});
+
+ipcMain.handle('expedition:activateExpedition', async (event, expeditionId) => {
+  // Check if NMS is running before allowing activation
+  const isRunning = await processMonitor.isNMSRunning();
+  if (isRunning) {
+    return {
+      success: false,
+      error: 'Cannot switch expeditions while No Man\'s Sky is running. Please close the game first.'
+    };
+  }
+  
+  return expeditionManager.activateExpedition(expeditionId);
+});
+
+ipcMain.handle('expedition:restoreOriginal', async () => {
+  // Check if NMS is running before allowing restoration
+  const isRunning = await processMonitor.isNMSRunning();
+  if (isRunning) {
+    return {
+      success: false,
+      error: 'Cannot restore original save while No Man\'s Sky is running. Please close the game first.'
+    };
+  }
+  
+  return expeditionManager.restoreOriginal();
+});
+
+ipcMain.handle('expedition:createBackup', async () => {
+  return expeditionManager.createBackup();
 });
