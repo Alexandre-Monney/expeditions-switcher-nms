@@ -17,7 +17,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: 15px;
 }
 
 .screen {
@@ -26,8 +26,13 @@ body {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 600px;
-    max-height: 90vh;
+    max-height: 95vh;
     overflow-y: auto;
+}
+
+#main-screen {
+    max-width: 1200px;
+    height: 95vh;
 }
 
 .screen.hidden {
@@ -36,7 +41,7 @@ body {
 
 /* Setup Screen */
 .setup-container {
-    padding: 40px;
+    padding: 30px;
 }
 
 .setup-container h1 {
@@ -257,15 +262,15 @@ body {
 
 /* Main Screen */
 .main-header {
-    padding: 40px 40px 20px;
+    padding: 25px 30px 15px;
     border-bottom: 1px solid #e9ecef;
 }
 
 .main-header h1 {
     color: #2a5298;
     text-align: center;
-    margin-bottom: 20px;
-    font-size: 2.2em;
+    margin-bottom: 15px;
+    font-size: 2.0em;
 }
 
 .current-platform {
@@ -299,13 +304,436 @@ body {
 }
 
 #main-content {
-    padding: 40px;
+    padding: 15px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
 #main-content p {
     color: #666;
     line-height: 1.6;
     margin-bottom: 15px;
+}
+
+/* ===== EXPEDITION MANAGEMENT STYLES ===== */
+
+/* Status Section */
+.status-section {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 15px;
+    border: 1px solid #e9ecef;
+}
+
+.status-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.status-header h2 {
+    color: #333;
+    font-size: 1.3em;
+    margin: 0;
+}
+
+.refresh-btn {
+    background: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.2s ease;
+}
+
+.refresh-btn:hover {
+    background: #5a6268;
+}
+
+.status-info {
+    background: white;
+    border-radius: 6px;
+    padding: 15px;
+    border: 1px solid #e9ecef;
+}
+
+.status-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.status-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.status-info.online {
+    border-left: 4px solid #28a745;
+}
+
+.status-info.expedition {
+    border-left: 4px solid #007bff;
+}
+
+.status-info.error {
+    border-left: 4px solid #dc3545;
+}
+
+/* Expedition Section */
+.expedition-section {
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
+    border: 1px solid #e9ecef;
+}
+
+.expedition-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.expedition-header h2 {
+    color: #333;
+    font-size: 1.3em;
+    margin: 0;
+}
+
+.nms-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.status-indicator {
+    font-size: 12px;
+}
+
+.status-indicator.running {
+    color: #dc3545;
+}
+
+.status-indicator.stopped {
+    color: #28a745;
+}
+
+/* Controls Sections */
+.controls-section {
+    margin-top: 20px;
+}
+
+.expedition-selector {
+    margin-bottom: 20px;
+}
+
+.expedition-selector label {
+    display: block;
+    color: #333;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.expedition-select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 14px;
+    background: white;
+}
+
+.expedition-select:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* Expedition Cards */
+.expedition-card {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px;
+}
+
+.expedition-card.current {
+    background: #e7f3ff;
+    border-color: #007bff;
+}
+
+.expedition-card.preview {
+    background: #fff;
+    border: 2px solid #007bff;
+}
+
+.expedition-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.expedition-card .expedition-header h3,
+.expedition-card .expedition-header h4 {
+    color: #333;
+    margin: 0;
+    font-size: 1.2em;
+}
+
+.expedition-badge {
+    background: #007bff;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.expedition-order {
+    background: #6c757d;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.expedition-details p {
+    margin: 8px 0;
+    color: #555;
+    line-height: 1.5;
+}
+
+.expedition-details .description {
+    font-style: italic;
+    color: #666;
+}
+
+.expedition-meta {
+    display: flex;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.difficulty {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.difficulty.easy {
+    background: #d4edda;
+    color: #155724;
+}
+
+.difficulty.medium {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.difficulty.hard {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.release-date {
+    background: #e2e3e5;
+    color: #495057;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.rewards ul {
+    margin: 8px 0 0 20px;
+    padding: 0;
+}
+
+.rewards li {
+    margin: 4px 0;
+    color: #555;
+}
+
+.no-selection {
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+    padding: 20px;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.action-btn {
+    border: none;
+    border-radius: 6px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex: 1;
+    min-width: 150px;
+}
+
+.action-btn.primary {
+    background: #007bff;
+    color: white;
+}
+
+.action-btn.primary:hover:not(:disabled) {
+    background: #0056b3;
+}
+
+.action-btn.secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.action-btn.secondary:hover:not(:disabled) {
+    background: #545b62;
+}
+
+.action-btn:disabled {
+    background: #ccc !important;
+    cursor: not-allowed;
+}
+
+/* Error State */
+.error-state {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.error-content h3 {
+    color: #dc3545;
+    margin-bottom: 15px;
+}
+
+.error-content p {
+    color: #666;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+/* Messages Section */
+.messages-section {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    max-width: 400px;
+}
+
+.message-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.message {
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-left: 4px solid #ccc;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    animation: slideIn 0.3s ease;
+}
+
+.message.message-success {
+    border-left-color: #28a745;
+}
+
+.message.message-error {
+    border-left-color: #dc3545;
+}
+
+.message.message-info {
+    border-left-color: #17a2b8;
+}
+
+.message-icon {
+    font-size: 16px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.message-text {
+    flex: 1;
+    color: #333;
+    line-height: 1.4;
+}
+
+.message-close {
+    background: none;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 0;
+    margin-left: auto;
+}
+
+.message-close:hover {
+    color: #666;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    #main-content {
+        padding: 15px 20px;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .action-btn {
+        min-width: auto;
+    }
+    
+    .messages-section {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+    }
+    
+    .expedition-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
 }
 
 .hidden {
