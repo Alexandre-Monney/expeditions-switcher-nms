@@ -36,7 +36,7 @@ describe('ProcessMonitor', () => {
       Object.defineProperty(process, 'platform', { value: 'darwin' });
       
       mockExec.mockImplementation((command, callback) => {
-        callback(null, { stdout: 'user  1234  0.0  0.5  No Man\'s Sky' });
+        callback(null, { stdout: '1234\n5678' }); // pgrep returns PIDs
       });
       
       const result = await processMonitor.isNMSRunning();
@@ -112,7 +112,7 @@ describe('ProcessMonitor', () => {
       
       mockExec.mockImplementation((command, callback) => {
         callback(null, { 
-          stdout: 'user 1234 0.0 5.2 123456 67890 ?? S 10:30AM 1:23.45 /Applications/No Man\'s Sky' 
+          stdout: '  PID  %CPU %MEM     ELAPSED COMMAND\n 1234   2.5  5.2    00:10:30 /Applications/No Man\'s Sky' 
         });
       });
       
@@ -122,8 +122,8 @@ describe('ProcessMonitor', () => {
         name: 'No Man\'s Sky',
         pid: 1234,
         platform: 'darwin',
-        memoryUsage: '5.2%',
-        startTime: '10:30AM'
+        memoryUsage: '2.5%',
+        startTime: '00:10:30'
       });
     });
 
@@ -173,14 +173,14 @@ describe('ProcessMonitor', () => {
 
   describe('_parseUnixPS', () => {
     test('should parse Unix ps output correctly', () => {
-      const output = 'user 1234 0.0 5.2 123456 67890 ?? S 10:30AM 1:23.45 /Applications/NoMansSky';
+      const output = '  PID  %CPU %MEM     ELAPSED COMMAND\n 1234   2.5  5.2    00:10:30 /Applications/NoMansSky';
       
       const result = processMonitor._parseUnixPS(output);
       
       expect(result).toEqual({
         pid: 1234,
-        memory: '5.2%',
-        startTime: '10:30AM'
+        memory: '2.5%',
+        startTime: '00:10:30'
       });
     });
 

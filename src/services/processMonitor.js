@@ -78,8 +78,8 @@ class ProcessMonitor {
         // Windows: utiliser tasklist
         command = `tasklist /FI "IMAGENAME eq ${processName}" /FO CSV /NH`;
       } else {
-        // Unix-like (macOS, Linux): utiliser ps et grep
-        command = `ps aux | grep -i "${processName}" | grep -v grep`;
+        // Unix-like (macOS, Linux): utiliser pgrep pour une détection précise
+        command = `pgrep -f "${processName}"`;
       }
       
       const { stdout } = await execAsync(command);
@@ -88,7 +88,7 @@ class ProcessMonitor {
         // Sur Windows, tasklist retourne le processus s'il existe
         return stdout.trim().length > 0 && !stdout.includes('No tasks are running');
       } else {
-        // Sur Unix, grep retourne du contenu s'il trouve le processus
+        // Sur Unix, pgrep retourne des PIDs s'il trouve le processus
         return stdout.trim().length > 0;
       }
     } catch (error) {
@@ -111,8 +111,8 @@ class ProcessMonitor {
         // Windows: tasklist avec plus de détails
         command = `tasklist /FI "IMAGENAME eq ${processName}" /FO CSV`;
       } else {
-        // Unix-like: ps avec format personnalisé
-        command = `ps aux | grep -i "${processName}" | grep -v grep | head -1`;
+        // Unix-like: utiliser ps avec pgrep pour plus de précision
+        command = `ps -p $(pgrep -f "${processName}" | head -1) -o pid,pcpu,pmem,etime,command 2>/dev/null`;
       }
       
       const { stdout } = await execAsync(command);
@@ -165,13 +165,18 @@ class ProcessMonitor {
    */
   _parseUnixPS(output) {
     try {
-      const fields = output.trim().split(/\s+/);
+      const lines = output.trim().split('\n');
+      if (lines.length < 2) return null;
       
-      if (fields.length >= 11) {
+      // Ignorer la ligne d'en-tête et prendre la première ligne de données
+      const dataLine = lines[1];
+      const fields = dataLine.trim().split(/\s+/);
+      
+      if (fields.length >= 4) {
         return {
-          pid: parseInt(fields[1]) || 'Unknown',
-          memory: `${fields[3]}%`, // % CPU
-          startTime: fields[8] || 'Unknown'
+          pid: parseInt(fields[0]) || 'Unknown',
+          memory: `${fields[1]}%`, // % CPU
+          startTime: fields[3] || 'Unknown'
         };
       }
       
