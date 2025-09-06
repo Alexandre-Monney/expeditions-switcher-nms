@@ -21,5 +21,12 @@ contextBridge.exposeInMainWorld('electronAPI', {
   },
   removeNMSStatusListener: () => {
     ipcRenderer.removeAllListeners('nms-status-changed');
-  }
+  },
+  
+  // Expedition management
+  getCurrentState: () => ipcRenderer.invoke('expedition:getCurrentState'),
+  getAvailableExpeditions: () => ipcRenderer.invoke('expedition:getAvailableExpeditions'),
+  activateExpedition: (expeditionId) => ipcRenderer.invoke('expedition:activateExpedition', expeditionId),
+  restoreOriginal: () => ipcRenderer.invoke('expedition:restoreOriginal'),
+  createBackup: () => ipcRenderer.invoke('expedition:createBackup')
 });
