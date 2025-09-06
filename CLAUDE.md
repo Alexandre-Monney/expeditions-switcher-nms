@@ -145,3 +145,16 @@ Aucune pour le moment - Configuration stockée localement.
 - Configuration utilisateur en local uniquement
 - Validation des chemins de fichiers
 - Gestion d'erreurs robuste pour les opérations fichiers
+
+## 📝 Conventions de Développement
+
+### Git & Commits
+- **Conventional Commits** obligatoire pour tous les commits
+- Format : `type(scope): description`
+- Types : `feat`, `fix`, `docs`, `test`, `refactor`, `style`, `chore`
+- Exemples :
+  - `feat(expedition): add expedition selection interface`
+  - `fix(processMonitor): correct macOS detection false positive`
+  - `docs: update README with packaging instructions`
+- Commits atomiques : une fonctionnalité/fix par commit
+- Messages descriptifs en anglais avec détails dans le body si nécessaire

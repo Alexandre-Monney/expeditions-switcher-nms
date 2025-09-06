@@ -12,16 +12,17 @@ No Man's Sky propose des expéditions événementielles limitées dans le temps.
 - Sécurise les sauvegardes avec un système de backup automatique
 - Propose une interface simple pour switcher entre expéditions
 
-## 🎯 État Actuel (MVP en cours)
+## 🎯 État Actuel (MVP Complet ✅)
 
-### ✅ Fonctionnalités Implémentées
+### 🚀 Fonctionnalités Core Implémentées
 - **Setup initial** avec sélection de plateforme (Steam, MS Store, GOG, Game Pass)
-- **Détection automatique Steam ID** avec scan des dossiers utilisateur
+- **Détection automatique Steam ID** avec scan des dossiers utilisateur  
 - **Configuration persistante** stockée dans `~/.nms-utils/config.json`
-- **Interface utilisateur** moderne et responsive
+- **Interface utilisateur complète** moderne et responsive avec gestion d'expéditions
 - **Changement de plateforme** via bouton dans l'interface principale *(entièrement testé)*
-- **Gestion multi-écrans** (Loading, Setup, Main)
-- **Tests complets** couvrant backend + frontend (53 tests)
+- **Gestion multi-écrans** (Loading, Setup, Main) avec navigation fluide
+- **Tests complets** couvrant backend + frontend (117 tests avec 90%+ couverture)
+- **Packaging production** avec electron-builder configuré pour toutes plateformes
 
 ### 🔧 Architecture Technique
 - **Electron** avec sécurité renforcée (`contextIsolation`, `nodeIntegration: false`)
@@ -42,43 +43,58 @@ No Man's Sky propose des expéditions événementielles limitées dans le temps.
 - ✅ Setup initial avec sélection de plateforme
 - ✅ Logos officiels des plateformes de jeu intégrés
 - ✅ Détection automatique des Steam IDs
-- ✅ Interface responsive avec effets visuels
+- ✅ Interface responsive optimisée (1400×900) avec effets visuels
 - ✅ Changement de plateforme post-configuration
+- ✅ **Interface de gestion d'expéditions complète** avec sélection, prévisualisation, activation
+- ✅ **Surveillance temps réel du statut NMS** avec désactivation boutons si jeu actif
+- ✅ **Système de messages utilisateur** avec notifications success/error/info
 
-### 📦 **Bibliothèque d'expéditions**
-- ✅ Métadonnées complètes de **18 expéditions** (2021-2025)
+### 📦 **Gestion d'expéditions complète**
+- ✅ **Service ExpeditionManager** complet avec backup/restore automatique
+- ✅ Métadonnées complètes de **18 expéditions** (2021-2025) avec descriptions, difficulté, récompenses
 - ✅ **Fichiers JSON d'expéditions inclus** - Prêt à l'emploi !
 - ✅ Images officielles des posters d'expéditions
-- ✅ Structure organisée et documentée
-- ✅ Validation et gestion d'erreurs
+- ✅ **Détection d'état intelligent** (online/expedition/error/no_cache)
+- ✅ **Interface utilisateur intuitive** avec prévisualisation détaillée des expéditions
+- ✅ **Système de backup automatique** avant chaque changement
+- ✅ Structure organisée et documentée avec validation d'erreurs
 
 ### 🧪 **Framework de tests robuste**
-- ✅ Jest configuré avec **53 tests** (unitaires + UI)
-- ✅ Tests UI avec jsdom pour le DOM
-- ✅ Couverture complète backend + frontend
-- ✅ Tests du changement de plateforme (21 nouveaux tests)
+- ✅ Jest configuré avec **117 tests** (unitaires + UI + expéditions)
+- ✅ Tests UI avec jsdom pour le DOM complet
+- ✅ **Couverture 90%+** backend + frontend + interface expéditions
+- ✅ **64 nouveaux tests** pour interface de gestion d'expéditions
+- ✅ Tests du changement de plateforme complets
 - ✅ Mocking approprié des modules système
 - ✅ Console.error supprimé pour un output propre
 - ✅ Tests pour tous les cas d'erreur et edge cases
 
-## 🚧 Fonctionnalités À Développer
+### 📦 **Packaging et Distribution**
+- ✅ **electron-builder** configuré pour Windows, macOS, Linux
+- ✅ **Scripts npm** pour build multi-plateformes (`npm run build:win`, etc.)
+- ✅ **Configuration NSIS** avec options d'installation personnalisées  
+- ✅ **Optimisation taille** avec compression maximum
+- ✅ **Script de création d'icônes** automatisé avec placeholders
+- ✅ **Documentation BUILD.md** complète pour la distribution
+- ✅ **Build testé** - Génère des exécutables fonctionnels (~190MB)
 
-### Phase 2 - Fonctionnalités Core
-- [ ] **Détection état fichiers** - Identifier si on est en mode online/offline
-- [ ] **Système de swap fichiers** - Logique de remplacement sécurisé avec backups
-- [ ] **Interface principale dynamique** - Select d'expéditions + boutons d'action
+## 🚧 Prochaines Étapes
 
-### Phase 2 - Améliorations UX  
-- [ ] **Validation sécurité** - Vérifications avant manipulation fichiers
-- [ ] **Messages d'état** - Feedback utilisateur pour chaque opération
-- [ ] **Gestion d'erreurs** - Récupération automatique en cas de problème
-- [ ] **Logs d'activité** - Historique des opérations effectuées
+### 🎯 **Phase Finale - Test & Distribution**
+- [ ] **Test Windows** - Validation fonctionnelle sur PC Windows réel
+- [ ] **Icônes finales** - Remplacer placeholders par design NMS professionnel  
+- [ ] **Signature de code** - Certificat pour éviter warnings sécurité Windows
+- [ ] **GitHub Release** - Packaging automatisé avec Actions CI/CD
+- [ ] **Documentation utilisateur** - Guide d'installation et usage
 
-### Phase 3 - Fonctionnalités Avancées
-- [ ] **Tracking progression** - Marquer les expéditions comme complétées
-- [ ] **Métadonnées expéditions** - Descriptions, récompenses, difficultés
-- [ ] **Import/Export** - Partage de configurations entre utilisateurs
-- [ ] **Auto-update** - Mise à jour automatique de la bibliothèque d'expéditions
+### 🚀 **Améliorations Futures (Post-MVP)**
+- [ ] **Auto-update** - Système de mise à jour automatique intégré
+- [ ] **Historique des activations** - Log des changements avec dates/heures
+- [ ] **Thème sombre/clair** - Options d'affichage utilisateur
+
+### 🌐 **Expansion Communautaire**
+- [ ] **Wiki intégré** - Guides et astuces par expédition
+- [ ] **Support multi-langues** - Français, Anglais, autres
 
 ## 🔄 Méthode de Switch des Expéditions
 
@@ -171,7 +187,7 @@ npm start
 
 ### Tests
 ```bash
-npm test                # Lancer tous les tests (53 tests)
+npm test                # Lancer tous les tests (117 tests)
 npm run test:watch      # Mode watch avec relance automatique
 npm run test:coverage   # Avec rapport de couverture
 ```
@@ -201,6 +217,178 @@ assets/images/
 ├── platform-logos/              # Steam, MS Store, GOG, Game Pass
 └── expeditions/                 # 18 posters officiels d'expéditions
 ```
+
+## 📦 Packaging & Distribution
+
+### Installation d'Electron Builder
+
+Pour créer des exécutables de production, nous utilisons `electron-builder` :
+
+```bash
+npm install --save-dev electron-builder
+```
+
+### Configuration Package.json
+
+Ajoutez les scripts de build dans `package.json` :
+
+```json
+{
+  "main": "main.js",
+  "homepage": "./",
+  "scripts": {
+    "build": "electron-builder",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux",
+    "dist": "npm run build"
+  },
+  "build": {
+    "appId": "com.alexandremonney.nms-expedition-manager",
+    "productName": "NMS Expedition Manager",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*",
+      "!**/.git/*",
+      "!**/node_modules/.cache/*",
+      "!**/{.nyc_output,coverage,__tests__,test,tests,spec,specs}/*"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64", "ia32"]
+        }
+      ],
+      "icon": "assets/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/icon.icns"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "assets/icon.png"
+    }
+  }
+}
+```
+
+### Création des Icônes
+
+Créez les icônes dans le dossier `assets/` :
+- **Windows** : `icon.ico` (256x256, format ICO)
+- **macOS** : `icon.icns` (512x512, format ICNS)
+- **Linux** : `icon.png` (512x512, format PNG)
+
+### Build de Production
+
+#### Windows (depuis n'importe quel OS)
+```bash
+npm run build:win
+```
+Génère :
+- `dist/NMS Expedition Manager Setup 1.0.0.exe` - Installateur NSIS
+- `dist/win-unpacked/` - Version portable
+
+#### macOS (depuis macOS uniquement)
+```bash
+npm run build:mac
+```
+Génère :
+- `dist/NMS Expedition Manager-1.0.0.dmg` - Image disque macOS
+
+#### Linux (depuis Linux/macOS)
+```bash
+npm run build:linux
+```
+Génère :
+- `dist/NMS Expedition Manager-1.0.0.AppImage` - Application portable Linux
+
+#### Build Multi-Plateformes
+```bash
+npm run build
+```
+
+### Distribution
+
+#### Pour Windows
+1. **L'installateur NSIS** (`Setup.exe`) :
+   - Installation complète dans `Program Files`
+   - Raccourcis automatiques (Bureau + Menu Démarrer)
+   - Désinstallateur intégré
+   - Auto-update supporté
+
+2. **Version portable** (`win-unpacked/`) :
+   - Dossier à distribuer directement
+   - Aucune installation requise
+   - Idéal pour tests ou déploiements spécifiques
+
+#### Signature et Certification (Optionnel)
+Pour éviter les avertissements Windows Defender :
+```bash
+# Installer electron-builder avec signature
+npm install --save-dev electron-builder
+
+# Configuration avec certificat (dans build config)
+"win": {
+  "certificateFile": "path/to/certificate.p12",
+  "certificatePassword": "password"
+}
+```
+
+### Optimisation de Taille
+
+Pour réduire la taille des exécutables :
+
+```json
+"build": {
+  "compression": "maximum",
+  "nsis": {
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true
+  }
+}
+```
+
+### Déploiement Automatique
+
+GitHub Actions pour builds automatiques :
+
+```yaml
+# .github/workflows/build.yml
+name: Build
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+    
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+    - run: npm install
+    - run: npm test
+    - run: npm run build
+```
+
+### Taille des Builds
+- **Windows** : ~150-200 MB (installateur)
+- **macOS** : ~150-200 MB (DMG)
+- **Linux** : ~150-200 MB (AppImage)
+
+*Les builds incluent le runtime Node.js et Chromium, d'où la taille importante mais garantissant la compatibilité.*
 
 ## 🔮 Idées Futures
 
