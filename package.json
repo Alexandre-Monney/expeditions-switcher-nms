@@ -1,21 +1,70 @@
 {
   "name": "nms-utils-electron",
   "version": "1.0.0",
-  "description": "",
+  "description": "Gestionnaire d'expéditions pour No Man's Sky - Switch facilement entre expéditions hors ligne",
   "main": "main.js",
+  "homepage": "./",
   "scripts": {
     "start": "electron .",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux",
+    "dist": "npm run build",
+    "create-icons": "node scripts/create-icons.js",
+    "prebuild": "npm run create-icons"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "build": {
+    "appId": "com.alexandremonney.nms-expedition-manager",
+    "productName": "NMS Expedition Manager",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*",
+      "!**/.git/*",
+      "!**/node_modules/.cache/*",
+      "!**/{.nyc_output,coverage,__tests__,test,tests,spec,specs}/*"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64", "ia32"]
+        }
+      ]
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "linux": {
+      "target": "AppImage"
+    },
+    "compression": "maximum",
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  },
+  "keywords": [
+    "no-mans-sky",
+    "expedition",
+    "manager",
+    "electron",
+    "gaming"
+  ],
+  "author": "Alexandre Monney",
+  "license": "MIT",
   "type": "commonjs",
   "devDependencies": {
     "@types/jest": "^30.0.0",
     "electron": "^38.0.0",
+    "electron-builder": "^26.0.12",
     "jest": "^30.1.3",
     "jest-environment-jsdom": "^30.1.2"
   }
