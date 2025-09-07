@@ -129,6 +129,12 @@ body {
     filter: brightness(0) invert(1);
 }
 
+/* MVP: Masquer MS Store et GOG */
+.platform-btn[data-platform="msstore"],
+.platform-btn[data-platform="gog"] {
+    display: none;
+}
+
 .platform-info {
     flex: 1;
 }
@@ -466,6 +472,31 @@ body {
     margin-bottom: 15px;
 }
 
+/* Expedition Content Layout */
+.expedition-content-with-image {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.expedition-details {
+    flex: 1;
+}
+
+.expedition-image-right {
+    flex-shrink: 0;
+    width: 150px;
+}
+
+.expedition-image-right img {
+    width: 100%;
+    height: auto;
+    max-height: 120px;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    object-fit: cover;
+}
+
 .expedition-card.current {
     background: #e7f3ff;
     border-color: #007bff;
@@ -733,6 +764,22 @@ body {
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
+    }
+    
+    /* Images responsive */
+    .expedition-content-with-image {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .expedition-image-right {
+        width: 100%;
+        text-align: center;
+    }
+    
+    .expedition-image-right img {
+        max-width: 200px;
+        max-height: 150px;
     }
 }
 
