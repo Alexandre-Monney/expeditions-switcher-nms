@@ -75,7 +75,7 @@ class ProcessMonitor {
       
       let command;
       if (platform === 'win32') {
-        // Windows: utiliser tasklist
+        // Windows: utiliser tasklist avec filtre exact et vérifier que le processus existe vraiment
         command = `tasklist /FI "IMAGENAME eq ${processName}" /FO CSV /NH`;
       } else {
         // Unix-like (macOS, Linux): utiliser pgrep pour une détection précise
@@ -85,8 +85,21 @@ class ProcessMonitor {
       const { stdout } = await execAsync(command);
       
       if (platform === 'win32') {
-        // Sur Windows, tasklist retourne le processus s'il existe
-        return stdout.trim().length > 0 && !stdout.includes('No tasks are running');
+        // Sur Windows, vérifier plus strictement
+        const output = stdout.trim();
+        if (output.length === 0 || output.includes('No tasks are running') || output.includes('INFO: No tasks')) {
+          return false;
+        }
+        
+        // Vérifier que la ligne contient vraiment le nom exact du processus
+        const lines = output.split('\n').filter(line => line.trim().length > 0);
+        for (const line of lines) {
+          // Format CSV: "nom","PID","nom_session","#_session","utilisation_mémoire"
+          if (line.includes(`"${processName}"`)) {
+            return true;
+          }
+        }
+        return false;
       } else {
         // Sur Unix, pgrep retourne des PIDs s'il trouve le processus
         return stdout.trim().length > 0;
@@ -108,7 +121,7 @@ class ProcessMonitor {
       
       let command;
       if (platform === 'win32') {
-        // Windows: tasklist avec plus de détails
+        // Windows: tasklist avec plus de détails et filtre strict
         command = `tasklist /FI "IMAGENAME eq ${processName}" /FO CSV`;
       } else {
         // Unix-like: utiliser ps avec pgrep pour plus de précision
@@ -122,7 +135,14 @@ class ProcessMonitor {
       }
       
       if (platform === 'win32') {
-        return this._parseWindowsTasklist(stdout);
+        // Vérifier que le processus correspond exactement
+        const lines = stdout.split('\n');
+        for (const line of lines) {
+          if (line.includes(`"${processName}"`)) {
+            return this._parseWindowsTasklist(stdout);
+          }
+        }
+        return null; // Processus non trouvé ou nom inexact
       } else {
         return this._parseUnixPS(stdout);
       }

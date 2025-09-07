@@ -193,6 +193,56 @@ describe('ProcessMonitor', () => {
     });
   });
 
+  describe('Windows false positive detection', () => {
+    test('should avoid false positives - reject partial matches in tasklist output', async () => {
+      Object.defineProperty(process, 'platform', { value: 'win32' });
+      
+      mockExec.mockImplementation((command, callback) => {
+        // Simulate tasklist returning output that contains similar but not exact process name
+        if (command.includes('NMS.exe')) {
+          // Return output that looks like it found something but is actually a different process
+          callback(null, { stdout: '"NotNMS.exe","1234","Console","1","10,000 K"' });
+        } else {
+          callback(null, { stdout: 'No tasks are running' });
+        }
+      });
+      
+      const result = await processMonitor.isNMSRunning();
+      
+      expect(result).toBe(false);
+    });
+
+    test('should handle Windows INFO messages correctly', async () => {
+      Object.defineProperty(process, 'platform', { value: 'win32' });
+      
+      mockExec.mockImplementation((command, callback) => {
+        // Simulate tasklist returning INFO message instead of "No tasks are running"
+        callback(null, { stdout: 'INFO: No tasks are running which match the specified criteria.' });
+      });
+      
+      const result = await processMonitor.isNMSRunning();
+      
+      expect(result).toBe(false);
+    });
+
+    test('should only return true for exact process name matches in CSV format', async () => {
+      Object.defineProperty(process, 'platform', { value: 'win32' });
+      
+      mockExec.mockImplementation((command, callback) => {
+        if (command.includes('NMS.exe')) {
+          // This should match exactly
+          callback(null, { stdout: '"NMS.exe","1234","Console","1","50,000 K"' });
+        } else {
+          callback(null, { stdout: 'No tasks are running' });
+        }
+      });
+      
+      const result = await processMonitor.isNMSRunning();
+      
+      expect(result).toBe(true);
+    });
+  });
+
   describe('monitoring', () => {
     beforeEach(() => {
       jest.useFakeTimers();
