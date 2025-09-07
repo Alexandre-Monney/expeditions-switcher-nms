@@ -158,14 +158,20 @@ class NMSExpeditionManager {
     }
 
     async completeSetup() {
-        const newConfig = {
-            platform: this.selectedPlatform,
-            steamId: this.selectedSteamId,
-            firstSetup: false,
-            cachePath: this.buildCachePath()
-        };
-
         try {
+            // Construire le cache path avec le Steam ID si nécessaire
+            const cachePath = await window.electronAPI.buildCachePath(
+                this.selectedPlatform, 
+                this.selectedSteamId
+            );
+            
+            const newConfig = {
+                platform: this.selectedPlatform,
+                steamId: this.selectedSteamId,
+                firstSetup: false,
+                cachePath: cachePath
+            };
+
             const success = await window.electronAPI.saveConfig(newConfig);
             if (success) {
                 this.config = newConfig;
@@ -177,11 +183,6 @@ class NMSExpeditionManager {
             console.error('Erreur sauvegarde config:', error);
             alert('Erreur lors de la sauvegarde de la configuration.');
         }
-    }
-
-    buildCachePath() {
-        // Cette logique sera déplacée côté main process
-        return null;
     }
 
     showSetupScreen() {
@@ -483,28 +484,35 @@ class NMSExpeditionManager {
         const preview = document.getElementById('expedition-preview');
         if (!preview) return;
 
+        const imagePath = `assets/images/expeditions/${expedition.id}.png`;
+        
         preview.innerHTML = `
             <div class="expedition-card preview">
                 <div class="expedition-header">
                     <h4>${expedition.displayName || expedition.id}</h4>
                     <span class="expedition-order">#${expedition.order || '?'}</span>
                 </div>
-                <div class="expedition-details">
-                    <p class="description">${expedition.description || 'Pas de description disponible'}</p>
-                    <div class="expedition-meta">
-                        <span class="difficulty ${(expedition.difficulty || '').toLowerCase()}">
-                            ${expedition.difficulty || 'Difficulté inconnue'}
-                        </span>
-                        <span class="release-date">${expedition.releaseDate || 'Date inconnue'}</span>
-                    </div>
-                    ${expedition.rewards && expedition.rewards.length > 0 ? `
-                        <div class="rewards">
-                            <strong>Récompenses:</strong>
-                            <ul>
-                                ${expedition.rewards.map(reward => `<li>${reward}</li>`).join('')}
-                            </ul>
+                <div class="expedition-content-with-image">
+                    <div class="expedition-details">
+                        <p class="description">${expedition.description || 'Pas de description disponible'}</p>
+                        <div class="expedition-meta">
+                            <span class="difficulty ${(expedition.difficulty || '').toLowerCase()}">
+                                ${expedition.difficulty || 'Difficulté inconnue'}
+                            </span>
+                            <span class="release-date">${expedition.releaseDate || 'Date inconnue'}</span>
                         </div>
-                    ` : ''}
+                        ${expedition.rewards && expedition.rewards.length > 0 ? `
+                            <div class="rewards">
+                                <strong>Récompenses:</strong>
+                                <ul>
+                                    ${expedition.rewards.map(reward => `<li>${reward}</li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                    </div>
+                    <div class="expedition-image-right">
+                        <img src="${imagePath}" alt="${expedition.displayName || expedition.id}" onerror="this.style.display='none'">
+                    </div>
                 </div>
             </div>
         `;
