@@ -4,6 +4,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // Configuration
   loadConfig: () => ipcRenderer.invoke('config:load'),
   saveConfig: (config) => ipcRenderer.invoke('config:save', config),
+  buildCachePath: (platform, steamId) => ipcRenderer.invoke('config:buildCachePath', platform, steamId),
   
   // Steam detection
   detectSteamIds: () => ipcRenderer.invoke('steam:detect'),

@@ -63,7 +63,7 @@ class ConfigManager {
           return path.join(appDataPath, 'HelloGames/NMS/cache');
         } else {
           // Steam PC: %APPDATA%\HelloGames\NMS\{steam id}\cache
-          return steamId 
+          return (steamId && steamId.trim() !== '') 
             ? path.join(appDataPath, 'HelloGames/NMS', steamId, 'cache')
             : null;
         }

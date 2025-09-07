@@ -5,8 +5,9 @@ const os = require('os');
 class SteamDetection {
   static detectSteamIds() {
     try {
+      // Utiliser les mêmes chemins que ConfigManager pour la cohérence
       const appDataPath = process.platform === 'win32' 
-        ? process.env.APPDATA 
+        ? path.join(os.homedir(), 'AppData/Roaming')
         : path.join(os.homedir(), 'Library/Application Support');
       
       const nmsBasePath = path.join(appDataPath, 'HelloGames', 'NMS');
@@ -41,7 +42,7 @@ class SteamDetection {
     }
   }
 
-  static async getMainSteamId() {
+  static getMainSteamId() {
     const steamIds = this.detectSteamIds();
     
     if (steamIds.length === 0) {

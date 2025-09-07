@@ -52,6 +52,10 @@ ipcMain.handle('config:save', (event, config) => {
   return configManager.saveConfig(config);
 });
 
+ipcMain.handle('config:buildCachePath', (event, platform, steamId) => {
+  return configManager.buildCachePath(platform, steamId);
+});
+
 // Steam detection IPC handlers
 ipcMain.handle('steam:detect', () => {
   return SteamDetection.detectSteamIds();

@@ -11,8 +11,8 @@ jest.mock('os');
 
 describe('SteamDetection', () => {
   let mockHomedir = '/mock/home';
-  let mockAppDataPath = '/mock/appdata';
-  let mockNMSPath = '/mock/appdata/HelloGames/NMS';
+  let mockAppDataPath = '/mock/home/AppData/Roaming';
+  let mockNMSPath = '/mock/home/AppData/Roaming/HelloGames/NMS';
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -20,8 +20,7 @@ describe('SteamDetection', () => {
     os.homedir.mockReturnValue(mockHomedir);
     path.join.mockImplementation((...args) => args.join('/'));
     
-    Object.defineProperty(process, 'platform', { value: 'win32' });
-    process.env.APPDATA = mockAppDataPath;
+    Object.defineProperty(process, 'platform', { value: 'win32', configurable: true });
   });
 
   describe('detectSteamIds', () => {
@@ -44,8 +43,8 @@ describe('SteamDetection', () => {
 
       fs.existsSync.mockImplementation((filePath) => {
         if (filePath === mockNMSPath) return true;
-        if (filePath === `/mock/appdata/HelloGames/NMS/${mockSteamId}/cache`) return true;
-        if (filePath === `/mock/appdata/HelloGames/NMS/${mockSteamId}/cache/SEASON_DATA_CACHE.JSON`) return true;
+        if (filePath === `/mock/home/AppData/Roaming/HelloGames/NMS/${mockSteamId}/cache`) return true;
+        if (filePath === `/mock/home/AppData/Roaming/HelloGames/NMS/${mockSteamId}/cache/SEASON_DATA_CACHE.JSON`) return true;
         return false;
       });
       
@@ -55,7 +54,7 @@ describe('SteamDetection', () => {
       
       expect(result).toEqual([{
         steamId: mockSteamId,
-        cachePath: `/mock/appdata/HelloGames/NMS/${mockSteamId}/cache`,
+        cachePath: `/mock/home/AppData/Roaming/HelloGames/NMS/${mockSteamId}/cache`,
         hasSeasonFile: true
       }]);
     });
