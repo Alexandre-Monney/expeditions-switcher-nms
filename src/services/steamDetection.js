@@ -20,7 +20,7 @@ class SteamDetection {
       const steamIds = [];
 
       for (const entry of entries) {
-        if (entry.isDirectory() && /^\d{17}$/.test(entry.name)) {
+        if (entry.isDirectory() && /^st_\d{17}$/.test(entry.name)) {
           const cachePath = path.join(nmsBasePath, entry.name, 'cache');
           const seasonFile = path.join(cachePath, 'SEASON_DATA_CACHE.JSON');
           

@@ -34,17 +34,17 @@ describe('SteamDetection', () => {
     });
 
     test('should detect valid Steam IDs with season files', () => {
-      const mockSteamId = '76561198123456789';
+      const mockSteamFolder = 'st_76561198123456789';
       const mockEntries = [
-        { name: mockSteamId, isDirectory: () => true },
+        { name: mockSteamFolder, isDirectory: () => true },
         { name: 'invalid', isDirectory: () => true },
         { name: 'cache', isDirectory: () => true }
       ];
 
       fs.existsSync.mockImplementation((filePath) => {
         if (filePath === mockNMSPath) return true;
-        if (filePath === `/mock/home/AppData/Roaming/HelloGames/NMS/${mockSteamId}/cache`) return true;
-        if (filePath === `/mock/home/AppData/Roaming/HelloGames/NMS/${mockSteamId}/cache/SEASON_DATA_CACHE.JSON`) return true;
+        if (filePath === `/mock/home/AppData/Roaming/HelloGames/NMS/${mockSteamFolder}/cache`) return true;
+        if (filePath === `/mock/home/AppData/Roaming/HelloGames/NMS/${mockSteamFolder}/cache/SEASON_DATA_CACHE.JSON`) return true;
         return false;
       });
       
@@ -53,8 +53,8 @@ describe('SteamDetection', () => {
       const result = SteamDetection.detectSteamIds();
       
       expect(result).toEqual([{
-        steamId: mockSteamId,
-        cachePath: `/mock/home/AppData/Roaming/HelloGames/NMS/${mockSteamId}/cache`,
+        steamId: mockSteamFolder,
+        cachePath: `/mock/home/AppData/Roaming/HelloGames/NMS/${mockSteamFolder}/cache`,
         hasSeasonFile: true
       }]);
     });
@@ -62,8 +62,8 @@ describe('SteamDetection', () => {
     test('should filter out directories without valid Steam ID format', () => {
       const mockEntries = [
         { name: 'invalid-id', isDirectory: () => true },
-        { name: '12345', isDirectory: () => true }, // Too short
-        { name: '765611981234567890', isDirectory: () => true }, // Too long
+        { name: 'st_invalid', isDirectory: () => true }, // Valid prefix but invalid suffix
+        { name: '76561198123456789', isDirectory: () => true }, // Old format (should be ignored)
         { name: 'cache', isDirectory: () => true }
       ];
 
@@ -73,6 +73,32 @@ describe('SteamDetection', () => {
       const result = SteamDetection.detectSteamIds();
       
       expect(result).toEqual([]);
+    });
+
+    test('should detect Steam folders with st_ prefix format', () => {
+      const mockEntries = [
+        { name: 'st_76561198123456789', isDirectory: () => true }, // New format
+        { name: 'st_76561198987654321', isDirectory: () => true }, // Another valid one
+        { name: 'st_', isDirectory: () => true }, // Invalid - empty after prefix
+        { name: 'DefaultUser', isDirectory: () => true } // GamePass folder
+      ];
+
+      fs.existsSync.mockImplementation((filePath) => {
+        if (filePath === mockNMSPath) return true;
+        if (filePath.includes('st_76561198123456789/cache')) return true;
+        if (filePath.includes('st_76561198123456789/cache/SEASON_DATA_CACHE.JSON')) return true;
+        if (filePath.includes('st_76561198987654321/cache')) return true;
+        if (filePath.includes('st_76561198987654321/cache/SEASON_DATA_CACHE.JSON')) return true;
+        return false;
+      });
+      
+      fs.readdirSync.mockReturnValue(mockEntries);
+      
+      const result = SteamDetection.detectSteamIds();
+      
+      expect(result).toHaveLength(2);
+      expect(result[0].steamId).toBe('st_76561198123456789');
+      expect(result[1].steamId).toBe('st_76561198987654321');
     });
 
     test('should handle filesystem errors gracefully', () => {
