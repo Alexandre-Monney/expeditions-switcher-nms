@@ -21,16 +21,16 @@
 ```json
 {
   "platform": "steam|msstore|gog|gamepass",
-  "steamId": "76561198xxx" // Si Steam uniquement,
+  "steamId": "st_76561198123456789" // Si Steam uniquement, format st_ requis,
   "firstSetup": false,
   "cachePath": "/path/to/NMS/cache"
 }
 ```
 
 ### Chemins des Fichiers NMS par Plateforme
-- **Steam PC**: `%APPDATA%\HelloGames\NMS\{steam_id}\cache\`
+- **Steam PC**: `%APPDATA%\HelloGames\NMS\st_{steam_id}\cache\` (format st_ + 17 chiffres)
 - **Steam Mac**: `~/Library/Application Support/HelloGames/NMS/cache/`  
-- **MS Store/GOG/GamePass**: `%APPDATA%\HelloGames\NMS\cache\`
+- **MS Store/GOG/GamePass**: `%APPDATA%\HelloGames\NMS\DefaultUser\cache\` avec fallback vers `\cache\`
 
 **Fichier cible**: `SEASON_DATA_CACHE.JSON`
 
@@ -50,10 +50,19 @@
 - Exception: Auto-détection Steam IDs dans les dossiers existants
 
 ### Détection Steam ID
-**Logique**: Scan des dossiers `%APPDATA%\HelloGames\NMS\` pour trouver les IDs Steam (format `\d{17}`) avec fichier `SEASON_DATA_CACHE.JSON` présent.
+**Logique**: Scan des dossiers `%APPDATA%\HelloGames\NMS\` pour trouver les IDs Steam (format `st_\d{17}`) avec fichier `SEASON_DATA_CACHE.JSON` présent.
+- **Format requis**: `st_` + 17 chiffres (ex: `st_76561198123456789`)
+- **Validation stricte**: Regex `/^st_\d{17}$/` pour éviter les faux positifs
 - Si plusieurs IDs → proposer la liste
-- Si un seul → sélection automatique
+- Si un seul → sélection automatique  
 - Fallback sur le plus récemment modifié
+
+### Chemins Résilients Xbox Game Pass
+**Logique**: Système de fallback intelligent pour gérer les variations de structure
+- **Vérification 1**: `%APPDATA%\HelloGames\NMS\DefaultUser\cache\`
+- **Vérification 2**: `%APPDATA%\HelloGames\NMS\cache\` si DefaultUser absent
+- **Fallback**: DefaultUser si aucun des deux n'existe (sera créé par le jeu)
+- **Plateformes concernées**: MS Store, GOG, Xbox Game Pass
 
 ### Workflow de Swap des Fichiers
 1. **Backup**: `SEASON_DATA_CACHE.JSON` → `SEASON_DATA_CACHE_original.JSON`
@@ -119,11 +128,13 @@ npm run build
 ## 📊 État des Tests
 
 ### Couverture actuelle
-- **ConfigManager**: 17 tests (11 + 6 platform change) ✅
-- **SteamDetection**: 7 tests ✅  
+- **ConfigManager**: 21 tests (11 base + 6 platform change + 4 resilient paths) ✅
+- **SteamDetection**: 7 tests (format st_ validé) ✅  
 - **ProcessMonitor**: 16 tests ✅
-- **UI Tests (Renderer)**: 15 tests ✅
-- **Total**: 53 tests, tous passés ✅
+- **UI Tests (Renderer)**: 50 tests ✅
+- **ExpeditionManager**: 23 tests ✅
+- **Steam Integration**: 6 tests ✅
+- **Total**: 134 tests, tous passés ✅
 
 ### Frameworks utilisés
 - **Jest** pour les tests unitaires
@@ -136,6 +147,12 @@ npm run build
 - **Backend**: 6 tests couvrant la logique de ConfigManager
 - **Frontend**: 15 tests couvrant l'interface utilisateur
 - **Cas couverts**: Switching platforms, Steam ID handling, UI states, error cases
+
+### Tests de chemins résilients (Nouveauté)
+- **Plateformes concernées**: MS Store, GOG, Xbox Game Pass
+- **Scénarios testés**: DefaultUser exists, direct cache exists, neither exists
+- **Validation**: Fallback logic complet avec _dirExists helper
+- **Couverture**: 4 nouveaux tests pour chaque plateforme non-Steam
 
 ## 📋 Variables d'Environnement
 Aucune pour le moment - Configuration stockée localement.
