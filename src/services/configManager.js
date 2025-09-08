@@ -70,10 +70,35 @@ class ConfigManager {
       case 'msstore':
       case 'gog':
       case 'gamepass':
-        // MS Store/GOG/Xbox Game Pass PC: %APPDATA%\HelloGames\NMS\cache
-        return path.join(appDataPath, 'HelloGames/NMS/cache');
+        // Xbox Game Pass peut avoir DefaultUser/cache ou directement /cache
+        const baseNMSPath = path.join(appDataPath, 'HelloGames/NMS');
+        const defaultUserPath = path.join(baseNMSPath, 'DefaultUser/cache');
+        const directCachePath = path.join(baseNMSPath, 'cache');
+        
+        // Vérifier d'abord si DefaultUser existe
+        if (this._dirExists(defaultUserPath)) {
+          return defaultUserPath;
+        } else if (this._dirExists(directCachePath)) {
+          return directCachePath;
+        } else {
+          // Fallback sur DefaultUser même s'il n'existe pas encore (sera créé par le jeu)
+          return defaultUserPath;
+        }
       default:
         return null;
+    }
+  }
+
+  /**
+   * Vérifie si un dossier existe
+   * @param {string} dirPath Chemin du dossier à vérifier
+   * @returns {boolean}
+   */
+  _dirExists(dirPath) {
+    try {
+      return fs.existsSync(dirPath);
+    } catch (error) {
+      return false;
     }
   }
 }

@@ -114,18 +114,143 @@ describe('ConfigManager', () => {
       expect(result).toBe('/mock/home/Library/Application Support/HelloGames/NMS/cache');
     });
 
-    test('should build MS Store cache path', () => {
+    test('should build MS Store cache path with resilient logic', () => {
       Object.defineProperty(process, 'platform', { value: 'win32' });
+      
+      // Mock _dirExists to return false, so it should fallback to DefaultUser
+      const spy = jest.spyOn(configManager, '_dirExists');
+      spy.mockReturnValue(false);
       
       const result = configManager.buildCachePath('msstore');
       
-      expect(result).toBe('/mock/home/AppData/Roaming/HelloGames/NMS/cache');
+      expect(result).toBe('/mock/home/AppData/Roaming/HelloGames/NMS/DefaultUser/cache');
+      
+      spy.mockRestore();
     });
 
     test('should return null for invalid platform', () => {
       const result = configManager.buildCachePath('invalid');
       
       expect(result).toBeNull();
+    });
+
+    test('should build Xbox Game Pass path with DefaultUser when it exists', () => {
+      Object.defineProperty(process, 'platform', { value: 'win32' });
+      
+      // Mock _dirExists to simulate DefaultUser exists
+      const spy = jest.spyOn(configManager, '_dirExists');
+      spy.mockImplementation((path) => {
+        return path.includes('DefaultUser/cache');
+      });
+      
+      const result = configManager.buildCachePath('gamepass');
+      
+      expect(result).toBe('/mock/home/AppData/Roaming/HelloGames/NMS/DefaultUser/cache');
+      expect(spy).toHaveBeenCalledWith('/mock/home/AppData/Roaming/HelloGames/NMS/DefaultUser/cache');
+      
+      spy.mockRestore();
+    });
+
+    test('should build Xbox Game Pass path with direct cache when DefaultUser does not exist', () => {
+      Object.defineProperty(process, 'platform', { value: 'win32' });
+      
+      // Mock _dirExists to simulate DefaultUser doesn't exist but cache does
+      const spy = jest.spyOn(configManager, '_dirExists');
+      spy.mockImplementation((path) => {
+        return path.endsWith('/cache') && !path.includes('DefaultUser');
+      });
+      
+      const result = configManager.buildCachePath('gamepass');
+      
+      expect(result).toBe('/mock/home/AppData/Roaming/HelloGames/NMS/cache');
+      expect(spy).toHaveBeenCalledWith('/mock/home/AppData/Roaming/HelloGames/NMS/DefaultUser/cache');
+      expect(spy).toHaveBeenCalledWith('/mock/home/AppData/Roaming/HelloGames/NMS/cache');
+      
+      spy.mockRestore();
+    });
+
+    test('should fallback to DefaultUser path when neither exists', () => {
+      Object.defineProperty(process, 'platform', { value: 'win32' });
+      
+      // Mock _dirExists to return false for all paths
+      const spy = jest.spyOn(configManager, '_dirExists');
+      spy.mockReturnValue(false);
+      
+      const result = configManager.buildCachePath('gamepass');
+      
+      expect(result).toBe('/mock/home/AppData/Roaming/HelloGames/NMS/DefaultUser/cache');
+      
+      spy.mockRestore();
+    });
+
+    test('should build MS Store path with DefaultUser when it exists', () => {
+      Object.defineProperty(process, 'platform', { value: 'win32' });
+      
+      // Mock _dirExists to simulate DefaultUser exists for MS Store
+      const spy = jest.spyOn(configManager, '_dirExists');
+      spy.mockImplementation((path) => {
+        return path.includes('DefaultUser/cache');
+      });
+      
+      const result = configManager.buildCachePath('msstore');
+      
+      expect(result).toBe('/mock/home/AppData/Roaming/HelloGames/NMS/DefaultUser/cache');
+      expect(spy).toHaveBeenCalledWith('/mock/home/AppData/Roaming/HelloGames/NMS/DefaultUser/cache');
+      
+      spy.mockRestore();
+    });
+
+    test('should build MS Store path with direct cache when DefaultUser does not exist', () => {
+      Object.defineProperty(process, 'platform', { value: 'win32' });
+      
+      // Mock _dirExists to simulate DefaultUser doesn't exist but cache does
+      const spy = jest.spyOn(configManager, '_dirExists');
+      spy.mockImplementation((path) => {
+        return path.endsWith('/cache') && !path.includes('DefaultUser');
+      });
+      
+      const result = configManager.buildCachePath('msstore');
+      
+      expect(result).toBe('/mock/home/AppData/Roaming/HelloGames/NMS/cache');
+      expect(spy).toHaveBeenCalledWith('/mock/home/AppData/Roaming/HelloGames/NMS/DefaultUser/cache');
+      expect(spy).toHaveBeenCalledWith('/mock/home/AppData/Roaming/HelloGames/NMS/cache');
+      
+      spy.mockRestore();
+    });
+
+    test('should build GOG path with DefaultUser when it exists', () => {
+      Object.defineProperty(process, 'platform', { value: 'win32' });
+      
+      // Mock _dirExists to simulate DefaultUser exists for GOG
+      const spy = jest.spyOn(configManager, '_dirExists');
+      spy.mockImplementation((path) => {
+        return path.includes('DefaultUser/cache');
+      });
+      
+      const result = configManager.buildCachePath('gog');
+      
+      expect(result).toBe('/mock/home/AppData/Roaming/HelloGames/NMS/DefaultUser/cache');
+      expect(spy).toHaveBeenCalledWith('/mock/home/AppData/Roaming/HelloGames/NMS/DefaultUser/cache');
+      
+      spy.mockRestore();
+    });
+
+    test('should build GOG path with direct cache when DefaultUser does not exist', () => {
+      Object.defineProperty(process, 'platform', { value: 'win32' });
+      
+      // Mock _dirExists to simulate DefaultUser doesn't exist but cache does
+      const spy = jest.spyOn(configManager, '_dirExists');
+      spy.mockImplementation((path) => {
+        return path.endsWith('/cache') && !path.includes('DefaultUser');
+      });
+      
+      const result = configManager.buildCachePath('gog');
+      
+      expect(result).toBe('/mock/home/AppData/Roaming/HelloGames/NMS/cache');
+      expect(spy).toHaveBeenCalledWith('/mock/home/AppData/Roaming/HelloGames/NMS/DefaultUser/cache');
+      expect(spy).toHaveBeenCalledWith('/mock/home/AppData/Roaming/HelloGames/NMS/cache');
+      
+      spy.mockRestore();
     });
   });
 
@@ -163,11 +288,17 @@ describe('ConfigManager', () => {
     test('should reset Steam ID when changing from Steam to non-Steam platform', () => {
       Object.defineProperty(process, 'platform', { value: 'win32' });
       
+      // Mock _dirExists to return false for resilient path logic
+      const spy = jest.spyOn(configManager, '_dirExists');
+      spy.mockReturnValue(false);
+      
       // Change from Steam to GOG - steamId should be null
       const newCachePath = configManager.buildCachePath('gog');
       
-      expect(newCachePath).toBe('/mock/home/AppData/Roaming/HelloGames/NMS/cache');
+      expect(newCachePath).toBe('/mock/home/AppData/Roaming/HelloGames/NMS/DefaultUser/cache');
       expect(newCachePath).not.toContain('76561198');
+      
+      spy.mockRestore();
     });
 
     test('should preserve Steam ID when changing from non-Steam to Steam platform', () => {
@@ -184,13 +315,19 @@ describe('ConfigManager', () => {
     test('should handle platform change between non-Steam platforms', () => {
       Object.defineProperty(process, 'platform', { value: 'win32' });
       
+      // Mock _dirExists to return false for resilient path logic
+      const spy = jest.spyOn(configManager, '_dirExists');
+      spy.mockReturnValue(false);
+      
       // Change from MS Store to Game Pass - both should have same cache path
       const msStorePath = configManager.buildCachePath('msstore');
       const gamePassPath = configManager.buildCachePath('gamepass');
       
-      expect(msStorePath).toBe('/mock/home/AppData/Roaming/HelloGames/NMS/cache');
-      expect(gamePassPath).toBe('/mock/home/AppData/Roaming/HelloGames/NMS/cache');
+      expect(msStorePath).toBe('/mock/home/AppData/Roaming/HelloGames/NMS/DefaultUser/cache');
+      expect(gamePassPath).toBe('/mock/home/AppData/Roaming/HelloGames/NMS/DefaultUser/cache');
       expect(msStorePath).toEqual(gamePassPath);
+      
+      spy.mockRestore();
     });
 
     test('should clear firstSetup flag when changing platform', () => {
