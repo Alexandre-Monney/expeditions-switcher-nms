@@ -3,11 +3,11 @@ const path = require('path');
 const ExpeditionManager = require('../expeditionManager');
 const ConfigManager = require('../configManager');
 
-// Mock filesystem operations
+
 jest.mock('fs');
 jest.mock('path');
 
-// Mock ConfigManager
+
 jest.mock('../configManager');
 
 describe('ExpeditionManager', () => {
@@ -80,7 +80,7 @@ describe('ExpeditionManager', () => {
         return false;
       });
 
-      // Mock expedition identification
+      
       jest.spyOn(expeditionManager, '_identifyCurrentExpedition')
         .mockResolvedValue({
           id: '01_pioneers',
@@ -108,7 +108,7 @@ describe('ExpeditionManager', () => {
       fs.readFileSync.mockReturnValue(mockSeasonContent);
       fs.copyFileSync.mockImplementation(() => {});
       
-      // Mock successful backup creation
+      
       let backupCreated = false;
       fs.existsSync.mockImplementation((filePath) => {
         if (filePath.includes('SEASON_DATA_CACHE_original.JSON')) return backupCreated;
@@ -116,7 +116,7 @@ describe('ExpeditionManager', () => {
         return false;
       });
       
-      // Simulate backup file creation after copyFileSync
+      
       fs.copyFileSync.mockImplementation(() => {
         backupCreated = true;
       });
@@ -133,7 +133,7 @@ describe('ExpeditionManager', () => {
 
     test('should return success when backup already exists', async () => {
       fs.existsSync.mockImplementation((filePath) => {
-        return true; // Both files exist
+        return true; 
       });
 
       fs.readFileSync.mockReturnValue(JSON.stringify({test: 'data'}));
@@ -195,7 +195,7 @@ describe('ExpeditionManager', () => {
       
       fs.copyFileSync.mockImplementation(() => {});
       
-      // Mock successful backup creation
+      
       jest.spyOn(expeditionManager, 'createBackup')
         .mockResolvedValue({ success: true, alreadyExists: false });
 
@@ -388,7 +388,7 @@ describe('ExpeditionManager', () => {
       
       fs.readFileSync.mockImplementation((filePath) => {
         if (filePath.includes('/mock/season.json')) return expeditionContent;
-        if (filePath.includes('01_pioneers.json')) return expeditionContent; // Match
+        if (filePath.includes('01_pioneers.json')) return expeditionContent; 
         if (filePath.includes('02_beachhead.json')) return JSON.stringify({other: 'data'});
         if (filePath.includes('expeditions-metadata.json')) {
           return JSON.stringify({

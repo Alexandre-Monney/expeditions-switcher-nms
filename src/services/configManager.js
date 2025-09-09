@@ -51,7 +51,6 @@ class ConfigManager {
   }
 
   buildCachePath(platform, steamId = null) {
-    // Platform-specific base paths
     const appDataPath = process.platform === 'win32' 
       ? path.join(os.homedir(), 'AppData/Roaming')
       : path.join(os.homedir(), 'Library/Application Support');
@@ -59,10 +58,8 @@ class ConfigManager {
     switch (platform) {
       case 'steam':
         if (process.platform === 'darwin') {
-          // Steam Mac: ~/Library/Application Support/HelloGames/NMS/cache
           return path.join(appDataPath, 'HelloGames/NMS/cache');
         } else {
-          // Steam PC: %APPDATA%\HelloGames\NMS\{steam id}\cache
           return (steamId && steamId.trim() !== '') 
             ? path.join(appDataPath, 'HelloGames/NMS', steamId, 'cache')
             : null;
@@ -70,18 +67,15 @@ class ConfigManager {
       case 'msstore':
       case 'gog':
       case 'gamepass':
-        // Xbox Game Pass peut avoir DefaultUser/cache ou directement /cache
         const baseNMSPath = path.join(appDataPath, 'HelloGames/NMS');
         const defaultUserPath = path.join(baseNMSPath, 'DefaultUser/cache');
         const directCachePath = path.join(baseNMSPath, 'cache');
         
-        // Vérifier d'abord si DefaultUser existe
         if (this._dirExists(defaultUserPath)) {
           return defaultUserPath;
         } else if (this._dirExists(directCachePath)) {
           return directCachePath;
         } else {
-          // Fallback sur DefaultUser même s'il n'existe pas encore (sera créé par le jeu)
           return defaultUserPath;
         }
       default:

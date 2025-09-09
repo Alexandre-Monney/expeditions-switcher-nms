@@ -8,7 +8,6 @@
 </head>
 <body>
     <div id="app">
-        <!-- Setup Screen -->
         <div id="setup-screen" class="screen hidden">
             <div class="setup-container">
                 <h1>NMS Expedition Manager</h1>
@@ -56,7 +55,6 @@
                     </div>
                 </div>
 
-                <!-- Steam ID Selection -->
                 <div id="steam-section" class="steam-section hidden">
                     <h3>Configuration Steam :</h3>
                     <div id="steam-detection" class="steam-detection">
@@ -71,7 +69,6 @@
             </div>
         </div>
 
-        <!-- Main Screen -->
         <div id="main-screen" class="screen hidden">
             <div class="main-header">
                 <h1>NMS Expedition Manager</h1>
@@ -81,7 +78,6 @@
                 </div>
             </div>
             <div id="main-content">
-                <!-- Status Section -->
                 <div id="status-section" class="status-section">
                     <div id="current-status" class="current-status">
                         <div class="status-header">
@@ -95,7 +91,6 @@
                     </div>
                 </div>
 
-                <!-- Expedition Selection Section -->
                 <div id="expedition-section" class="expedition-section">
                     <div class="expedition-header">
                         <h2>Gestion des Expéditions</h2>
@@ -105,7 +100,6 @@
                         </div>
                     </div>
                     
-                    <!-- Online Mode Controls -->
                     <div id="online-controls" class="controls-section hidden">
                         <div class="expedition-selector">
                             <label for="expedition-select">Choisir une expédition :</label>
@@ -114,7 +108,6 @@
                             </select>
                         </div>
                         <div class="expedition-preview" id="expedition-preview">
-                            <!-- Preview will be populated here -->
                         </div>
                         <div class="action-buttons">
                             <button id="activate-expedition-btn" class="action-btn primary" disabled>
@@ -123,10 +116,8 @@
                         </div>
                     </div>
 
-                    <!-- Expedition Mode Controls -->
                     <div id="expedition-controls" class="controls-section hidden">
                         <div class="current-expedition" id="current-expedition">
-                            <!-- Current expedition info will be populated here -->
                         </div>
                         <div class="action-buttons">
                             <button id="restore-original-btn" class="action-btn secondary">
@@ -138,7 +129,6 @@
                         </div>
                     </div>
 
-                    <!-- Error State -->
                     <div id="error-state" class="error-state hidden">
                         <div class="error-content">
                             <h3>⚠️ Problème de Configuration</h3>
@@ -148,14 +138,12 @@
                     </div>
                 </div>
 
-                <!-- Messages Section -->
                 <div id="messages-section" class="messages-section">
                     <div id="message-container" class="message-container"></div>
                 </div>
             </div>
         </div>
 
-        <!-- Loading -->
         <div id="loading-screen" class="screen">
             <div class="loading-container">
                 <h1>NMS Expedition Manager</h1>

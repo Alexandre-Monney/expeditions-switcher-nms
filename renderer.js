@@ -14,7 +14,6 @@ class NMSExpeditionManager {
         await this.loadConfig();
         this.setupEventListeners();
         
-        // Décider quel écran afficher
         if (this.config && this.config.firstSetup === false) {
             await this.showMainScreen();
         } else {
@@ -33,14 +32,12 @@ class NMSExpeditionManager {
     }
 
     setupEventListeners() {
-        // Platform selection
         document.querySelectorAll('.platform-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 this.selectPlatform(btn.dataset.platform);
             });
         });
 
-        // Steam detection
         const detectSteamBtn = document.getElementById('detect-steam-btn');
         if (detectSteamBtn) {
             detectSteamBtn.addEventListener('click', () => {
@@ -48,7 +45,6 @@ class NMSExpeditionManager {
             });
         }
 
-        // Continue button
         const continueBtn = document.getElementById('setup-continue-btn');
         if (continueBtn) {
             continueBtn.addEventListener('click', () => {
@@ -56,7 +52,6 @@ class NMSExpeditionManager {
             });
         }
 
-        // Change platform button
         const changePlatformBtn = document.getElementById('change-platform-btn');
         if (changePlatformBtn) {
             changePlatformBtn.addEventListener('click', () => {
@@ -64,20 +59,17 @@ class NMSExpeditionManager {
             });
         }
 
-        // Expedition management event listeners
         this.setupExpeditionEventListeners();
     }
 
     selectPlatform(platform) {
         this.selectedPlatform = platform;
         
-        // Update UI
         document.querySelectorAll('.platform-btn').forEach(btn => {
             btn.classList.remove('selected');
         });
         document.querySelector(`[data-platform="${platform}"]`).classList.add('selected');
 
-        // Show/hide Steam section
         const steamSection = document.getElementById('steam-section');
         if (platform === 'steam') {
             steamSection.classList.remove('hidden');
@@ -123,7 +115,6 @@ class NMSExpeditionManager {
                     resultsDiv.appendChild(option);
                 });
 
-                // Auto-select le premier si un seul
                 if (steamIds.length === 1) {
                     this.selectSteamId(steamIds[0].steamId);
                 }
@@ -140,7 +131,6 @@ class NMSExpeditionManager {
     selectSteamId(steamId) {
         this.selectedSteamId = steamId;
         
-        // Update UI
         document.querySelectorAll('.steam-id-option').forEach(option => {
             option.classList.remove('selected');
         });
@@ -159,7 +149,6 @@ class NMSExpeditionManager {
 
     async completeSetup() {
         try {
-            // Construire le cache path avec le Steam ID si nécessaire
             const cachePath = await window.electronAPI.buildCachePath(
                 this.selectedPlatform, 
                 this.selectedSteamId
@@ -195,7 +184,6 @@ class NMSExpeditionManager {
         document.getElementById('main-screen').classList.remove('hidden');
         this.updateMainScreenInfo();
         
-        // Initialize expedition functionality
         await this.initializeExpeditionManager();
     }
 
@@ -224,10 +212,8 @@ class NMSExpeditionManager {
         });
     }
 
-    // ===== EXPEDITION MANAGEMENT METHODS =====
 
     setupExpeditionEventListeners() {
-        // Refresh status button
         const refreshBtn = document.getElementById('refresh-status-btn');
         if (refreshBtn) {
             refreshBtn.addEventListener('click', () => {
@@ -235,7 +221,6 @@ class NMSExpeditionManager {
             });
         }
 
-        // Expedition selection
         const expeditionSelect = document.getElementById('expedition-select');
         if (expeditionSelect) {
             expeditionSelect.addEventListener('change', (e) => {
@@ -243,7 +228,6 @@ class NMSExpeditionManager {
             });
         }
 
-        // Action buttons
         const activateBtn = document.getElementById('activate-expedition-btn');
         if (activateBtn) {
             activateBtn.addEventListener('click', () => {
@@ -272,19 +256,15 @@ class NMSExpeditionManager {
             });
         }
 
-        // NMS status monitoring
         this.setupNMSStatusMonitoring();
     }
 
     async initializeExpeditionManager() {
         try {
-            // Load available expeditions
             await this.loadAvailableExpeditions();
             
-            // Get current state
             await this.refreshExpeditionState();
             
-            // Start NMS monitoring
             await window.electronAPI.startNMSMonitoring(3000);
             
         } catch (error) {
@@ -413,7 +393,6 @@ class NMSExpeditionManager {
         const expeditionControls = document.getElementById('expedition-controls');
         const errorState = document.getElementById('error-state');
 
-        // Hide all sections first
         [onlineControls, expeditionControls, errorState].forEach(section => {
             if (section) section.classList.add('hidden');
         });
@@ -472,7 +451,6 @@ class NMSExpeditionManager {
             activateBtn.disabled = !expeditionId;
         }
 
-        // Update preview
         if (expeditionId) {
             const expedition = this.availableExpeditions.find(e => e.id === expeditionId);
             if (expedition) {
@@ -585,11 +563,9 @@ class NMSExpeditionManager {
     }
 
     switchToOnlineMode() {
-        // Switch to online controls to allow selecting a different expedition
         this.updateControlSections({ mode: 'online' });
         this.clearExpeditionPreview();
         
-        // Reset selection
         const select = document.getElementById('expedition-select');
         if (select) select.value = '';
         this.selectedExpeditionId = null;
@@ -615,7 +591,6 @@ class NMSExpeditionManager {
             }
         }
 
-        // Disable/enable action buttons based on NMS status
         this.updateButtonsForNMSStatus(isRunning);
     }
 
@@ -632,7 +607,6 @@ class NMSExpeditionManager {
                     btn.disabled = true;
                     btn.title = 'Fermez No Man\'s Sky pour effectuer cette action';
                 } else {
-                    // Re-enable based on other conditions
                     if (buttonId === 'activate-expedition-btn') {
                         btn.disabled = !this.selectedExpeditionId;
                     } else {
@@ -660,7 +634,6 @@ class NMSExpeditionManager {
 
         container.appendChild(messageEl);
 
-        // Auto-remove after 5 seconds
         setTimeout(() => {
             if (messageEl.parentElement) {
                 messageEl.remove();

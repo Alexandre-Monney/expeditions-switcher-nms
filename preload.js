@@ -1,16 +1,13 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
-  // Configuration
   loadConfig: () => ipcRenderer.invoke('config:load'),
   saveConfig: (config) => ipcRenderer.invoke('config:save', config),
   buildCachePath: (platform, steamId) => ipcRenderer.invoke('config:buildCachePath', platform, steamId),
   
-  // Steam detection
   detectSteamIds: () => ipcRenderer.invoke('steam:detect'),
   getMainSteamId: () => ipcRenderer.invoke('steam:getMain'),
   
-  // Process monitoring
   isNMSRunning: () => ipcRenderer.invoke('process:isNMSRunning'),
   getNMSProcessInfo: () => ipcRenderer.invoke('process:getNMSProcessInfo'),
   startNMSMonitoring: (interval) => ipcRenderer.invoke('process:startMonitoring', interval),
@@ -24,7 +21,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
     ipcRenderer.removeAllListeners('nms-status-changed');
   },
   
-  // Expedition management
   getCurrentState: () => ipcRenderer.invoke('expedition:getCurrentState'),
   getAvailableExpeditions: () => ipcRenderer.invoke('expedition:getAvailableExpeditions'),
   activateExpedition: (expeditionId) => ipcRenderer.invoke('expedition:activateExpedition', expeditionId),

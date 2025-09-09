@@ -27,7 +27,6 @@ class ExpeditionManager {
       const seasonFile = path.join(config.cachePath, 'SEASON_DATA_CACHE.JSON');
       const backupFile = path.join(config.cachePath, 'SEASON_DATA_CACHE_original.JSON');
 
-      // Check file existence
       const hasSeasonFile = fs.existsSync(seasonFile);
       const hasBackupFile = fs.existsSync(backupFile);
 
@@ -39,7 +38,6 @@ class ExpeditionManager {
         };
       }
 
-      // If no backup exists, we're in online mode
       if (!hasBackupFile) {
         return {
           mode: 'online',
@@ -51,7 +49,6 @@ class ExpeditionManager {
         };
       }
 
-      // If backup exists, we're in expedition mode - try to identify which one
       const currentExpedition = await this._identifyCurrentExpedition(seasonFile);
       
       return {
@@ -85,12 +82,10 @@ class ExpeditionManager {
       const expeditionFiles = fs.readdirSync(this.expeditionsDataPath)
         .filter(file => file.endsWith('.json') && file !== 'expeditions-metadata.json');
 
-      // Compare with each expedition file
       for (const expeditionFile of expeditionFiles) {
         const expeditionPath = path.join(this.expeditionsDataPath, expeditionFile);
         const expeditionContent = fs.readFileSync(expeditionPath, 'utf8');
         
-        // Simple content comparison (could be enhanced with better matching logic)
         if (currentContent === expeditionContent) {
           const expeditionId = expeditionFile.replace('.json', '');
           const metadata = await this._getExpeditionMetadata(expeditionId);
@@ -140,16 +135,13 @@ class ExpeditionManager {
       const seasonFile = path.join(config.cachePath, 'SEASON_DATA_CACHE.JSON');
       const backupFile = path.join(config.cachePath, 'SEASON_DATA_CACHE_original.JSON');
 
-      // Verify source file exists and is valid JSON
       if (!fs.existsSync(seasonFile)) {
         throw new Error('SEASON_DATA_CACHE.JSON not found');
       }
 
-      // Validate JSON format
       const content = fs.readFileSync(seasonFile, 'utf8');
-      JSON.parse(content); // Will throw if invalid JSON
+      JSON.parse(content);
 
-      // Check if backup already exists
       if (fs.existsSync(backupFile)) {
         return {
           success: true,
@@ -158,18 +150,15 @@ class ExpeditionManager {
         };
       }
 
-      // Create backup
       fs.copyFileSync(seasonFile, backupFile);
 
-      // Verify backup was created successfully
       if (!fs.existsSync(backupFile)) {
         throw new Error('Failed to create backup file');
       }
 
-      // Verify backup content matches original
       const backupContent = fs.readFileSync(backupFile, 'utf8');
       if (backupContent !== content) {
-        fs.unlinkSync(backupFile); // Clean up failed backup
+        fs.unlinkSync(backupFile);
         throw new Error('Backup verification failed - content mismatch');
       }
 
@@ -203,14 +192,12 @@ class ExpeditionManager {
       const seasonFile = path.join(config.cachePath, 'SEASON_DATA_CACHE.JSON');
       const expeditionFile = path.join(this.expeditionsDataPath, `${expeditionId}.json`);
 
-      // Verify expedition file exists
       if (!fs.existsSync(expeditionFile)) {
         throw new Error(`Expedition file not found: ${expeditionId}.json`);
       }
 
-      // Validate expedition file JSON format
       const expeditionContent = fs.readFileSync(expeditionFile, 'utf8');
-      JSON.parse(expeditionContent); // Will throw if invalid JSON
+      JSON.parse(expeditionContent);
 
       // Create backup first if it doesn't exist
       const backupResult = await this.createBackup();
@@ -218,16 +205,13 @@ class ExpeditionManager {
         throw new Error(`Failed to create backup: ${backupResult.error}`);
       }
 
-      // Replace season file with expedition data
       fs.copyFileSync(expeditionFile, seasonFile);
 
-      // Verify the replacement was successful
       const newContent = fs.readFileSync(seasonFile, 'utf8');
       if (newContent !== expeditionContent) {
         throw new Error('Expedition activation verification failed');
       }
 
-      // Get expedition metadata for response
       const metadata = await this._getExpeditionMetadata(expeditionId);
 
       return {
@@ -261,25 +245,20 @@ class ExpeditionManager {
       const seasonFile = path.join(config.cachePath, 'SEASON_DATA_CACHE.JSON');
       const backupFile = path.join(config.cachePath, 'SEASON_DATA_CACHE_original.JSON');
 
-      // Verify backup file exists
       if (!fs.existsSync(backupFile)) {
         throw new Error('No backup file found - cannot restore');
       }
 
-      // Validate backup file JSON format
       const backupContent = fs.readFileSync(backupFile, 'utf8');
-      JSON.parse(backupContent); // Will throw if invalid JSON
+      JSON.parse(backupContent);
 
-      // Restore backup to season file
       fs.copyFileSync(backupFile, seasonFile);
 
-      // Verify restoration
       const restoredContent = fs.readFileSync(seasonFile, 'utf8');
       if (restoredContent !== backupContent) {
         throw new Error('Restoration verification failed');
       }
 
-      // Remove backup file after successful restoration
       fs.unlinkSync(backupFile);
 
       return {
@@ -319,7 +298,6 @@ class ExpeditionManager {
         });
       }
 
-      // Sort by order if available
       expeditions.sort((a, b) => (a.order || 0) - (b.order || 0));
 
       return {

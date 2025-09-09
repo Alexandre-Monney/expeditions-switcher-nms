@@ -75,37 +75,30 @@ class ProcessMonitor {
       
       let command;
       if (platform === 'win32') {
-        // Windows: utiliser tasklist avec filtre exact et vérifier que le processus existe vraiment
         command = `tasklist /FI "IMAGENAME eq ${processName}" /FO CSV /NH`;
       } else {
-        // Unix-like (macOS, Linux): utiliser pgrep pour une détection précise
         command = `pgrep -f "${processName}"`;
       }
       
       const { stdout } = await execAsync(command);
       
       if (platform === 'win32') {
-        // Sur Windows, vérifier plus strictement
         const output = stdout.trim();
         if (output.length === 0 || output.includes('No tasks are running') || output.includes('INFO: No tasks')) {
           return false;
         }
         
-        // Vérifier que la ligne contient vraiment le nom exact du processus
         const lines = output.split('\n').filter(line => line.trim().length > 0);
         for (const line of lines) {
-          // Format CSV: "nom","PID","nom_session","#_session","utilisation_mémoire"
           if (line.includes(`"${processName}"`)) {
             return true;
           }
         }
         return false;
       } else {
-        // Sur Unix, pgrep retourne des PIDs s'il trouve le processus
         return stdout.trim().length > 0;
       }
     } catch (error) {
-      // Si la commande échoue, le processus n'est probablement pas actif
       return false;
     }
   }
@@ -121,10 +114,8 @@ class ProcessMonitor {
       
       let command;
       if (platform === 'win32') {
-        // Windows: tasklist avec plus de détails et filtre strict
         command = `tasklist /FI "IMAGENAME eq ${processName}" /FO CSV`;
       } else {
-        // Unix-like: utiliser ps avec pgrep pour plus de précision
         command = `ps -p $(pgrep -f "${processName}" | head -1) -o pid,pcpu,pmem,etime,command 2>/dev/null`;
       }
       
@@ -135,14 +126,13 @@ class ProcessMonitor {
       }
       
       if (platform === 'win32') {
-        // Vérifier que le processus correspond exactement
         const lines = stdout.split('\n');
         for (const line of lines) {
           if (line.includes(`"${processName}"`)) {
             return this._parseWindowsTasklist(stdout);
           }
         }
-        return null; // Processus non trouvé ou nom inexact
+        return null;
       } else {
         return this._parseUnixPS(stdout);
       }
@@ -161,7 +151,6 @@ class ProcessMonitor {
       const lines = output.trim().split('\n');
       if (lines.length < 2) return null;
       
-      // Ignorer la ligne d'en-tête CSV
       const dataLine = lines[1];
       const fields = dataLine.split('","').map(field => field.replace(/"/g, ''));
       
@@ -188,14 +177,13 @@ class ProcessMonitor {
       const lines = output.trim().split('\n');
       if (lines.length < 2) return null;
       
-      // Ignorer la ligne d'en-tête et prendre la première ligne de données
       const dataLine = lines[1];
       const fields = dataLine.trim().split(/\s+/);
       
       if (fields.length >= 4) {
         return {
           pid: parseInt(fields[0]) || 'Unknown',
-          memory: `${fields[1]}%`, // % CPU
+          memory: `${fields[1]}%`,
           startTime: fields[3] || 'Unknown'
         };
       }

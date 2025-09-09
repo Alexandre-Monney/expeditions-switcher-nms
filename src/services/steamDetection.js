@@ -5,7 +5,6 @@ const os = require('os');
 class SteamDetection {
   static detectSteamIds() {
     try {
-      // Utiliser les mêmes chemins que ConfigManager pour la cohérence
       const appDataPath = process.platform === 'win32' 
         ? path.join(os.homedir(), 'AppData/Roaming')
         : path.join(os.homedir(), 'Library/Application Support');
@@ -24,7 +23,6 @@ class SteamDetection {
           const cachePath = path.join(nmsBasePath, entry.name, 'cache');
           const seasonFile = path.join(cachePath, 'SEASON_DATA_CACHE.JSON');
           
-          // Vérifier si le dossier cache existe et contient le fichier
           if (fs.existsSync(cachePath) && fs.existsSync(seasonFile)) {
             steamIds.push({
               steamId: entry.name,
@@ -53,7 +51,6 @@ class SteamDetection {
       return steamIds[0];
     }
 
-    // Si plusieurs Steam IDs, retourner celui avec la modification la plus récente
     let mostRecent = steamIds[0];
     for (const steamData of steamIds) {
       const seasonFile = path.join(steamData.cachePath, 'SEASON_DATA_CACHE.JSON');
