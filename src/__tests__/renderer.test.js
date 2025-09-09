@@ -297,9 +297,12 @@ class TestUIManager {
         
       case 'expedition':
         const expeditionName = state.currentExpedition?.displayName || 'Expédition inconnue';
+        const expeditionImageUrl = state.currentExpedition?.imageUrl || 'assets/images/expeditions/default.png';
         statusHtml = `
           <div class="status-content expedition">
-            <span class="status-icon">🚀</span>
+            <div class="status-icon expedition-icon">
+              <img src="${expeditionImageUrl}" alt="${expeditionName}" class="expedition-status-image">
+            </div>
             <div>
               <strong>Mode Expédition Active</strong>
               <p>Expédition active: <strong>${expeditionName}</strong></p>
@@ -941,7 +944,7 @@ describe('NMS Expedition Manager UI - Expedition Management', () => {
       expect(statusInfo.classList.contains('expedition')).toBe(true);
       expect(statusInfo.innerHTML).toContain('Mode Expédition Active');
       expect(statusInfo.innerHTML).toContain('The Pioneers');
-      expect(statusInfo.innerHTML).toContain('🚀');
+      expect(statusInfo.innerHTML).toContain('expedition-status-image');
 
       const onlineControls = document.getElementById('online-controls');
       const expeditionControls = document.getElementById('expedition-controls');
