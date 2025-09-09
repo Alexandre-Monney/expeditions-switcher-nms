@@ -129,6 +129,11 @@ body {
     filter: brightness(0) invert(1);
 }
 
+/* Exception pour Steam: garder le logo visible quand sélectionné */
+.platform-btn[data-platform="steam"].selected .platform-logo img {
+    filter: brightness(1.2) contrast(1.2);
+}
+
 /* MVP: Masquer MS Store et GOG */
 .platform-btn[data-platform="msstore"],
 .platform-btn[data-platform="gog"] {
