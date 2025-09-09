@@ -1,6 +1,6 @@
 {
   "01_pioneers": {
-    "displayName": "The Pioneers",
+    "displayName": "01 - The Pioneers",
     "description": "The first expedition - Pioneer across the galaxy",
     "difficulty": "Easy",
     "duration": "7 weeks",
@@ -11,7 +11,7 @@
     "imageUrl": "assets/images/expeditions/01_pioneers.png"
   },
   "02_beachhead": {
-    "displayName": "Beachhead", 
+    "displayName": "02 - Beachhead",
     "description": "Establish a beachhead on new worlds - Mass Effect crossover",
     "difficulty": "Medium",
     "duration": "2 weeks",
@@ -22,7 +22,7 @@
     "imageUrl": "assets/images/expeditions/02_beachhead.png"
   },
   "03_cartographers": {
-    "displayName": "Cartographers",
+    "displayName": "03 - Cartographers",
     "description": "Chart unknown territories and map the stars",
     "difficulty": "Medium", 
     "duration": "5 weeks",
@@ -33,7 +33,7 @@
     "imageUrl": "assets/images/expeditions/03_cartographers.png"
   },
   "04_emergence": {
-    "displayName": "Emergence",
+    "displayName": "04 - Emergence",
     "description": "Face cosmic horrors in this challenging expedition",
     "difficulty": "Hard",
     "duration": "4 weeks",
@@ -44,7 +44,7 @@
     "imageUrl": "assets/images/expeditions/04_emergence.png"
   },
   "05_exobiology": {
-    "displayName": "Exobiology",
+    "displayName": "05 - Exobiology",
     "description": "Discover and catalog alien lifeforms",
     "difficulty": "Medium",
     "duration": "5 weeks", 
@@ -55,7 +55,7 @@
     "imageUrl": "assets/images/expeditions/05_exobiology.png"
   },
   "06_blighted": {
-    "displayName": "The Blighted",
+    "displayName": "06 - The Blighted",
     "description": "Navigate through blighted and corrupted worlds",
     "difficulty": "Hard",
     "duration": "5 weeks",
@@ -66,7 +66,7 @@
     "imageUrl": "assets/images/expeditions/06_blighted.png"
   },
   "07_leviathan": {
-    "displayName": "Leviathan",
+    "displayName": "07 - Leviathan",
     "description": "Break free from an endless time loop",
     "difficulty": "Hard",
     "duration": "6 weeks",
@@ -77,7 +77,7 @@
     "imageUrl": "assets/images/expeditions/07_leviathan.png"
   },
   "08_polestar": {
-    "displayName": "Polestar",
+    "displayName": "08 - Polestar",
     "description": "Navigate by the stars in this exploration expedition",
     "difficulty": "Medium",
     "duration": "6 weeks",
@@ -88,7 +88,7 @@
     "imageUrl": "assets/images/expeditions/08_polestar.png"
   },
   "09_utopia": {
-    "displayName": "Utopia",
+    "displayName": "09 - Utopia",
     "description": "Build the perfect utopian settlement",
     "difficulty": "Easy",
     "duration": "6 weeks",
@@ -99,7 +99,7 @@
     "imageUrl": "assets/images/expeditions/09_utopia.png"
   },
   "10_singularity": {
-    "displayName": "Singularity", 
+    "displayName": "10 - Singularity", 
     "description": "Investigate gravitational anomalies and black holes",
     "difficulty": "Hard",
     "duration": "5 weeks",
@@ -110,7 +110,7 @@
     "imageUrl": "assets/images/expeditions/10_singularity.png"
   },
   "11_voyagers": {
-    "displayName": "Voyagers",
+    "displayName": "11 - Voyagers",
     "description": "Journey across multiple galaxies as a voyager",
     "difficulty": "Medium",
     "duration": "7 weeks",
@@ -121,7 +121,7 @@
     "imageUrl": "assets/images/expeditions/11_voyagers.png"
   },
   "12_omega": {
-    "displayName": "Omega",
+    "displayName": "12 - Omega",
     "description": "The ultimate expedition - face the final challenge", 
     "difficulty": "Very Hard",
     "duration": "4 weeks",
@@ -132,7 +132,7 @@
     "imageUrl": "assets/images/expeditions/12_omega.png"
   },
   "13_adrift": {
-    "displayName": "Adrift",
+    "displayName": "13 - Adrift",
     "description": "Survive while adrift in space with limited resources",
     "difficulty": "Very Hard",
     "duration": "7 weeks",
@@ -143,7 +143,7 @@
     "imageUrl": "assets/images/expeditions/13_adrift.png"
   },
   "14_liquidators": {
-    "displayName": "Liquidators",
+    "displayName": "14 - Liquidators",
     "description": "Clean up hazardous materials across the galaxy",
     "difficulty": "Hard", 
     "duration": "5 weeks",
@@ -154,7 +154,7 @@
     "imageUrl": "assets/images/expeditions/14_liquidators.png"
   },
   "15_aquarius": {
-    "displayName": "Aquarius", 
+    "displayName": "15 - Aquarius", 
     "description": "Explore oceanic worlds and underwater mysteries",
     "difficulty": "Medium",
     "duration": "7 weeks",
@@ -165,7 +165,7 @@
     "imageUrl": "assets/images/expeditions/15_aquarius.png"
   },
   "16_cursed": {
-    "displayName": "The Cursed",
+    "displayName": "16 - The Cursed",
     "description": "Break ancient curses in this spooky expedition",
     "difficulty": "Hard",
     "duration": "2 weeks",
@@ -176,7 +176,7 @@
     "imageUrl": "assets/images/expeditions/16_cursed.png"
   },
   "17_titan": {
-    "displayName": "Titan",
+    "displayName": "17 - Titan",
     "description": "Face titanic challenges in massive worlds",
     "difficulty": "Hard",
     "duration": "6 weeks",
@@ -187,7 +187,7 @@
     "imageUrl": "assets/images/expeditions/17_titan.png"
   },
   "18_relics": {
-    "displayName": "Relics",
+    "displayName": "18 - Relics",
     "description": "Discover ancient relics and archaeological treasures",
     "difficulty": "Medium",
     "duration": "6 weeks",
