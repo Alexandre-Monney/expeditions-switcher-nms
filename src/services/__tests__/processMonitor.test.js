@@ -1,7 +1,7 @@
 const { exec } = require('child_process');
 const ProcessMonitor = require('../processMonitor');
 
-// Mock child_process
+
 jest.mock('child_process');
 
 describe('ProcessMonitor', () => {
@@ -15,7 +15,7 @@ describe('ProcessMonitor', () => {
   });
 
   afterEach(() => {
-    // Clear any intervals that might be running
+    
     jest.clearAllTimers();
   });
 
@@ -36,7 +36,7 @@ describe('ProcessMonitor', () => {
       Object.defineProperty(process, 'platform', { value: 'darwin' });
       
       mockExec.mockImplementation((command, callback) => {
-        callback(null, { stdout: '1234\n5678' }); // pgrep returns PIDs
+        callback(null, { stdout: '1234\n5678' }); 
       });
       
       const result = await processMonitor.isNMSRunning();
@@ -71,11 +71,11 @@ describe('ProcessMonitor', () => {
       
       mockExec
         .mockImplementationOnce((command, callback) => {
-          // First call for NMS.exe - not found
+          
           callback(null, { stdout: 'No tasks are running' });
         })
         .mockImplementationOnce((command, callback) => {
-          // Second call for NoMansSky.exe - found
+          
           callback(null, { stdout: '"NoMansSky.exe","5678","Console","1","15,000 K"' });
         });
       
@@ -198,9 +198,9 @@ describe('ProcessMonitor', () => {
       Object.defineProperty(process, 'platform', { value: 'win32' });
       
       mockExec.mockImplementation((command, callback) => {
-        // Simulate tasklist returning output that contains similar but not exact process name
+        
         if (command.includes('NMS.exe')) {
-          // Return output that looks like it found something but is actually a different process
+          
           callback(null, { stdout: '"NotNMS.exe","1234","Console","1","10,000 K"' });
         } else {
           callback(null, { stdout: 'No tasks are running' });
@@ -216,7 +216,7 @@ describe('ProcessMonitor', () => {
       Object.defineProperty(process, 'platform', { value: 'win32' });
       
       mockExec.mockImplementation((command, callback) => {
-        // Simulate tasklist returning INFO message instead of "No tasks are running"
+        
         callback(null, { stdout: 'INFO: No tasks are running which match the specified criteria.' });
       });
       
@@ -230,7 +230,7 @@ describe('ProcessMonitor', () => {
       
       mockExec.mockImplementation((command, callback) => {
         if (command.includes('NMS.exe')) {
-          // This should match exactly
+          
           callback(null, { stdout: '"NMS.exe","1234","Console","1","50,000 K"' });
         } else {
           callback(null, { stdout: 'No tasks are running' });
@@ -269,7 +269,7 @@ describe('ProcessMonitor', () => {
       
       processMonitor.stopMonitoring(intervalId);
       
-      // Fast-forward time
+      
       jest.advanceTimersByTime(2000);
       
       expect(mockCallback).not.toHaveBeenCalled();

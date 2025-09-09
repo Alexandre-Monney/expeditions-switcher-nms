@@ -12,7 +12,7 @@ function createWindow() {
     minWidth: 1200,
     minHeight: 800,
     icon: path.join(__dirname, 'assets/icons/app-icon.png'),
-    show: false, // Don't show until ready
+    show: false,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -20,7 +20,6 @@ function createWindow() {
     }
   });
 
-  // Show window when ready to prevent visual flash
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();
   });
@@ -42,7 +41,6 @@ app.on('activate', () => {
   }
 });
 
-// Configuration IPC handlers
 const configManager = new ConfigManager();
 
 ipcMain.handle('config:load', () => {
@@ -57,7 +55,6 @@ ipcMain.handle('config:buildCachePath', (event, platform, steamId) => {
   return configManager.buildCachePath(platform, steamId);
 });
 
-// Steam detection IPC handlers
 ipcMain.handle('steam:detect', () => {
   return SteamDetection.detectSteamIds();
 });
@@ -66,7 +63,6 @@ ipcMain.handle('steam:getMain', () => {
   return SteamDetection.getMainSteamId();
 });
 
-// Process monitoring IPC handlers
 const processMonitor = new ProcessMonitor();
 let monitoringIntervalId = null;
 
@@ -79,14 +75,11 @@ ipcMain.handle('process:getNMSProcessInfo', async () => {
 });
 
 ipcMain.handle('process:startMonitoring', (event, interval = 5000) => {
-  // Stop existing monitoring if any
   if (monitoringIntervalId) {
     processMonitor.stopMonitoring(monitoringIntervalId);
   }
   
-  // Start new monitoring
   monitoringIntervalId = processMonitor.startMonitoring((isRunning) => {
-    // Send status to all windows
     BrowserWindow.getAllWindows().forEach(window => {
       window.webContents.send('nms-status-changed', isRunning);
     });
@@ -104,7 +97,6 @@ ipcMain.handle('process:stopMonitoring', () => {
   return false;
 });
 
-// Expedition management IPC handlers
 const expeditionManager = new ExpeditionManager();
 
 ipcMain.handle('expedition:getCurrentState', async () => {
@@ -116,7 +108,6 @@ ipcMain.handle('expedition:getAvailableExpeditions', async () => {
 });
 
 ipcMain.handle('expedition:activateExpedition', async (event, expeditionId) => {
-  // Check if NMS is running before allowing activation
   const isRunning = await processMonitor.isNMSRunning();
   if (isRunning) {
     return {
@@ -129,7 +120,6 @@ ipcMain.handle('expedition:activateExpedition', async (event, expeditionId) => {
 });
 
 ipcMain.handle('expedition:restoreOriginal', async () => {
-  // Check if NMS is running before allowing restoration
   const isRunning = await processMonitor.isNMSRunning();
   if (isRunning) {
     return {

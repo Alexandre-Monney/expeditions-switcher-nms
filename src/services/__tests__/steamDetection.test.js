@@ -3,7 +3,7 @@ const path = require('path');
 const os = require('os');
 const SteamDetection = require('../steamDetection');
 
-// Mock filesystem operations
+
 jest.mock('fs');
 jest.mock('path');
 jest.mock('os');
@@ -62,8 +62,8 @@ describe('SteamDetection', () => {
     test('should filter out directories without valid Steam ID format', () => {
       const mockEntries = [
         { name: 'invalid-id', isDirectory: () => true },
-        { name: 'st_invalid', isDirectory: () => true }, // Valid prefix but invalid suffix
-        { name: '76561198123456789', isDirectory: () => true }, // Old format (should be ignored)
+        { name: 'st_invalid', isDirectory: () => true }, 
+        { name: '76561198123456789', isDirectory: () => true }, 
         { name: 'cache', isDirectory: () => true }
       ];
 
@@ -77,10 +77,10 @@ describe('SteamDetection', () => {
 
     test('should detect Steam folders with st_ prefix format', () => {
       const mockEntries = [
-        { name: 'st_76561198123456789', isDirectory: () => true }, // New format
-        { name: 'st_76561198987654321', isDirectory: () => true }, // Another valid one
-        { name: 'st_', isDirectory: () => true }, // Invalid - empty after prefix
-        { name: 'DefaultUser', isDirectory: () => true } // GamePass folder
+        { name: 'st_76561198123456789', isDirectory: () => true }, 
+        { name: 'st_76561198987654321', isDirectory: () => true }, 
+        { name: 'st_', isDirectory: () => true }, 
+        { name: 'DefaultUser', isDirectory: () => true } 
       ];
 
       fs.existsSync.mockImplementation((filePath) => {

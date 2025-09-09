@@ -1,7 +1,7 @@
 const ConfigManager = require('../services/configManager');
 const SteamDetection = require('../services/steamDetection');
 
-// Mock des modules filesystem
+
 jest.mock('fs');
 jest.mock('os');
 const fs = require('fs');
@@ -13,10 +13,10 @@ describe('Steam Integration Workflow', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     
-    // Mock os.homedir
+    
     os.homedir.mockReturnValue('/mock/home');
     
-    // Mock process.platform
+    
     Object.defineProperty(process, 'platform', { value: 'win32', configurable: true });
     
     configManager = new ConfigManager();
@@ -24,7 +24,7 @@ describe('Steam Integration Workflow', () => {
 
   describe('Steam ID Detection and Cache Path Integration', () => {
     test('should detect Steam IDs and use them in buildCachePath', async () => {
-      // Mock fs pour simuler l'arborescence Steam
+      
       fs.existsSync.mockImplementation((path) => {
         if (path.includes('HelloGames/NMS')) return true;
         if (path.includes('76561198123456789/cache')) return true;
@@ -42,30 +42,30 @@ describe('Steam Integration Workflow', () => {
         mtime: new Date('2023-01-01')
       });
 
-      // Test détection Steam
+      
       const steamIds = SteamDetection.detectSteamIds();
       expect(steamIds).toHaveLength(1);
       expect(steamIds[0].steamId).toBe('st_76561198123456789');
 
-      // Test que buildCachePath utilise bien le Steam ID
+      
       const cachePath = configManager.buildCachePath('steam', 'st_76561198123456789');
       expect(cachePath).toBe('/mock/home/AppData/Roaming/HelloGames/NMS/st_76561198123456789/cache');
     });
 
     test('should return null cache path when Steam platform but no steamId provided', () => {
-      // BUG REPRODUCED: buildCachePath should return null if steamId is missing for Steam
+      
       const cachePath = configManager.buildCachePath('steam', null);
       expect(cachePath).toBeNull();
     });
 
     test('should return null cache path when Steam platform and empty steamId', () => {
-      // BUG REPRODUCED: buildCachePath should handle empty string steamId
+      
       const cachePath = configManager.buildCachePath('steam', '');
       expect(cachePath).toBeNull();
     });
 
     test('should work with multiple Steam IDs detected', () => {
-      // Mock multiple Steam IDs
+      
       fs.existsSync.mockImplementation((path) => {
         if (path.includes('HelloGames/NMS')) return true;
         if (path.includes('cache')) return true;
@@ -83,7 +83,7 @@ describe('Steam Integration Workflow', () => {
         if (path.includes('st_76561198123456789')) {
           return { mtime: new Date('2023-01-01') };
         } else if (path.includes('st_76561198987654321')) {
-          return { mtime: new Date('2023-01-02') }; // Plus récent
+          return { mtime: new Date('2023-01-02') }; 
         }
         return { mtime: new Date('2023-01-01') };
       });
@@ -91,11 +91,11 @@ describe('Steam Integration Workflow', () => {
       const steamIds = SteamDetection.detectSteamIds();
       expect(steamIds).toHaveLength(2);
 
-      // Test que getMainSteamId retourne le plus récent
+      
       const mainSteamId = SteamDetection.getMainSteamId();
       expect(mainSteamId.steamId).toBe('st_76561198987654321');
 
-      // Test que buildCachePath fonctionne avec les deux IDs
+      
       const cachePath1 = configManager.buildCachePath('steam', 'st_76561198123456789');
       const cachePath2 = configManager.buildCachePath('steam', 'st_76561198987654321');
       
@@ -106,7 +106,7 @@ describe('Steam Integration Workflow', () => {
 
   describe('Steam Detection Path Consistency', () => {
     test('should use consistent paths between SteamDetection and ConfigManager', () => {
-      // Test que les deux services utilisent les mêmes chemins de base
+      
       fs.existsSync.mockImplementation((path) => {
         if (path.includes('HelloGames/NMS')) return true;
         if (path.includes('st_76561198123456789/cache')) return true;
@@ -135,7 +135,7 @@ describe('Steam Integration Workflow', () => {
     test('should work correctly on macOS', () => {
       Object.defineProperty(process, 'platform', { value: 'darwin' });
       
-      // Sur macOS, pas de Steam ID dans le chemin
+      
       const cachePath = configManager.buildCachePath('steam');
       expect(cachePath).toBe('/mock/home/Library/Application Support/HelloGames/NMS/cache');
     });

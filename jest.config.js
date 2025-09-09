@@ -3,7 +3,7 @@ module.exports = {
   collectCoverageFrom: [
     'src/**/*.js',
     '!src/**/*.test.js',
-    '!src/ui/**',  // Skip UI tests for now
+    '!src/ui/**',
     '!**/node_modules/**'
   ],
   testMatch: [

@@ -3,7 +3,7 @@ const path = require('path');
 const os = require('os');
 const ConfigManager = require('../configManager');
 
-// Mock filesystem operations
+
 jest.mock('fs');
 jest.mock('path');
 jest.mock('os');
@@ -22,7 +22,7 @@ describe('ConfigManager', () => {
     os.homedir.mockReturnValue(mockHomedir);
     path.join.mockImplementation((...args) => args.join('/'));
     
-    // Mock default paths
+    
     configManager.configDir = mockConfigDir;
     configManager.configFile = mockConfigFile;
   });
@@ -117,7 +117,7 @@ describe('ConfigManager', () => {
     test('should build MS Store cache path with resilient logic', () => {
       Object.defineProperty(process, 'platform', { value: 'win32' });
       
-      // Mock _dirExists to return false, so it should fallback to DefaultUser
+      
       const spy = jest.spyOn(configManager, '_dirExists');
       spy.mockReturnValue(false);
       
@@ -137,7 +137,7 @@ describe('ConfigManager', () => {
     test('should build Xbox Game Pass path with DefaultUser when it exists', () => {
       Object.defineProperty(process, 'platform', { value: 'win32' });
       
-      // Mock _dirExists to simulate DefaultUser exists
+      
       const spy = jest.spyOn(configManager, '_dirExists');
       spy.mockImplementation((path) => {
         return path.includes('DefaultUser/cache');
@@ -154,7 +154,7 @@ describe('ConfigManager', () => {
     test('should build Xbox Game Pass path with direct cache when DefaultUser does not exist', () => {
       Object.defineProperty(process, 'platform', { value: 'win32' });
       
-      // Mock _dirExists to simulate DefaultUser doesn't exist but cache does
+      
       const spy = jest.spyOn(configManager, '_dirExists');
       spy.mockImplementation((path) => {
         return path.endsWith('/cache') && !path.includes('DefaultUser');
@@ -172,7 +172,7 @@ describe('ConfigManager', () => {
     test('should fallback to DefaultUser path when neither exists', () => {
       Object.defineProperty(process, 'platform', { value: 'win32' });
       
-      // Mock _dirExists to return false for all paths
+      
       const spy = jest.spyOn(configManager, '_dirExists');
       spy.mockReturnValue(false);
       
@@ -186,7 +186,7 @@ describe('ConfigManager', () => {
     test('should build MS Store path with DefaultUser when it exists', () => {
       Object.defineProperty(process, 'platform', { value: 'win32' });
       
-      // Mock _dirExists to simulate DefaultUser exists for MS Store
+      
       const spy = jest.spyOn(configManager, '_dirExists');
       spy.mockImplementation((path) => {
         return path.includes('DefaultUser/cache');
@@ -203,7 +203,7 @@ describe('ConfigManager', () => {
     test('should build MS Store path with direct cache when DefaultUser does not exist', () => {
       Object.defineProperty(process, 'platform', { value: 'win32' });
       
-      // Mock _dirExists to simulate DefaultUser doesn't exist but cache does
+      
       const spy = jest.spyOn(configManager, '_dirExists');
       spy.mockImplementation((path) => {
         return path.endsWith('/cache') && !path.includes('DefaultUser');
@@ -221,7 +221,7 @@ describe('ConfigManager', () => {
     test('should build GOG path with DefaultUser when it exists', () => {
       Object.defineProperty(process, 'platform', { value: 'win32' });
       
-      // Mock _dirExists to simulate DefaultUser exists for GOG
+      
       const spy = jest.spyOn(configManager, '_dirExists');
       spy.mockImplementation((path) => {
         return path.includes('DefaultUser/cache');
@@ -238,7 +238,7 @@ describe('ConfigManager', () => {
     test('should build GOG path with direct cache when DefaultUser does not exist', () => {
       Object.defineProperty(process, 'platform', { value: 'win32' });
       
-      // Mock _dirExists to simulate DefaultUser doesn't exist but cache does
+      
       const spy = jest.spyOn(configManager, '_dirExists');
       spy.mockImplementation((path) => {
         return path.endsWith('/cache') && !path.includes('DefaultUser');
@@ -256,7 +256,7 @@ describe('ConfigManager', () => {
 
   describe('Platform Change Functionality', () => {
     test('should handle platform change by overwriting existing config', () => {
-      // Setup: existing Steam config
+      
       const existingConfig = {
         platform: 'steam',
         steamId: '76561198123456789',
@@ -264,7 +264,7 @@ describe('ConfigManager', () => {
         cachePath: '/old/steam/path'
       };
       
-      // New GOG config
+      
       const newConfig = {
         platform: 'gog',
         steamId: null,
@@ -288,11 +288,11 @@ describe('ConfigManager', () => {
     test('should reset Steam ID when changing from Steam to non-Steam platform', () => {
       Object.defineProperty(process, 'platform', { value: 'win32' });
       
-      // Mock _dirExists to return false for resilient path logic
+      
       const spy = jest.spyOn(configManager, '_dirExists');
       spy.mockReturnValue(false);
       
-      // Change from Steam to GOG - steamId should be null
+      
       const newCachePath = configManager.buildCachePath('gog');
       
       expect(newCachePath).toBe('/mock/home/AppData/Roaming/HelloGames/NMS/DefaultUser/cache');
@@ -304,7 +304,7 @@ describe('ConfigManager', () => {
     test('should preserve Steam ID when changing from non-Steam to Steam platform', () => {
       Object.defineProperty(process, 'platform', { value: 'win32' });
       
-      // Change from GOG to Steam - should accept new steamId
+      
       const newSteamId = '76561198987654321';
       const newCachePath = configManager.buildCachePath('steam', newSteamId);
       
@@ -315,11 +315,11 @@ describe('ConfigManager', () => {
     test('should handle platform change between non-Steam platforms', () => {
       Object.defineProperty(process, 'platform', { value: 'win32' });
       
-      // Mock _dirExists to return false for resilient path logic
+      
       const spy = jest.spyOn(configManager, '_dirExists');
       spy.mockReturnValue(false);
       
-      // Change from MS Store to Game Pass - both should have same cache path
+      
       const msStorePath = configManager.buildCachePath('msstore');
       const gamePassPath = configManager.buildCachePath('gamepass');
       
@@ -334,7 +334,7 @@ describe('ConfigManager', () => {
       const platformChangeConfig = {
         platform: 'gog',
         steamId: null,
-        firstSetup: false, // Should remain false after platform change
+        firstSetup: false, 
         cachePath: '/new/path'
       };
 

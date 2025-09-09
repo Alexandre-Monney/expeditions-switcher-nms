@@ -2,18 +2,18 @@
  * @jest-environment jsdom
  */
 
-// Mock electron APIs
+
 const mockElectronAPI = {
   loadConfig: jest.fn(),
   saveConfig: jest.fn(),
   detectSteamIds: jest.fn(),
-  // Expedition management APIs
+  
   getCurrentState: jest.fn(),
   getAvailableExpeditions: jest.fn(),
   activateExpedition: jest.fn(),
   restoreOriginal: jest.fn(),
   createBackup: jest.fn(),
-  // Process monitoring APIs
+  
   isNMSRunning: jest.fn(),
   getNMSProcessInfo: jest.fn(),
   startNMSMonitoring: jest.fn(),
@@ -22,7 +22,7 @@ const mockElectronAPI = {
   removeNMSStatusListener: jest.fn()
 };
 
-// Setup DOM and globals before importing renderer
+
 const setupDOM = () => {
   document.body.innerHTML = `
     <div id="app">
@@ -140,11 +140,11 @@ const setupDOM = () => {
     </div>
   `;
 
-  // Mock window.electronAPI
+  
   global.window = { electronAPI: mockElectronAPI };
 };
 
-// Simple UI manager class for testing
+
 class TestUIManager {
   constructor() {
     this.selectedPlatform = null;
@@ -196,7 +196,7 @@ class TestUIManager {
   selectPlatform(platform) {
     this.selectedPlatform = platform;
     
-    // Update UI
+    
     document.querySelectorAll('.platform-btn').forEach(btn => {
       btn.classList.remove('selected');
     });
@@ -205,7 +205,7 @@ class TestUIManager {
       targetBtn.classList.add('selected');
     }
 
-    // Show/hide Steam section
+    
     const steamSection = document.getElementById('steam-section');
     if (platform === 'steam') {
       steamSection.classList.remove('hidden');
@@ -232,7 +232,7 @@ class TestUIManager {
     return false;
   }
 
-  // ===== EXPEDITION MANAGEMENT METHODS =====
+  
 
   async loadAvailableExpeditions() {
     const result = await window.electronAPI.getAvailableExpeditions();
@@ -350,7 +350,7 @@ class TestUIManager {
     const expeditionControls = document.getElementById('expedition-controls');
     const errorState = document.getElementById('error-state');
 
-    // Hide all sections first
+    
     [onlineControls, expeditionControls, errorState].forEach(section => {
       if (section) section.classList.add('hidden');
     });
@@ -409,7 +409,7 @@ class TestUIManager {
       activateBtn.disabled = !expeditionId;
     }
 
-    // Update preview
+    
     if (expeditionId) {
       const expedition = this.availableExpeditions.find(e => e.id === expeditionId);
       if (expedition) {
@@ -490,7 +490,7 @@ class TestUIManager {
     this.updateControlSections({ mode: 'online' });
     this.clearExpeditionPreview();
     
-    // Reset selection
+    
     const select = document.getElementById('expedition-select');
     if (select) select.value = '';
     this.selectedExpeditionId = null;
@@ -510,7 +510,7 @@ class TestUIManager {
       }
     }
 
-    // Disable/enable action buttons based on NMS status
+    
     this.updateButtonsForNMSStatus(isRunning);
   }
 
@@ -527,7 +527,7 @@ class TestUIManager {
           btn.disabled = true;
           btn.title = 'Fermez No Man\'s Sky pour effectuer cette action';
         } else {
-          // Re-enable based on other conditions
+          
           if (buttonId === 'activate-expedition-btn') {
             btn.disabled = !this.selectedExpeditionId;
           } else {
@@ -555,7 +555,7 @@ class TestUIManager {
 
     container.appendChild(messageEl);
 
-    return messageEl; // Return for testing
+    return messageEl; 
   }
 }
 
@@ -566,7 +566,7 @@ describe('NMS Expedition Manager UI - Platform Change', () => {
     setupDOM();
     jest.clearAllMocks();
     
-    // Reset mocks
+    
     mockElectronAPI.loadConfig.mockResolvedValue({ 
       platform: 'steam', 
       steamId: '76561198123456789',
@@ -575,7 +575,7 @@ describe('NMS Expedition Manager UI - Platform Change', () => {
     mockElectronAPI.saveConfig.mockResolvedValue(true);
     mockElectronAPI.detectSteamIds.mockResolvedValue([]);
 
-    // Ensure global window object is properly set
+    
     global.window = Object.assign(global.window || {}, { electronAPI: mockElectronAPI });
 
     uiManager = new TestUIManager();
@@ -599,10 +599,10 @@ describe('NMS Expedition Manager UI - Platform Change', () => {
       await uiManager.loadConfig();
       uiManager.showMainScreen();
 
-      // Simulate clicking change platform (this would call showSetupScreen in real app)
+      
       uiManager.showSetupScreen();
 
-      // Should now show setup screen
+      
       const setupScreen = document.getElementById('setup-screen');
       const mainScreen = document.getElementById('main-screen');
       
@@ -616,10 +616,10 @@ describe('NMS Expedition Manager UI - Platform Change', () => {
       await uiManager.loadConfig();
       uiManager.showMainScreen();
       
-      // Simulate clicking change platform
+      
       uiManager.showSetupScreen();
       
-      // No platform should be selected initially
+      
       const selectedPlatforms = document.querySelectorAll('.platform-btn.selected');
       expect(selectedPlatforms.length).toBe(0);
     });
@@ -650,7 +650,7 @@ describe('NMS Expedition Manager UI - Platform Change', () => {
     });
 
     test('should update main screen info after platform change', async () => {
-      // Setup initial config
+      
       uiManager.config = {
         platform: 'gog',
         steamId: null,
@@ -725,7 +725,7 @@ describe('NMS Expedition Manager UI - Platform Change', () => {
       const result = await uiManager.completeSetup();
       
       expect(result).toBe(false);
-      // Should not update config on failure
+      
       expect(uiManager.config).not.toEqual(expect.objectContaining({
         platform: 'steam'
       }));
@@ -734,13 +734,13 @@ describe('NMS Expedition Manager UI - Platform Change', () => {
 
   describe('Edge Cases and Error Handling', () => {
     test('should handle missing DOM elements gracefully', () => {
-      // Remove the platform info element
+      
       const platformInfo = document.getElementById('current-platform-info');
       platformInfo.remove();
 
       uiManager.config = { platform: 'steam' };
       
-      // Should not throw error
+      
       expect(() => uiManager.updateMainScreenInfo()).not.toThrow();
     });
 
@@ -761,7 +761,7 @@ describe('NMS Expedition Manager UI - Platform Change', () => {
       uiManager.selectedPlatform = 'gog';
       await uiManager.completeSetup();
 
-      // Should not include custom properties in saved config
+      
       expect(mockElectronAPI.saveConfig).toHaveBeenCalledWith({
         platform: 'gog',
         steamId: null,
@@ -772,7 +772,7 @@ describe('NMS Expedition Manager UI - Platform Change', () => {
   });
 });
 
-// ===== EXPEDITION MANAGEMENT TESTS =====
+
 
 describe('NMS Expedition Manager UI - Expedition Management', () => {
   let uiManager;
@@ -781,7 +781,7 @@ describe('NMS Expedition Manager UI - Expedition Management', () => {
     setupDOM();
     jest.clearAllMocks();
     
-    // Setup basic config
+    
     mockElectronAPI.loadConfig.mockResolvedValue({ 
       platform: 'steam', 
       steamId: '76561198123456789',
@@ -789,7 +789,7 @@ describe('NMS Expedition Manager UI - Expedition Management', () => {
       cachePath: '/test/cache'
     });
 
-    // Setup default expedition API responses
+    
     mockElectronAPI.getAvailableExpeditions.mockResolvedValue({
       success: true,
       expeditions: [
@@ -863,7 +863,7 @@ describe('NMS Expedition Manager UI - Expedition Management', () => {
       await uiManager.loadAvailableExpeditions();
 
       const select = document.getElementById('expedition-select');
-      expect(select.children).toHaveLength(3); // Default option + 2 expeditions
+      expect(select.children).toHaveLength(3); 
       expect(select.children[0].textContent).toBe('-- Choisir une expédition --');
       expect(select.children[1].textContent).toBe('The Pioneers (2021-03-31)');
       expect(select.children[2].textContent).toBe('Beachhead (2021-05-17)');
@@ -885,7 +885,7 @@ describe('NMS Expedition Manager UI - Expedition Management', () => {
       mockElectronAPI.getAvailableExpeditions.mockResolvedValue({
         success: true,
         expeditions: [
-          { id: 'test_expedition' }, // Minimal data
+          { id: 'test_expedition' }, 
         ],
         count: 1
       });
@@ -952,7 +952,7 @@ describe('NMS Expedition Manager UI - Expedition Management', () => {
       expect(onlineControls.classList.contains('hidden')).toBe(true);
       expect(expeditionControls.classList.contains('hidden')).toBe(false);
 
-      // Check expedition info display
+      
       const currentExpedition = document.getElementById('current-expedition');
       expect(currentExpedition.innerHTML).toContain('The Pioneers');
       expect(currentExpedition.innerHTML).toContain('ACTIF');
@@ -999,7 +999,7 @@ describe('NMS Expedition Manager UI - Expedition Management', () => {
     test('should handle state refresh errors gracefully', async () => {
       mockElectronAPI.getCurrentState.mockRejectedValue(new Error('Network error'));
 
-      // Mock console.error to avoid error output in tests
+      
       const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
 
       const result = await uiManager.refreshExpeditionState();
@@ -1071,7 +1071,7 @@ describe('NMS Expedition Manager UI - Expedition Management', () => {
         id: 'no_rewards',
         displayName: 'No Rewards Expedition',
         description: 'Test expedition',
-        // No rewards property
+        
       }];
       uiManager.selectExpedition('no_rewards');
 
@@ -1093,7 +1093,7 @@ describe('NMS Expedition Manager UI - Expedition Management', () => {
       expect(result.success).toBe(true);
       expect(mockElectronAPI.activateExpedition).toHaveBeenCalledWith('01_pioneers');
 
-      // Check success message was displayed
+      
       const messageContainer = document.getElementById('message-container');
       expect(messageContainer.children).toHaveLength(1);
       expect(messageContainer.children[0].classList.contains('message-success')).toBe(true);
@@ -1111,7 +1111,7 @@ describe('NMS Expedition Manager UI - Expedition Management', () => {
 
       expect(result.success).toBe(false);
 
-      // Check error message was displayed
+      
       const messageContainer = document.getElementById('message-container');
       expect(messageContainer.children).toHaveLength(1);
       expect(messageContainer.children[0].classList.contains('message-error')).toBe(true);
@@ -1144,7 +1144,7 @@ describe('NMS Expedition Manager UI - Expedition Management', () => {
       expect(result.success).toBe(true);
       expect(mockElectronAPI.restoreOriginal).toHaveBeenCalledTimes(1);
 
-      // Check success message was displayed
+      
       const messageContainer = document.getElementById('message-container');
       expect(messageContainer.children).toHaveLength(1);
       expect(messageContainer.children[0].classList.contains('message-success')).toBe(true);
@@ -1161,7 +1161,7 @@ describe('NMS Expedition Manager UI - Expedition Management', () => {
 
       expect(result.success).toBe(false);
 
-      // Check error message was displayed
+      
       const messageContainer = document.getElementById('message-container');
       expect(messageContainer.children).toHaveLength(1);
       expect(messageContainer.children[0].classList.contains('message-error')).toBe(true);
@@ -1179,7 +1179,7 @@ describe('NMS Expedition Manager UI - Expedition Management', () => {
 
   describe('Online Mode Switch', () => {
     test('should switch to online mode and reset selection', () => {
-      // Setup initial state
+      
       uiManager.selectedExpeditionId = '01_pioneers';
       const select = document.getElementById('expedition-select');
       select.value = '01_pioneers';
@@ -1189,7 +1189,7 @@ describe('NMS Expedition Manager UI - Expedition Management', () => {
       expect(uiManager.selectedExpeditionId).toBeNull();
       expect(select.value).toBe('');
 
-      // Check online controls are shown
+      
       const onlineControls = document.getElementById('online-controls');
       expect(onlineControls.classList.contains('hidden')).toBe(false);
     });
@@ -1242,15 +1242,15 @@ describe('NMS Expedition Manager UI - Expedition Management', () => {
       await uiManager.loadAvailableExpeditions();
       uiManager.selectExpedition('01_pioneers');
 
-      // First disable by setting NMS as running
+      
       uiManager.updateNMSStatus(true);
-      // Then re-enable by setting NMS as stopped
+      
       uiManager.updateNMSStatus(false);
 
       const activateBtn = document.getElementById('activate-expedition-btn');
       const restoreBtn = document.getElementById('restore-original-btn');
 
-      expect(activateBtn.disabled).toBe(false); // Should be enabled because expedition is selected
+      expect(activateBtn.disabled).toBe(false); 
       expect(activateBtn.title).toBe('');
       expect(restoreBtn.disabled).toBe(false);
       expect(restoreBtn.title).toBe('');
@@ -1261,17 +1261,17 @@ describe('NMS Expedition Manager UI - Expedition Management', () => {
       uiManager.updateNMSStatus(false);
 
       const activateBtn = document.getElementById('activate-expedition-btn');
-      expect(activateBtn.disabled).toBe(true); // Still disabled due to no selection
+      expect(activateBtn.disabled).toBe(true); 
     });
 
     test('should handle missing status elements gracefully', () => {
-      // Remove status elements
+      
       const indicator = document.getElementById('nms-status-indicator');
       const text = document.getElementById('nms-status-text');
       indicator.remove();
       text.remove();
 
-      // Should not throw error
+      
       expect(() => uiManager.updateNMSStatus(true)).not.toThrow();
     });
   });
@@ -1283,7 +1283,7 @@ describe('NMS Expedition Manager UI - Expedition Management', () => {
       expect(messageEl.classList.contains('message-success')).toBe(true);
       expect(messageEl.innerHTML).toContain('✅');
       expect(messageEl.innerHTML).toContain('Test success message');
-      expect(messageEl.innerHTML).toContain('×'); // Close button
+      expect(messageEl.innerHTML).toContain('×'); 
 
       const container = document.getElementById('message-container');
       expect(container.children).toHaveLength(1);
@@ -1333,12 +1333,12 @@ describe('NMS Expedition Manager UI - Expedition Management', () => {
 
   describe('Edge Cases and Error Handling', () => {
     test('should handle missing DOM elements gracefully', () => {
-      // Remove key elements
+      
       document.getElementById('status-info').remove();
       document.getElementById('expedition-preview').remove();
       document.getElementById('current-expedition').remove();
 
-      // Should not throw errors
+      
       expect(() => uiManager.updateStatusSection({ mode: 'online' })).not.toThrow();
       expect(() => uiManager.updateExpeditionPreview({ id: 'test' })).not.toThrow();
       expect(() => uiManager.updateCurrentExpeditionInfo({ id: 'test' })).not.toThrow();
@@ -1347,7 +1347,7 @@ describe('NMS Expedition Manager UI - Expedition Management', () => {
     test('should handle expeditions with empty or null rewards', () => {
       const expedition1 = { id: 'test1', rewards: [] };
       const expedition2 = { id: 'test2', rewards: null };
-      const expedition3 = { id: 'test3' }; // No rewards property
+      const expedition3 = { id: 'test3' }; 
 
       expect(() => uiManager.updateExpeditionPreview(expedition1)).not.toThrow();
       expect(() => uiManager.updateExpeditionPreview(expedition2)).not.toThrow();
