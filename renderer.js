@@ -360,9 +360,12 @@ class NMSExpeditionManager {
                 
             case 'expedition':
                 const expeditionName = state.currentExpedition?.displayName || 'Expédition inconnue';
+                const expeditionImageUrl = state.currentExpedition?.imageUrl || 'assets/images/expeditions/default.png';
                 statusHtml = `
                     <div class="status-content expedition">
-                        <span class="status-icon">🚀</span>
+                        <div class="status-icon expedition-icon">
+                            <img src="${expeditionImageUrl}" alt="${expeditionName}" class="expedition-status-image">
+                        </div>
                         <div>
                             <strong>Mode Expédition Active</strong>
                             <p>Expédition active: <strong>${expeditionName}</strong></p>
