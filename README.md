@@ -15,11 +15,11 @@ No Man's Sky propose des expéditions événementielles limitées dans le temps.
 ## 🎯 État Actuel (MVP Complet ✅)
 
 ### 🚀 Fonctionnalités Core Implémentées
-- **Setup initial** avec sélection de plateforme (Steam, MS Store, GOG, Game Pass)
+- **Setup initial** avec sélection de plateforme (Steam ou XBOX/PC Game Pass)
 - **Détection automatique Steam ID** avec scan des dossiers utilisateur  
 - **Configuration persistante** stockée dans `~/.nms-utils/config.json`
 - **Interface utilisateur complète** moderne et responsive avec gestion d'expéditions
-- **Changement de plateforme** via bouton dans l'interface principale *(entièrement testé)*
+- **Changement de plateforme** via bouton dans l'interface principale
 - **Gestion multi-écrans** (Loading, Setup, Main) avec navigation fluide
 - **Tests complets** couvrant backend + frontend (117 tests avec 90%+ couverture)
 - **Packaging production** avec electron-builder configuré pour toutes plateformes
@@ -28,12 +28,12 @@ No Man's Sky propose des expéditions événementielles limitées dans le temps.
 - **Electron** avec sécurité renforcée (`contextIsolation`, `nodeIntegration: false`)
 - **Structure modulaire** services backend séparés du frontend
 - **Communication sécurisée** via `contextBridge` et IPC
-- **Support multi-plateformes** Windows/Mac avec chemins appropriés
+- **Support Windows uniquement** avec chemins spécifiques
 
 ## ✅ Fonctionnalités Implémentées
 
 ### 🔍 **Système de détection de processus NMS**
-- ✅ Détection multi-plateforme (Windows, macOS, Linux)
+- ✅ Détection processus Windows
 - ✅ Support multiples noms de processus (NMS.exe, NoMansSky.exe, No Man's Sky)
 - ✅ Surveillance temps réel avec callbacks configurables
 - ✅ Extraction informations processus (PID, mémoire, heure de démarrage)
@@ -53,7 +53,7 @@ No Man's Sky propose des expéditions événementielles limitées dans le temps.
 - ✅ **Service ExpeditionManager** complet avec backup/restore automatique
 - ✅ Métadonnées complètes de **18 expéditions** (2021-2025) avec descriptions, difficulté, récompenses
 - ✅ **Fichiers JSON d'expéditions inclus** - Prêt à l'emploi !
-- ✅ Images officielles des posters d'expéditions
+- ✅ Images officielles des illustrations d'expéditions
 - ✅ **Détection d'état intelligent** (online/expedition/error/no_cache)
 - ✅ **Interface utilisateur intuitive** avec prévisualisation détaillée des expéditions
 - ✅ **Système de backup automatique** avant chaque changement
@@ -70,19 +70,17 @@ No Man's Sky propose des expéditions événementielles limitées dans le temps.
 - ✅ Tests pour tous les cas d'erreur et edge cases
 
 ### 📦 **Packaging et Distribution**
-- ✅ **electron-builder** configuré pour Windows, macOS, Linux
+- ✅ **electron-builder** configuré pour Windows
 - ✅ **Scripts npm** pour build multi-plateformes (`npm run build:win`, etc.)
 - ✅ **Configuration NSIS** avec options d'installation personnalisées  
 - ✅ **Optimisation taille** avec compression maximum
-- ✅ **Script de création d'icônes** automatisé avec placeholders
 - ✅ **Documentation BUILD.md** complète pour la distribution
 - ✅ **Build testé** - Génère des exécutables fonctionnels (~190MB)
 
 ## 🚧 Prochaines Étapes
 
 ### 🎯 **Phase Finale - Test & Distribution**
-- [ ] **Test Windows** - Validation fonctionnelle sur PC Windows réel
-- [ ] **Icônes finales** - Remplacer placeholders par design NMS professionnel  
+- [ ] **Fix desinstalleur** - Une erreur se produit lors de la désinstallation/réinstallation
 - [ ] **Signature de code** - Certificat pour éviter warnings sécurité Windows
 - [ ] **GitHub Release** - Packaging automatisé avec Actions CI/CD
 - [ ] **Documentation utilisateur** - Guide d'installation et usage
@@ -91,6 +89,7 @@ No Man's Sky propose des expéditions événementielles limitées dans le temps.
 - [ ] **Auto-update** - Système de mise à jour automatique intégré
 - [ ] **Historique des activations** - Log des changements avec dates/heures
 - [ ] **Thème sombre/clair** - Options d'affichage utilisateur
+- [ ] **Détection de mode en ligne/hors ligne** - Affichage d'un warning pour steam en mode en ligne
 
 ### 🌐 **Expansion Communautaire**
 - [ ] **Wiki intégré** - Guides et astuces par expédition
@@ -132,22 +131,10 @@ SEASON_DATA_CACHE_original.JSON → SEASON_DATA_CACHE.JSON
 - Nettoyage automatique du backup
 - Vérification de la cohérence des données
 
-### Sécurités Implémentées
-- **Détection processus NMS** : Empêche les modifications si le jeu tourne
-- **Validation JSON** : Vérification de l'intégrité avant chaque opération
-- **Backup automatique** : Aucune perte de données possible
-- **Rollback d'urgence** : Restauration en cas d'erreur
-
-### Bibliothèque d'Expéditions Intégrée
-- **18 expéditions** prêtes à l'emploi (2021-2025)
-- **Fichiers JSON** validés et testés
-- **Métadonnées** : Noms, descriptions, dates, récompenses
-- **Images** : Posters officiels de chaque expédition
-
 ## 🎮 Workflow Utilisateur Cible
 
 ### Premier Lancement
-1. Sélection de la plateforme (Steam, MS Store, etc.)
+1. Sélection de la plateforme
 2. Détection automatique Steam ID si applicable
 3. Validation de la configuration et du cache path
 
@@ -159,7 +146,7 @@ SEASON_DATA_CACHE_original.JSON → SEASON_DATA_CACHE.JSON
    - **Sécurité** : Vérification que NMS n'est pas en cours
 
 2. **Mode Offline Expédition** :
-   - Affichage de l'expédition active avec poster et métadonnées
+   - Affichage de l'expédition active avec illustration et métadonnées
    - Bouton "Revenir en mode online" (restauration backup)
    - **Sécurité** : Validation de l'intégrité avant restauration
 
@@ -204,8 +191,8 @@ src/
 │   ├── configManager.js         # Configuration utilisateur
 │   ├── steamDetection.js        # Détection automatique Steam IDs
 │   ├── processMonitor.js        # Surveillance processus NMS
-│   │   └── __tests__/               # Tests services (36 tests)
-├── __tests__/                   # Tests UI (15 tests)
+│   │   └── __tests__/               # Tests services
+├── __tests__/                   # Tests UI
 └── jest.setup.js                # Configuration Jest globale
 └── data/
     └── expeditions/
@@ -214,7 +201,7 @@ src/
         ├── 02_beachhead.json          # (18 fichiers inclus)
         └── ...                        # Prêt à l'emploi !
 assets/images/
-├── platform-logos/              # Steam, MS Store, GOG, Game Pass
+├── platform-logos/              # Steam, Game Pass
 └── expeditions/                 # 18 posters officiels d'expéditions
 ```
 
@@ -239,8 +226,6 @@ Ajoutez les scripts de build dans `package.json` :
   "scripts": {
     "build": "electron-builder",
     "build:win": "electron-builder --win",
-    "build:mac": "electron-builder --mac",
-    "build:linux": "electron-builder --linux",
     "dist": "npm run build"
   },
   "build": {
@@ -264,24 +249,9 @@ Ajoutez les scripts de build dans `package.json` :
       ],
       "icon": "assets/icon.ico"
     },
-    "mac": {
-      "target": "dmg",
-      "icon": "assets/icon.icns"
-    },
-    "linux": {
-      "target": "AppImage",
-      "icon": "assets/icon.png"
-    }
   }
 }
 ```
-
-### Création des Icônes
-
-Créez les icônes dans le dossier `assets/` :
-- **Windows** : `icon.ico` (256x256, format ICO)
-- **macOS** : `icon.icns` (512x512, format ICNS)
-- **Linux** : `icon.png` (512x512, format PNG)
 
 ### Build de Production
 
@@ -292,25 +262,6 @@ npm run build:win
 Génère :
 - `dist/NMS Expedition Manager Setup 1.0.0.exe` - Installateur NSIS
 - `dist/win-unpacked/` - Version portable
-
-#### macOS (depuis macOS uniquement)
-```bash
-npm run build:mac
-```
-Génère :
-- `dist/NMS Expedition Manager-1.0.0.dmg` - Image disque macOS
-
-#### Linux (depuis Linux/macOS)
-```bash
-npm run build:linux
-```
-Génère :
-- `dist/NMS Expedition Manager-1.0.0.AppImage` - Application portable Linux
-
-#### Build Multi-Plateformes
-```bash
-npm run build
-```
 
 ### Distribution
 
@@ -326,19 +277,6 @@ npm run build
    - Aucune installation requise
    - Idéal pour tests ou déploiements spécifiques
 
-#### Signature et Certification (Optionnel)
-Pour éviter les avertissements Windows Defender :
-```bash
-# Installer electron-builder avec signature
-npm install --save-dev electron-builder
-
-# Configuration avec certificat (dans build config)
-"win": {
-  "certificateFile": "path/to/certificate.p12",
-  "certificatePassword": "password"
-}
-```
-
 ### Optimisation de Taille
 
 Pour réduire la taille des exécutables :
@@ -352,73 +290,18 @@ Pour réduire la taille des exécutables :
   }
 }
 ```
-
-### Déploiement Automatique
-
-GitHub Actions pour builds automatiques :
-
-```yaml
-# .github/workflows/build.yml
-name: Build
-
-on:
-  push:
-    tags:
-      - 'v*'
-
-jobs:
-  build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
-    
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
-      with:
-        node-version: '16'
-    - run: npm install
-    - run: npm test
-    - run: npm run build
-```
-
 ### Taille des Builds
 - **Windows** : ~150-200 MB (installateur)
-- **macOS** : ~150-200 MB (DMG)
-- **Linux** : ~150-200 MB (AppImage)
 
 *Les builds incluent le runtime Node.js et Chromium, d'où la taille importante mais garantissant la compatibilité.*
-
-## 🔮 Idées Futures
-
-### Fonctionnalités Communautaires
-- **Partage d'expéditions** - Repository communautaire de fichiers JSON
-- **Ratings & Reviews** - Système de notation des expéditions
-- **Wiki intégré** - Guides et astuces par expédition
-
-### Intégrations
-- **Discord Rich Presence** - Afficher l'expédition en cours
-- **Captures d'écran** - Galerie automatique des moments forts
-- **Statistiques** - Temps de jeu par expédition, succès débloqués
-
-### Outils Avancés
-- **Éditeur de sauvegardes** - Modifications avancées des fichiers
-- **Backup cloud** - Synchronisation configurations multi-appareils
-- **Mode développeur** - Outils pour créer ses propres expéditions
-
-### Expérience Utilisateur
-- **Thèmes personnalisables** - Interface adaptable
-- **Raccourcis clavier** - Actions rapides sans souris
-- **Mode compact** - Interface réduite dans la barre système
 
 ## 🤝 Contribution
 
 Projet en développement actif. Les contributions sont les bienvenues !
 
 ### Priorités de Développement
-1. Finir le MVP (détection processus + swap fichiers)
-2. Tests et stabilisation
+1. Finir le MVP
+2. Refactoring, tests et stabilisation
 3. Fonctionnalités avancées
 4. Packaging et distribution
 

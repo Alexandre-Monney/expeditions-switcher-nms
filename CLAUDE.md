@@ -28,9 +28,8 @@
 ```
 
 ### Chemins des Fichiers NMS par Plateforme
-- **Steam PC**: `%APPDATA%\HelloGames\NMS\st_{steam_id}\cache\` (format st_ + 17 chiffres)
-- **Steam Mac**: `~/Library/Application Support/HelloGames/NMS/cache/`  
-- **MS Store/GOG/GamePass**: `%APPDATA%\HelloGames\NMS\DefaultUser\cache\` avec fallback vers `\cache\`
+- **Steam PC**: `%APPDATA%\HelloGames\NMS\st_{steam_id}\cache\` (format st_ + 17 chiffres) 
+- **GamePass**: `%APPDATA%\HelloGames\NMS\DefaultUser\cache\` avec fallback vers `%APPDATA%\HelloGames\NMS\cache\`
 
 **Fichier cible**: `SEASON_DATA_CACHE.JSON`
 
@@ -62,7 +61,7 @@
 - **Vérification 1**: `%APPDATA%\HelloGames\NMS\DefaultUser\cache\`
 - **Vérification 2**: `%APPDATA%\HelloGames\NMS\cache\` si DefaultUser absent
 - **Fallback**: DefaultUser si aucun des deux n'existe (sera créé par le jeu)
-- **Plateformes concernées**: MS Store, GOG, Xbox Game Pass
+- **Plateformes concernées**: Xbox Game Pass
 
 ### Workflow de Swap des Fichiers
 1. **Backup**: `SEASON_DATA_CACHE.JSON` → `SEASON_DATA_CACHE_original.JSON`
@@ -149,7 +148,7 @@ npm run build
 - **Cas couverts**: Switching platforms, Steam ID handling, UI states, error cases
 
 ### Tests de chemins résilients (Nouveauté)
-- **Plateformes concernées**: MS Store, GOG, Xbox Game Pass
+- **Plateformes concernées**: Xbox Game Pass
 - **Scénarios testés**: DefaultUser exists, direct cache exists, neither exists
 - **Validation**: Fallback logic complet avec _dirExists helper
 - **Couverture**: 4 nouveaux tests pour chaque plateforme non-Steam
@@ -157,13 +156,40 @@ npm run build
 ## 📋 Variables d'Environnement
 Aucune pour le moment - Configuration stockée localement.
 
+## 🎨 Interface & UX
+
+### Assets
+- **Icône application**: `assets/icons/app-icon.png` (1024x1024 PNG)
+- **Configuration Windows**: Application Windows uniquement
+- **Logos plateformes**: Steam, Xbox Game Pass
+
+### Expérience Utilisateur
+- **Interface épurée**: Suppression des emojis décoratifs des titres principaux
+- **Titres simplifiés**: 
+  - "NMS Expedition Manager" (sans 🚀)
+  - "État Actuel" (sans 📊) 
+  - "Gestion des Expéditions" (sans 🌌)
+- **Icônes contextuelles**: Emojis fonctionnels conservés (🔄, ⚙️, ⚠️)
+- **Status block amélioré**: Icône d'expédition centrée et agrandie au lieu de l'emoji fusée
+
+### Gestion des Plateformes - UI
+- **Sélection visuelle**: Logos des plateformes avec feedback hover/selected
+- **Fix Steam**: Correction visibilité logo Steam (filter: brightness/contrast)
+- **Responsive**: Interface adaptative selon la plateforme sélectionnée
+
 ## 🔒 Sécurité & Bonnes Pratiques
 - Pas de secrets dans le code
 - Configuration utilisateur en local uniquement
 - Validation des chemins de fichiers
 - Gestion d'erreurs robuste pour les opérations fichiers
+- **Code clean**: Suppression de tous les commentaires pour un code auto-documenté
 
 ## 📝 Conventions de Développement
+
+### Qualité du Code
+- **Nommage explicite**: Variables et méthodes auto-documentées
+- **Pas de commentaires**: Code suffisamment clair sans paraphrase
+- **Architecture modulaire**: Services séparés et responsabilités claires
 
 ### Git & Commits
 - **Conventional Commits** obligatoire pour tous les commits
@@ -171,7 +197,8 @@ Aucune pour le moment - Configuration stockée localement.
 - Types : `feat`, `fix`, `docs`, `test`, `refactor`, `style`, `chore`
 - Exemples :
   - `feat(expedition): add expedition selection interface`
-  - `fix(processMonitor): correct macOS detection false positive`
+  - `fix(ui): correct Steam logo visibility when selected`
+  - `refactor: remove all comments from codebase for cleaner code`
   - `docs: update README with packaging instructions`
 - Commits atomiques : une fonctionnalité/fix par commit
 - Messages descriptifs en anglais avec détails dans le body si nécessaire
