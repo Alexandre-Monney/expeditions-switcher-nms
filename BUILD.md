@@ -2,6 +2,8 @@
 
 Ce guide explique comment créer des exécutables de production pour NMS Expedition Manager.
 
+**⚠️ Note importante**: Cette application est conçue uniquement pour Windows. Le support macOS/Linux a été supprimé.
+
 ## ⚡ Build Rapide
 
 ### Windows
@@ -10,18 +12,6 @@ npm run build:win
 ```
 Génère : `dist/NMS Expedition Manager Setup 1.0.0.exe`
 
-### macOS
-```bash
-npm run build:mac
-```
-Génère : `dist/NMS Expedition Manager-1.0.0.dmg`
-
-### Linux
-```bash
-npm run build:linux
-```
-Génère : `dist/NMS Expedition Manager-1.0.0.AppImage`
-
 ## 🎯 Test Rapide (Version non-packagée)
 
 Pour tester plus rapidement sans créer l'installateur :
@@ -29,15 +19,9 @@ Pour tester plus rapidement sans créer l'installateur :
 ```bash
 # Windows unpacked
 npm run build:win -- --dir
-
-# macOS unpacked  
-npm run build:mac -- --dir
-
-# Linux unpacked
-npm run build:linux -- --dir
 ```
 
-Les builds unpacked sont dans `dist/win-unpacked/`, `dist/mac/`, `dist/linux-unpacked/`
+Le build unpacked est dans `dist/win-unpacked/`
 
 ## 📦 Structure des Builds
 
@@ -45,54 +29,11 @@ Les builds unpacked sont dans `dist/win-unpacked/`, `dist/mac/`, `dist/linux-unp
 - **`Setup.exe`** : Installateur complet avec raccourcis
 - **`win-unpacked/`** : Version portable (pas d'installation)
 
-### macOS
-- **`.dmg`** : Image disque macOS standard
-- **`mac/`** : Application .app (drag & drop)
-
-### Linux
-- **`.AppImage`** : Application portable Linux
-- **`linux-unpacked/`** : Dossier d'application
-
-## 🎨 Icônes Personnalisées
-
-### 1. Créer vos icônes
-```bash
-npm run create-icons
-```
-
-### 2. Remplacer les icônes
-- Éditez `assets/icon.svg` avec votre design
-- Créez `assets/icon.png` (512×512)
-- Convertissez vers `assets/icon.ico` (Windows)
-- Créez `assets/icon.icns` (macOS)
-
-### 3. Activer les icônes
-Décommentez les lignes `"icon"` dans `package.json` :
-
-```json
-"win": {
-  "target": [...],
-  "icon": "assets/icon.ico"
-},
-"mac": {
-  "target": "dmg",
-  "icon": "assets/icon.icns"
-},
-"linux": {
-  "target": "AppImage", 
-  "icon": "assets/icon.png"
-}
-```
-
 ## 🚨 Troubleshooting
 
-### Build Windows depuis macOS/Linux
-- ✅ Fonctionne nativement avec electron-builder
-- ⚠️ Peut nécessiter Wine pour la signature
-
-### Build macOS depuis Windows/Linux
-- ❌ Impossible (limitations Apple)
-- ✅ Utilisez GitHub Actions ou une VM macOS
+### Application Windows uniquement
+- ✅ Conçue spécifiquement pour Windows
+- ❌ Support macOS/Linux supprimé
 
 ### Erreurs communes
 
@@ -126,7 +67,7 @@ Décommentez les lignes `"icon"` dans `package.json` :
 3. Upload builds sur GitHub Releases
 
 ### Site Web
-- Hébergez les `.exe`, `.dmg`, `.AppImage`
+- Hébergez les `.exe`
 - Fournissez checksums SHA256
 
 ### Auto-Update (Optionnel)
@@ -141,4 +82,4 @@ Ajoutez dans `package.json` :
 
 ---
 
-**🎉 C'est prêt !** Vous pouvez maintenant distribuer NMS Expedition Manager sur toutes les plateformes !
+**🎉 C'est prêt !** Vous pouvez maintenant distribuer NMS Expedition Manager pour Windows !
