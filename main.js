@@ -11,6 +11,7 @@ function createWindow() {
     height: 900,
     minWidth: 1200,
     minHeight: 800,
+    icon: path.join(__dirname, 'assets/icons/app-icon.png'),
     show: false, // Don't show until ready
     webPreferences: {
       nodeIntegration: false,
