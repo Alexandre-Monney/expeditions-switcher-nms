@@ -106,13 +106,6 @@ describe('ConfigManager', () => {
       expect(result).toBe('/mock/home/AppData/Roaming/HelloGames/NMS/76561198123456789/cache');
     });
 
-    test('should build Steam cache path on Mac', () => {
-      Object.defineProperty(process, 'platform', { value: 'darwin' });
-      
-      const result = configManager.buildCachePath('steam');
-      
-      expect(result).toBe('/mock/home/Library/Application Support/HelloGames/NMS/cache');
-    });
 
     test('should build MS Store cache path with resilient logic', () => {
       Object.defineProperty(process, 'platform', { value: 'win32' });

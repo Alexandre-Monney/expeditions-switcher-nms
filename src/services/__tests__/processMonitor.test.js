@@ -32,17 +32,6 @@ describe('ProcessMonitor', () => {
       expect(result).toBe(true);
     });
 
-    test('should return true when NMS process is found on macOS', async () => {
-      Object.defineProperty(process, 'platform', { value: 'darwin' });
-      
-      mockExec.mockImplementation((command, callback) => {
-        callback(null, { stdout: '1234\n5678' }); 
-      });
-      
-      const result = await processMonitor.isNMSRunning();
-      
-      expect(result).toBe(true);
-    });
 
     test('should return false when no NMS process is found', async () => {
       Object.defineProperty(process, 'platform', { value: 'win32' });
@@ -107,25 +96,6 @@ describe('ProcessMonitor', () => {
       });
     });
 
-    test('should return process info when NMS is running on macOS', async () => {
-      Object.defineProperty(process, 'platform', { value: 'darwin' });
-      
-      mockExec.mockImplementation((command, callback) => {
-        callback(null, { 
-          stdout: '  PID  %CPU %MEM     ELAPSED COMMAND\n 1234   2.5  5.2    00:10:30 /Applications/No Man\'s Sky' 
-        });
-      });
-      
-      const result = await processMonitor.getNMSProcessInfo();
-      
-      expect(result).toEqual({
-        name: 'No Man\'s Sky',
-        pid: 1234,
-        platform: 'darwin',
-        memoryUsage: '2.5%',
-        startTime: '00:10:30'
-      });
-    });
 
     test('should return null when no NMS process is found', async () => {
       mockExec.mockImplementation((command, callback) => {

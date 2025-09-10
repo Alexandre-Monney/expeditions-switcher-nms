@@ -131,13 +131,4 @@ describe('Steam Integration Workflow', () => {
     });
   });
 
-  describe('macOS Steam Detection', () => {
-    test('should work correctly on macOS', () => {
-      Object.defineProperty(process, 'platform', { value: 'darwin' });
-      
-      
-      const cachePath = configManager.buildCachePath('steam');
-      expect(cachePath).toBe('/mock/home/Library/Application Support/HelloGames/NMS/cache');
-    });
-  });
 });

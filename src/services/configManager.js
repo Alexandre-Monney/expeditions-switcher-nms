@@ -51,19 +51,13 @@ class ConfigManager {
   }
 
   buildCachePath(platform, steamId = null) {
-    const appDataPath = process.platform === 'win32' 
-      ? path.join(os.homedir(), 'AppData/Roaming')
-      : path.join(os.homedir(), 'Library/Application Support');
+    const appDataPath = path.join(os.homedir(), 'AppData/Roaming');
 
     switch (platform) {
       case 'steam':
-        if (process.platform === 'darwin') {
-          return path.join(appDataPath, 'HelloGames/NMS/cache');
-        } else {
-          return (steamId && steamId.trim() !== '') 
-            ? path.join(appDataPath, 'HelloGames/NMS', steamId, 'cache')
-            : null;
-        }
+        return (steamId && steamId.trim() !== '') 
+          ? path.join(appDataPath, 'HelloGames/NMS', steamId, 'cache')
+          : null;
       case 'msstore':
       case 'gog':
       case 'gamepass':

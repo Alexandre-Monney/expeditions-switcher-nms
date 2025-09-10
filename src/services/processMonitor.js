@@ -6,9 +6,7 @@ const execAsync = promisify(exec);
 class ProcessMonitor {
   constructor() {
     this.nmsProcessNames = {
-      win32: ['NMS.exe', 'NoMansSky.exe'],
-      darwin: ['No Man\'s Sky', 'NMS'],
-      linux: ['NMS.x64', 'NoMansSky']
+      win32: ['NMS.exe', 'NoMansSky.exe']
     };
   }
 
@@ -18,8 +16,7 @@ class ProcessMonitor {
    */
   async isNMSRunning() {
     try {
-      const platform = process.platform;
-      const processNames = this.nmsProcessNames[platform] || this.nmsProcessNames.win32;
+      const processNames = this.nmsProcessNames.win32;
       
       for (const processName of processNames) {
         const isRunning = await this._checkProcessByName(processName);
@@ -41,8 +38,7 @@ class ProcessMonitor {
    */
   async getNMSProcessInfo() {
     try {
-      const platform = process.platform;
-      const processNames = this.nmsProcessNames[platform] || this.nmsProcessNames.win32;
+      const processNames = this.nmsProcessNames.win32;
       
       for (const processName of processNames) {
         const processInfo = await this._getProcessInfo(processName);
@@ -50,7 +46,7 @@ class ProcessMonitor {
           return {
             name: processName,
             pid: processInfo.pid,
-            platform: platform,
+            platform: 'win32',
             memoryUsage: processInfo.memory || 'Unknown',
             startTime: processInfo.startTime || 'Unknown'
           };
