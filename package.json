@@ -11,8 +11,6 @@
     "test:coverage": "jest --coverage",
     "build": "electron-builder",
     "build:win": "electron-builder --win",
-    "build:mac": "electron-builder --mac",
-    "build:linux": "electron-builder --linux",
     "dist": "npm run build"
   },
   "build": {
@@ -35,14 +33,6 @@
           "arch": ["x64", "ia32"]
         }
       ],
-      "icon": "assets/icons/app-icon.png"
-    },
-    "mac": {
-      "target": "dmg",
-      "icon": "assets/icons/app-icon.png"
-    },
-    "linux": {
-      "target": "AppImage",
       "icon": "assets/icons/app-icon.png"
     },
     "compression": "maximum",
