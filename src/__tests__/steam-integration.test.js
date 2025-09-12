@@ -1,5 +1,6 @@
 const ConfigManager = require('../services/configManager');
 const SteamDetection = require('../services/steamDetection');
+const path = require('path');
 
 
 jest.mock('fs');
@@ -14,7 +15,7 @@ describe('Steam Integration Workflow', () => {
     jest.clearAllMocks();
     
     
-    os.homedir.mockReturnValue('/mock/home');
+    os.homedir.mockReturnValue('C:\\Users\\TestUser');
     
     
     Object.defineProperty(process, 'platform', { value: 'win32', configurable: true });
@@ -26,17 +27,17 @@ describe('Steam Integration Workflow', () => {
     test('should detect Steam IDs and use them in buildCachePath', async () => {
       
       fs.existsSync.mockImplementation((path) => {
-        if (path.includes('HelloGames/NMS')) return true;
-        if (path.includes('76561198123456789/cache')) return true;
-        if (path.includes('SEASON_DATA_CACHE.JSON')) return true;
-        return false;
+        return (path.includes('HelloGames') && path.includes('NMS') && !path.includes('st_')) ||
+               path.includes('st_76561198123456789') ||
+               path.includes('SEASON_DATA_CACHE.JSON');
       });
 
-      fs.readdirSync.mockReturnValue([
-        { name: 'st_76561198123456789', isDirectory: () => true },
-        { name: 'someotherfile.txt', isDirectory: () => false },
-        { name: 'notasteamid', isDirectory: () => true }
-      ]);
+      
+      const mockDirentSteam = { name: 'st_76561198123456789', isDirectory: () => true };
+      const mockDirentFile = { name: 'someotherfile.txt', isDirectory: () => false };
+      const mockDirentInvalid = { name: 'notasteamid', isDirectory: () => true };
+      
+      fs.readdirSync.mockReturnValue([mockDirentSteam, mockDirentFile, mockDirentInvalid]);
 
       fs.statSync.mockReturnValue({
         mtime: new Date('2023-01-01')
@@ -49,7 +50,7 @@ describe('Steam Integration Workflow', () => {
 
       
       const cachePath = configManager.buildCachePath('steam', 'st_76561198123456789');
-      expect(cachePath).toBe('/mock/home/AppData/Roaming/HelloGames/NMS/st_76561198123456789/cache');
+      expect(cachePath).toBe(path.normalize('C:\\Users\\TestUser/AppData/Roaming/HelloGames/NMS/st_76561198123456789/cache'));
     });
 
     test('should return null cache path when Steam platform but no steamId provided', () => {
@@ -67,17 +68,19 @@ describe('Steam Integration Workflow', () => {
     test('should work with multiple Steam IDs detected', () => {
       
       fs.existsSync.mockImplementation((path) => {
-        if (path.includes('HelloGames/NMS')) return true;
-        if (path.includes('cache')) return true;
+        if (path.includes('HelloGames') && path.includes('NMS') && !path.includes('st_')) return true;
+        if (path.includes('st_76561198123456789')) return true;
+        if (path.includes('st_76561198987654321')) return true;
         if (path.includes('SEASON_DATA_CACHE.JSON')) return true;
         return false;
       });
 
-      fs.readdirSync.mockReturnValue([
-        { name: 'st_76561198123456789', isDirectory: () => true },
-        { name: 'st_76561198987654321', isDirectory: () => true },
-        { name: 'notasteamid', isDirectory: () => true }
-      ]);
+      
+      const mockDirentSteam1 = { name: 'st_76561198123456789', isDirectory: () => true };
+      const mockDirentSteam2 = { name: 'st_76561198987654321', isDirectory: () => true };
+      const mockDirentInvalid = { name: 'notasteamid', isDirectory: () => true };
+      
+      fs.readdirSync.mockReturnValue([mockDirentSteam1, mockDirentSteam2, mockDirentInvalid]);
 
       fs.statSync.mockImplementation((path) => {
         if (path.includes('st_76561198123456789')) {
@@ -99,8 +102,8 @@ describe('Steam Integration Workflow', () => {
       const cachePath1 = configManager.buildCachePath('steam', 'st_76561198123456789');
       const cachePath2 = configManager.buildCachePath('steam', 'st_76561198987654321');
       
-      expect(cachePath1).toBe('/mock/home/AppData/Roaming/HelloGames/NMS/st_76561198123456789/cache');
-      expect(cachePath2).toBe('/mock/home/AppData/Roaming/HelloGames/NMS/st_76561198987654321/cache');
+      expect(cachePath1).toBe(path.normalize('C:\\Users\\TestUser/AppData/Roaming/HelloGames/NMS/st_76561198123456789/cache'));
+      expect(cachePath2).toBe(path.normalize('C:\\Users\\TestUser/AppData/Roaming/HelloGames/NMS/st_76561198987654321/cache'));
     });
   });
 
@@ -108,15 +111,15 @@ describe('Steam Integration Workflow', () => {
     test('should use consistent paths between SteamDetection and ConfigManager', () => {
       
       fs.existsSync.mockImplementation((path) => {
-        if (path.includes('HelloGames/NMS')) return true;
-        if (path.includes('st_76561198123456789/cache')) return true;
+        if (path.includes('HelloGames') && path.includes('NMS') && !path.includes('st_')) return true;
+        if (path.includes('st_76561198123456789')) return true;
         if (path.includes('SEASON_DATA_CACHE.JSON')) return true;
         return false;
       });
 
-      fs.readdirSync.mockReturnValue([
-        { name: 'st_76561198123456789', isDirectory: () => true }
-      ]);
+      
+      const mockDirentSteam = { name: 'st_76561198123456789', isDirectory: () => true };
+      fs.readdirSync.mockReturnValue([mockDirentSteam]);
 
       fs.statSync.mockReturnValue({
         mtime: new Date('2023-01-01')
