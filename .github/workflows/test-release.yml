@@ -30,23 +30,21 @@ jobs:
     - name: Build Windows application
       run: npm run build:win
       
-    - name: Test Release Creation
-      uses: softprops/action-gh-release@v2
+    - name: Test Release Creation with native gh
+      run: |
+        gh release create "${{ github.ref_name }}" \
+          dist/*.exe \
+          dist/*.blockmap \
+          --title "Test Release ${{ github.ref_name }}" \
+          --notes "🧪 **Test Release - Ne pas utiliser en production**
+
+        Cette release est un test pour valider le workflow de build automatique.
+
+        Fichiers générés :
+        - Installeur Windows  
+        - Version portable
+        - Blockmaps pour la vérification" \
+          --draft \
+          --prerelease
       env:
-        GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        files: |
-          dist/*.exe
-          dist/*.blockmap
-        draft: true
-        prerelease: true
-        tag_name: ${{ github.ref_name }}
-        name: "Test Release ${{ github.ref_name }}"
-        body: |
-          🧪 **Test Release - Ne pas utiliser en production**
-          
-          Cette release est un test pour valider le workflow de build automatique.
-          
-          Fichiers générés :
-          - Installeur Windows
-          - Version portable
-          - Blockmaps pour la vérification
+        GH_TOKEN: ${{ github.token }}
