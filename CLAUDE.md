@@ -202,3 +202,11 @@ Aucune pour le moment - Configuration stockée localement.
   - `docs: update README with packaging instructions`
 - Commits atomiques : une fonctionnalité/fix par commit
 - Messages descriptifs en anglais avec détails dans le body si nécessaire
+
+### Pull Requests
+- **Descriptions concises** avec structure standardisée :
+  - **Problème** : Quelle problématique on résout
+  - **Solution** : Approche choisie pour la résoudre
+  - **Test** : Comment tester/valider (si pertinent)
+- Éviter les descriptions trop détaillées ou verbeuses
+- Focus sur le "pourquoi" plutôt que le "comment"
