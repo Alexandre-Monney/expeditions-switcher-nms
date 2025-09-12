@@ -76,4 +76,4 @@ jobs:
           
           Voir les notes de version générées automatiquement ci-dessous.
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
