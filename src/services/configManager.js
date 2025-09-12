@@ -51,7 +51,7 @@ class ConfigManager {
   }
 
   buildCachePath(platform, steamId = null) {
-    const appDataPath = path.join(os.homedir(), 'AppData/Roaming');
+    const appDataPath = path.join(os.homedir(), 'AppData', 'Roaming');
 
     switch (platform) {
       case 'steam':

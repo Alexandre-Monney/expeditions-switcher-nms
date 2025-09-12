@@ -5,7 +5,7 @@ const os = require('os');
 class SteamDetection {
   static detectSteamIds() {
     try {
-      const appDataPath = path.join(os.homedir(), 'AppData/Roaming');
+      const appDataPath = path.join(os.homedir(), 'AppData', 'Roaming');
       const nmsBasePath = path.join(appDataPath, 'HelloGames', 'NMS');
       
       if (!fs.existsSync(nmsBasePath)) {
