@@ -210,3 +210,21 @@ Aucune pour le moment - Configuration stockée localement.
   - **Test** : Comment tester/valider (si pertinent)
 - Éviter les descriptions trop détaillées ou verbeuses
 - Focus sur le "pourquoi" plutôt que le "comment"
+
+## 🚨 Règles Git Importantes
+
+### Commits
+- **JAMAIS de commit direct sur main** - toujours passer par des branches
+- Utiliser des branches pour toute modification : `fix/`, `feat/`, etc.
+- Merger uniquement via Pull Requests
+
+## 📝 Notes Techniques
+
+### Métadonnées Windows (à investiguer plus tard)
+- **Problème** : `publisherName` et `verInfo` non supportés dans electron-builder v26
+- **Alternatives potentielles** :
+  - `legalTrademarks` : pour informations légales 
+  - `releaseInfo` : pour métadonnées de release
+  - Downgrade electron-builder vers version qui supporte ces propriétés
+  - Configuration dans `nsis` section au lieu de `win`
+- **Status** : Ignoré pour v1.0.x, fonctionnel sans ces métadonnées
