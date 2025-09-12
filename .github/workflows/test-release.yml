@@ -1,0 +1,52 @@
+name: Test Release Workflow
+
+on:
+  push:
+    tags:
+      - 'test-*'
+
+jobs:
+  test-build:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run tests
+      run: npm test
+      
+    - name: Build Windows application
+      run: npm run build:win
+      
+    - name: Test Release Creation
+      uses: softprops/action-gh-release@v2
+      with:
+        token: ${{ github.token }}
+        files: |
+          dist/*.exe
+          dist/*.blockmap
+        draft: true
+        prerelease: true
+        tag_name: ${{ github.ref_name }}
+        name: "Test Release ${{ github.ref_name }}"
+        body: |
+          🧪 **Test Release - Ne pas utiliser en production**
+          
+          Cette release est un test pour valider le workflow de build automatique.
+          
+          Fichiers générés :
+          - Installeur Windows
+          - Version portable
+          - Blockmaps pour la vérification
