@@ -31,9 +31,19 @@
         {
           "target": "nsis",
           "arch": ["x64", "ia32"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
         }
       ],
-      "icon": "assets/icons/app-icon.png"
+      "icon": "assets/icons/app-icon.png",
+      "publisherName": "Alexandre Monney",
+      "verInfo": {
+        "CompanyName": "Alexandre Monney",
+        "FileDescription": "NMS Expedition Manager - Gestionnaire d'expéditions No Man's Sky",
+        "ProductName": "NMS Expedition Manager"
+      }
     },
     "compression": "maximum",
     "nsis": {
