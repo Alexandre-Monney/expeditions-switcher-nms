@@ -15,11 +15,69 @@ class NMSExpeditionManager {
     async init() {
         await this.loadConfig();
         this.setupEventListeners();
+        this.setupI18nSubscription();
+        this.translateStaticContent();
         
         if (this.config && this.config.firstSetup === false) {
             await this.showMainScreen();
         } else {
             this.showSetupScreen();
+        }
+    }
+
+    setupI18nSubscription() {
+        if (this.i18nService) {
+            this.i18nService.subscribe(() => {
+                this.translateStaticContent();
+            });
+        }
+    }
+
+    translateStaticContent() {
+        if (!this.i18nService || !this.i18nService.isLoaded()) return;
+
+        // Setup screen translations
+        this.translator.setTextContent(document.querySelector('#setup-screen h1'), 'setup.title');
+        this.translator.setTextContent(document.querySelector('.setup-description'), 'setup.description');
+        this.translator.setTextContent(document.querySelector('.platform-selection h3'), 'setup.selectPlatform');
+        
+        // Platform names and descriptions
+        this.translator.setTextContent(document.querySelector('[data-platform="steam"] .platform-info strong'), 'setup.platforms.steam.name');
+        this.translator.setTextContent(document.querySelector('[data-platform="steam"] .platform-info span'), 'setup.platforms.steam.description');
+        this.translator.setTextContent(document.querySelector('[data-platform="msstore"] .platform-info strong'), 'setup.platforms.msstore.name');
+        this.translator.setTextContent(document.querySelector('[data-platform="msstore"] .platform-info span'), 'setup.platforms.msstore.description');
+        this.translator.setTextContent(document.querySelector('[data-platform="gog"] .platform-info strong'), 'setup.platforms.gog.name');
+        this.translator.setTextContent(document.querySelector('[data-platform="gog"] .platform-info span'), 'setup.platforms.gog.description');
+        this.translator.setTextContent(document.querySelector('[data-platform="gamepass"] .platform-info strong'), 'setup.platforms.gamepass.name');
+        this.translator.setTextContent(document.querySelector('[data-platform="gamepass"] .platform-info span'), 'setup.platforms.gamepass.description');
+        
+        // Steam section
+        this.translator.setTextContent(document.querySelector('#steam-section h3'), 'setup.steamSection.title');
+        this.translator.setTextContent(document.querySelector('#detect-steam-btn'), 'setup.steamSection.detectBtn');
+        this.translator.setTextContent(document.querySelector('#setup-continue-btn'), 'setup.continueBtn');
+        
+        // Main screen translations
+        this.translator.setTextContent(document.querySelector('#main-screen h1'), 'main.title');
+        this.translator.setTextContent(document.querySelector('#change-platform-btn'), 'main.changePlatform');
+        this.translator.setTextContent(document.querySelector('#current-status h2'), 'main.status.title');
+        this.translator.setTextContent(document.querySelector('#refresh-status-btn'), 'main.status.refresh');
+        this.translator.setTextContent(document.querySelector('#expedition-section h2'), 'main.expeditions.title');
+        
+        // Expedition controls
+        this.translator.setTextContent(document.querySelector('label[for="expedition-select"]'), 'main.expeditions.selectExpedition');
+        this.translator.setTextContent(document.querySelector('#activate-expedition-btn'), 'main.expeditions.activate');
+        this.translator.setTextContent(document.querySelector('#restore-original-btn'), 'main.expeditions.restore');
+        this.translator.setTextContent(document.querySelector('#switch-expedition-btn'), 'main.expeditions.switch');
+        this.translator.setTextContent(document.querySelector('#error-state h3'), 'main.error.title');
+        this.translator.setTextContent(document.querySelector('#retry-btn'), 'main.error.retry');
+        
+        // Loading screen
+        this.translator.setTextContent(document.querySelector('#loading-screen h1'), 'loading.title');
+        this.translator.setTextContent(document.querySelector('#loading-screen p'), 'loading.text');
+        
+        // Update platform info if config is loaded
+        if (this.config) {
+            this.updatePlatformInfo();
         }
     }
 
@@ -626,6 +684,14 @@ class NMSExpeditionManager {
                 }
             }
         });
+    }
+
+    updatePlatformInfo() {
+        const platformInfoEl = document.getElementById('current-platform-info');
+        if (!platformInfoEl || !this.config || !this.config.platform) return;
+
+        const platformName = this.i18nService.translate(`setup.platforms.${this.config.platform}.name`);
+        platformInfoEl.textContent = this.i18nService.translate('main.platform', { platform: platformName });
     }
 
     showMessage(message, type = 'info') {
