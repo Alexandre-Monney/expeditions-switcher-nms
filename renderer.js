@@ -647,14 +647,18 @@ class NMSExpeditionManager {
 }
 
 // Initialize the app
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    // Initialize I18n Service
+    window.i18nService = new I18nService();
+    await window.i18nService.init();
+    
     // Initialize Language Switcher
-    const languageSwitcher = new LanguageSwitcher();
+    const languageSwitcher = new LanguageSwitcher(window.i18nService);
     const container = document.getElementById('language-switcher-container');
     if (container) {
         container.appendChild(languageSwitcher.getElement());
     }
 
-    // Initialize main app
-    window.nmsManager = new NMSExpeditionManager();
+    // Initialize main app with i18n
+    window.nmsManager = new NMSExpeditionManager(window.i18nService);
 });
