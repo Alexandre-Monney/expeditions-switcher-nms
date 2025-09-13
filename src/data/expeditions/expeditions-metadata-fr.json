@@ -1,0 +1,200 @@
+{
+  "01_pioneers": {
+    "displayName": "01 - The Pioneers",
+    "description": "La première expédition - Pionnier à travers la galaxie",
+    "difficulty": "Facile",
+    "duration": "7 semaines",
+    "rewards": ["Vaisseau Vecteur Doré", "Titre de Pionnier", "Vaporisateur Soleil Liquide"],
+    "releaseDate": "2021-03-31",
+    "endDate": "2021-05-16",
+    "order": 1,
+    "imageUrl": "assets/images/expeditions/01_pioneers.png"
+  },
+  "02_beachhead": {
+    "displayName": "02 - Beachhead",
+    "description": "Établir une tête de pont sur de nouveaux mondes - Croisement Mass Effect",
+    "difficulty": "Moyen",
+    "duration": "2 semaines",
+    "rewards": ["Frégate Normandy SR-1", "Autocollants Mass Effect", "Bannière N7"],
+    "releaseDate": "2021-05-17",
+    "endDate": "2021-05-31",
+    "order": 2,
+    "imageUrl": "assets/images/expeditions/02_beachhead.png"
+  },
+  "03_cartographers": {
+    "displayName": "03 - Cartographers",
+    "description": "Cartographier des territoires inconnus et mapper les étoiles",
+    "difficulty": "Moyen", 
+    "duration": "5 semaines",
+    "rewards": ["Traînée de vaisseau exclusive", "Titre de Cartographe", "Décorations de base"],
+    "releaseDate": "2021-09-08",
+    "endDate": "2021-10-17",
+    "order": 3,
+    "imageUrl": "assets/images/expeditions/03_cartographers.png"
+  },
+  "04_emergence": {
+    "displayName": "04 - Emergence",
+    "description": "Affronter des horreurs cosmiques dans cette expédition difficile",
+    "difficulty": "Difficile",
+    "duration": "4 semaines",
+    "rewards": ["Frégate Vivante", "Modifications d'os", "Objets à thème horrifique"],
+    "releaseDate": "2021-10-20",
+    "endDate": "2021-11-22",
+    "order": 4,
+    "imageUrl": "assets/images/expeditions/04_emergence.png"
+  },
+  "05_exobiology": {
+    "displayName": "05 - Exobiology",
+    "description": "Découvrir et cataloguer les formes de vie extraterrestres",
+    "difficulty": "Moyen",
+    "duration": "5 semaines", 
+    "rewards": ["Traînée biologique de vaisseau", "Titre d'Exobiologiste", "Parties de créatures"],
+    "releaseDate": "2022-02-24",
+    "endDate": "2022-04-04",
+    "order": 5,
+    "imageUrl": "assets/images/expeditions/05_exobiology.png"
+  },
+  "06_blighted": {
+    "displayName": "06 - The Blighted",
+    "description": "Naviguer à travers des mondes infestés et corrompus",
+    "difficulty": "Difficile",
+    "duration": "5 semaines",
+    "rewards": ["Vaisseau Ver", "Décorations d'infestation", "Bannières corrompues"],
+    "releaseDate": "2022-04-14",
+    "endDate": "2022-05-22",
+    "order": 6,
+    "imageUrl": "assets/images/expeditions/06_blighted.png"
+  },
+  "07_leviathan": {
+    "displayName": "07 - Leviathan",
+    "description": "S'échapper d'une boucle temporelle infinie",
+    "difficulty": "Difficile",
+    "duration": "6 semaines",
+    "rewards": ["Frégate Léviathan", "Protection temporelle", "Pièces de base temporelles"],
+    "releaseDate": "2022-05-25", 
+    "endDate": "2022-07-05",
+    "order": 7,
+    "imageUrl": "assets/images/expeditions/07_leviathan.png"
+  },
+  "08_polestar": {
+    "displayName": "08 - Polestar",
+    "description": "Naviguer par les étoiles dans cette expédition d'exploration",
+    "difficulty": "Moyen",
+    "duration": "6 semaines",
+    "rewards": ["Traînée dorée de vaisseau", "Titre d'Étoile Polaire", "Outils de navigation"],
+    "releaseDate": "2022-07-27",
+    "endDate": "2022-09-11",
+    "order": 8,
+    "imageUrl": "assets/images/expeditions/08_polestar.png"
+  },
+  "09_utopia": {
+    "displayName": "09 - Utopia",
+    "description": "Construire la colonie utopique parfaite",
+    "difficulty": "Facile",
+    "duration": "6 semaines",
+    "rewards": ["Vaisseau Utopie", "Pièces de base parfaites", "Scanner de planète paradisiaque"],
+    "releaseDate": "2023-02-22",
+    "endDate": "2023-04-04",
+    "order": 9,
+    "imageUrl": "assets/images/expeditions/09_utopia.png"
+  },
+  "10_singularity": {
+    "displayName": "10 - Singularity", 
+    "description": "Enquêter sur les anomalies gravitationnelles et les trous noirs",
+    "difficulty": "Difficile",
+    "duration": "5 semaines",
+    "rewards": ["Moteur de Singularité", "Effets de trou noir", "Cape gravitationnelle"],
+    "releaseDate": "2023-06-08",
+    "endDate": "2023-07-12",
+    "order": 10,
+    "imageUrl": "assets/images/expeditions/10_singularity.png"
+  },
+  "11_voyagers": {
+    "displayName": "11 - Voyagers",
+    "description": "Voyager à travers plusieurs galaxies en tant qu'explorateur",
+    "difficulty": "Moyen",
+    "duration": "7 semaines",
+    "rewards": ["Vaisseau Voyageur", "Badge multi-galaxies", "Manteau de Voyageur"],
+    "releaseDate": "2023-08-31",
+    "endDate": "2023-10-16", 
+    "order": 11,
+    "imageUrl": "assets/images/expeditions/11_voyagers.png"
+  },
+  "12_omega": {
+    "displayName": "12 - Omega",
+    "description": "L'expédition ultime - affronter le défi final", 
+    "difficulty": "Très Difficile",
+    "duration": "4 semaines",
+    "rewards": ["Vaisseau Omega", "Titre Final", "Récompenses ultimes"],
+    "releaseDate": "2024-02-15",
+    "endDate": "2024-03-18",
+    "order": 12,
+    "imageUrl": "assets/images/expeditions/12_omega.png"
+  },
+  "13_adrift": {
+    "displayName": "13 - Adrift",
+    "description": "Survivre à la dérive dans l'espace avec des ressources limitées",
+    "difficulty": "Très Difficile",
+    "duration": "7 semaines",
+    "rewards": ["Vaisseau à la Dérive", "Capsule de survie", "Balise d'urgence"],
+    "releaseDate": "2024-05-29",
+    "endDate": "2024-07-15", 
+    "order": 13,
+    "imageUrl": "assets/images/expeditions/13_adrift.png"
+  },
+  "14_liquidators": {
+    "displayName": "14 - Liquidators",
+    "description": "Nettoyer les matériaux dangereux à travers la galaxie",
+    "difficulty": "Difficile", 
+    "duration": "5 semaines",
+    "rewards": ["Mech Liquidateur", "Combinaison anti-radiations", "Outils de nettoyage"],
+    "releaseDate": "2024-07-24",
+    "endDate": "2024-09-02",
+    "order": 14,
+    "imageUrl": "assets/images/expeditions/14_liquidators.png"
+  },
+  "15_aquarius": {
+    "displayName": "15 - Aquarius", 
+    "description": "Explorer les mondes océaniques et les mystères sous-marins",
+    "difficulty": "Moyen",
+    "duration": "7 semaines",
+    "rewards": ["Vaisseau Aquatique", "Pièces de base sous-marines", "Titre d'Explorateur Océanique"],
+    "releaseDate": "2024-09-04",
+    "endDate": "2024-10-21",
+    "order": 15,
+    "imageUrl": "assets/images/expeditions/15_aquarius.png"
+  },
+  "16_cursed": {
+    "displayName": "16 - The Cursed",
+    "description": "Briser d'anciennes malédictions dans cette expédition effrayante",
+    "difficulty": "Difficile",
+    "duration": "2 semaines",
+    "rewards": ["Vaisseau Maudit", "Décorations effrayantes", "Outils brise-malédiction"],
+    "releaseDate": "2024-10-23",
+    "endDate": "2024-11-06",
+    "order": 16,
+    "imageUrl": "assets/images/expeditions/16_cursed.png"
+  },
+  "17_titan": {
+    "displayName": "17 - Titan",
+    "description": "Affronter des défis titanesques dans des mondes massifs",
+    "difficulty": "Difficile",
+    "duration": "6 semaines",
+    "rewards": ["Vaisseau classe Titan", "Pièces de base colossales", "Titre d'Explorateur Géant"],
+    "releaseDate": "2025-02-12",
+    "endDate": "2025-03-26",
+    "order": 17,
+    "imageUrl": "assets/images/expeditions/17_titan.png"
+  },
+  "18_relics": {
+    "displayName": "18 - Relics",
+    "description": "Découvrir d'anciennes reliques et des trésors archéologiques",
+    "difficulty": "Moyen",
+    "duration": "6 semaines",
+    "rewards": ["Vaisseau Relique", "Outils archéologiques", "Décorations antiques"],
+    "releaseDate": "2025-03-27",
+    "endDate": "2025-05-07",
+    "order": 18,
+    "imageUrl": "assets/images/expeditions/18_relics.png"
+  }
+}
