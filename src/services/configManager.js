@@ -10,7 +10,8 @@ class ConfigManager {
       platform: null,
       steamId: null,
       firstSetup: true,
-      cachePath: null
+      cachePath: null,
+      language: 'fr'
     };
   }
 

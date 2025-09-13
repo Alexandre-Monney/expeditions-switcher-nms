@@ -37,7 +37,8 @@ describe('ConfigManager', () => {
         platform: null,
         steamId: null,
         firstSetup: true,
-        cachePath: null
+        cachePath: null,
+        language: 'fr'
       });
     });
 
@@ -353,6 +354,86 @@ describe('ConfigManager', () => {
       const result = configManager.saveConfig(newConfig);
       
       expect(result).toBe(false);
+    });
+  });
+
+  describe('language configuration', () => {
+    test('should save French language to config', () => {
+      fs.existsSync.mockReturnValue(false);
+      fs.mkdirSync.mockReturnValue(undefined);
+      fs.writeFileSync.mockReturnValue(undefined);
+      
+      const configWithLanguage = { language: 'fr' };
+      const result = configManager.saveConfig(configWithLanguage);
+      
+      expect(result).toBe(true);
+      expect(fs.writeFileSync).toHaveBeenCalledWith(
+        mockConfigFile, 
+        JSON.stringify(configWithLanguage, null, 2)
+      );
+    });
+
+    test('should save English language to config', () => {
+      fs.existsSync.mockReturnValue(false);
+      fs.mkdirSync.mockReturnValue(undefined);
+      fs.writeFileSync.mockReturnValue(undefined);
+      
+      const configWithLanguage = { language: 'en' };
+      const result = configManager.saveConfig(configWithLanguage);
+      
+      expect(result).toBe(true);
+      expect(fs.writeFileSync).toHaveBeenCalledWith(
+        mockConfigFile, 
+        JSON.stringify(configWithLanguage, null, 2)
+      );
+    });
+
+    test('should update language using updateConfig', () => {
+      const existingConfig = {
+        platform: 'steam',
+        steamId: '76561198123456789',
+        language: 'fr'
+      };
+      
+      fs.existsSync.mockReturnValue(true);
+      fs.readFileSync.mockReturnValue(JSON.stringify(existingConfig));
+      fs.writeFileSync.mockReturnValue(undefined);
+      
+      const result = configManager.updateConfig({ language: 'en' });
+      
+      const expectedConfig = {
+        ...configManager.defaultConfig,
+        ...existingConfig,
+        language: 'en'
+      };
+      
+      expect(result).toBe(true);
+      expect(fs.writeFileSync).toHaveBeenCalledWith(
+        mockConfigFile, 
+        JSON.stringify(expectedConfig, null, 2)
+      );
+    });
+
+    test('should load config with French as default language', () => {
+      fs.existsSync.mockReturnValue(false);
+      
+      const result = configManager.loadConfig();
+      
+      expect(result.language).toBe('fr');
+    });
+
+    test('should preserve language when loading existing config', () => {
+      const mockConfig = {
+        platform: 'steam',
+        language: 'en'
+      };
+      
+      fs.existsSync.mockReturnValue(true);
+      fs.readFileSync.mockReturnValue(JSON.stringify(mockConfig));
+      
+      const result = configManager.loadConfig();
+      
+      expect(result.language).toBe('en');
     });
   });
 });
