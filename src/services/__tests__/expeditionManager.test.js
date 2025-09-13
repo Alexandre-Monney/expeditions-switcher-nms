@@ -84,7 +84,7 @@ describe('ExpeditionManager', () => {
       jest.spyOn(expeditionManager, '_identifyCurrentExpedition')
         .mockResolvedValue({
           id: '01_pioneers',
-          displayName: 'The Pioneers'
+          displayName: '01 - The Pioneers'
         });
 
       const result = await expeditionManager.getCurrentState();
@@ -182,11 +182,11 @@ describe('ExpeditionManager', () => {
       
       fs.readFileSync.mockImplementation((filePath) => {
         if (filePath.includes('01_pioneers.json')) return expeditionContent;
-        if (filePath.includes('expeditions-metadata.json')) {
+        if (filePath.includes('expeditions-metadata-fr.json')) {
           return JSON.stringify({
             '01_pioneers': {
-              displayName: 'The Pioneers',
-              description: 'First expedition'
+              displayName: '01 - The Pioneers',
+              description: 'La première expédition - Pionnier à travers la galaxie'
             }
           });
         }
@@ -203,7 +203,7 @@ describe('ExpeditionManager', () => {
       
       expect(result.success).toBe(true);
       expect(result.expeditionId).toBe('01_pioneers');
-      expect(result.metadata.displayName).toBe('The Pioneers');
+      expect(result.metadata.displayName).toBe('01 - The Pioneers');
       expect(fs.copyFileSync).toHaveBeenCalledWith(
         '/mock/expeditions/01_pioneers.json',
         '/mock/cache/SEASON_DATA_CACHE.JSON'
@@ -317,12 +317,12 @@ describe('ExpeditionManager', () => {
       const mockFiles = [
         '01_pioneers.json',
         '02_beachhead.json', 
-        'expeditions-metadata.json'
+        'expeditions-metadata-fr.json'
       ];
       
       const mockMetadata = {
         '01_pioneers': {
-          displayName: 'The Pioneers',
+          displayName: '01 - The Pioneers',
           order: 1
         },
         '02_beachhead': {
@@ -333,7 +333,7 @@ describe('ExpeditionManager', () => {
       
       fs.readdirSync.mockReturnValue(mockFiles);
       fs.readFileSync.mockImplementation((filePath) => {
-        if (filePath.includes('expeditions-metadata.json')) {
+        if (filePath.includes('expeditions-metadata-fr.json')) {
           return JSON.stringify(mockMetadata);
         }
         return '{}';
@@ -345,7 +345,7 @@ describe('ExpeditionManager', () => {
       expect(result.count).toBe(2);
       expect(result.expeditions).toHaveLength(2);
       expect(result.expeditions[0].id).toBe('01_pioneers');
-      expect(result.expeditions[0].displayName).toBe('The Pioneers');
+      expect(result.expeditions[0].displayName).toBe('01 - The Pioneers');
       expect(result.expeditions[1].id).toBe('02_beachhead');
     });
 
@@ -382,7 +382,7 @@ describe('ExpeditionManager', () => {
   describe('_identifyCurrentExpedition', () => {
     test('should identify expedition by content matching', async () => {
       const expeditionContent = JSON.stringify({expedition: 'test'});
-      const mockFiles = ['01_pioneers.json', '02_beachhead.json', 'expeditions-metadata.json'];
+      const mockFiles = ['01_pioneers.json', '02_beachhead.json', 'expeditions-metadata-fr.json'];
       
       fs.readdirSync.mockReturnValue(mockFiles);
       
@@ -390,9 +390,9 @@ describe('ExpeditionManager', () => {
         if (filePath.includes('/mock/season.json')) return expeditionContent;
         if (filePath.includes('01_pioneers.json')) return expeditionContent; 
         if (filePath.includes('02_beachhead.json')) return JSON.stringify({other: 'data'});
-        if (filePath.includes('expeditions-metadata.json')) {
+        if (filePath.includes('expeditions-metadata-fr.json')) {
           return JSON.stringify({
-            '01_pioneers': { displayName: 'The Pioneers' }
+            '01_pioneers': { displayName: '01 - The Pioneers' }
           });
         }
         return '{}';
@@ -402,7 +402,7 @@ describe('ExpeditionManager', () => {
       
       expect(result).not.toBeNull();
       expect(result.id).toBe('01_pioneers');
-      expect(result.displayName).toBe('The Pioneers');
+      expect(result.displayName).toBe('01 - The Pioneers');
     });
 
     test('should return null when no expedition matches', async () => {
