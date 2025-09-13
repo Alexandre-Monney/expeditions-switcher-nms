@@ -333,8 +333,8 @@ class NMSExpeditionManager {
                     <div class="status-content online">
                         <span class="status-icon">🌐</span>
                         <div>
-                            <strong>Mode Online</strong>
-                            <p>Fichier original actif. Prêt pour l'activation d'une expédition.</p>
+                            <strong>${this.i18nService.translate('main.status.online.title')}</strong>
+                            <p>${this.i18nService.translate('main.status.online.description')}</p>
                         </div>
                     </div>
                 `;
@@ -342,7 +342,7 @@ class NMSExpeditionManager {
                 break;
                 
             case 'expedition':
-                const expeditionName = state.currentExpedition?.displayName || 'Expédition inconnue';
+                const expeditionName = state.currentExpedition?.displayName || this.i18nService.translate('main.expeditions.unknownExpedition');
                 const expeditionImageUrl = state.currentExpedition?.imageUrl || 'assets/images/expeditions/default.png';
                 statusHtml = `
                     <div class="status-content expedition">
@@ -350,9 +350,9 @@ class NMSExpeditionManager {
                             <img src="${expeditionImageUrl}" alt="${expeditionName}" class="expedition-status-image">
                         </div>
                         <div>
-                            <strong>Mode Expédition Active</strong>
-                            <p>Expédition active: <strong>${expeditionName}</strong></p>
-                            <p>Fermez No Man's Sky et lancez-le hors ligne pour jouer.</p>
+                            <strong>${this.i18nService.translate('main.status.expedition.title')}</strong>
+                            <p>${this.i18nService.translate('main.status.expedition.active', { expeditionName })}</p>
+                            <p>${this.i18nService.translate('main.status.expedition.description')}</p>
                         </div>
                     </div>
                 `;
@@ -364,8 +364,8 @@ class NMSExpeditionManager {
                     <div class="status-content error">
                         <span class="status-icon">⚠️</span>
                         <div>
-                            <strong>Fichier Cache Non Trouvé</strong>
-                            <p>SEASON_DATA_CACHE.JSON manquant. Lancez No Man's Sky une fois pour créer les fichiers nécessaires.</p>
+                            <strong>${this.i18nService.translate('main.status.noCache.title')}</strong>
+                            <p>${this.i18nService.translate('main.status.noCache.description')}</p>
                         </div>
                     </div>
                 `;
@@ -378,8 +378,8 @@ class NMSExpeditionManager {
                     <div class="status-content error">
                         <span class="status-icon">❌</span>
                         <div>
-                            <strong>Erreur de Configuration</strong>
-                            <p>${state.error || 'Erreur inconnue'}</p>
+                            <strong>${this.i18nService.translate('main.status.error.title')}</strong>
+                            <p>${state.error || this.i18nService.translate('main.status.error.title')}</p>
                         </div>
                     </div>
                 `;
@@ -430,17 +430,22 @@ class NMSExpeditionManager {
         const container = document.getElementById('current-expedition');
         if (!container || !expedition) return;
 
+        const description = expedition.description || this.i18nService.translate('main.expedition.noDescription');
+        const difficulty = expedition.difficulty || this.i18nService.translate('main.expedition.noDifficulty');
+        const releaseDate = expedition.releaseDate || this.i18nService.translate('main.expedition.unknownDate');
+        const rewards = expedition.rewards ? expedition.rewards.join(', ') : '';
+        
         container.innerHTML = `
             <div class="expedition-card current">
                 <div class="expedition-header">
                     <h3>${expedition.displayName || expedition.id}</h3>
-                    <span class="expedition-badge">ACTIF</span>
+                    <span class="expedition-badge">${this.i18nService.translate('main.expedition.active')}</span>
                 </div>
                 <div class="expedition-details">
-                    <p><strong>Description:</strong> ${expedition.description || 'Pas de description'}</p>
-                    <p><strong>Difficulté:</strong> ${expedition.difficulty || 'Non spécifiée'}</p>
-                    <p><strong>Date de sortie:</strong> ${expedition.releaseDate || 'Inconnue'}</p>
-                    ${expedition.rewards ? `<p><strong>Récompenses:</strong> ${expedition.rewards.join(', ')}</p>` : ''}
+                    <p><strong>${this.i18nService.translate('main.expedition.description')}</strong> ${description}</p>
+                    <p><strong>${this.i18nService.translate('main.expedition.difficulty')}</strong> ${difficulty}</p>
+                    <p><strong>${this.i18nService.translate('main.expedition.releaseDate')}</strong> ${releaseDate}</p>
+                    ${expedition.rewards ? `<p><strong>${this.i18nService.translate('main.expedition.rewards')}</strong> ${rewards}</p>` : ''}
                 </div>
             </div>
         `;
@@ -478,16 +483,16 @@ class NMSExpeditionManager {
                 </div>
                 <div class="expedition-content-with-image">
                     <div class="expedition-details">
-                        <p class="description">${expedition.description || 'Pas de description disponible'}</p>
+                        <p class="description">${expedition.description || this.i18nService.translate('main.expedition.noDescription')}</p>
                         <div class="expedition-meta">
                             <span class="difficulty ${(expedition.difficulty || '').toLowerCase()}">
-                                ${expedition.difficulty || 'Difficulté inconnue'}
+                                ${expedition.difficulty || this.i18nService.translate('main.expedition.noDifficulty')}
                             </span>
-                            <span class="release-date">${expedition.releaseDate || 'Date inconnue'}</span>
+                            <span class="release-date">${expedition.releaseDate || this.i18nService.translate('main.expedition.unknownDate')}</span>
                         </div>
                         ${expedition.rewards && expedition.rewards.length > 0 ? `
                             <div class="rewards">
-                                <strong>Récompenses:</strong>
+                                <strong>${this.i18nService.translate('main.expeditions.rewards')}:</strong>
                                 <ul>
                                     ${expedition.rewards.map(reward => `<li>${reward}</li>`).join('')}
                                 </ul>
@@ -505,7 +510,7 @@ class NMSExpeditionManager {
     clearExpeditionPreview() {
         const preview = document.getElementById('expedition-preview');
         if (preview) {
-            preview.innerHTML = '<p class="no-selection">Sélectionnez une expédition pour voir les détails.</p>';
+            preview.innerHTML = `<p class="no-selection">${this.i18nService.translate('main.expeditions.noSelection')}</p>`;
         }
     }
 
@@ -515,26 +520,27 @@ class NMSExpeditionManager {
         const activateBtn = document.getElementById('activate-expedition-btn');
         if (activateBtn) {
             activateBtn.disabled = true;
-            activateBtn.textContent = '🚀 Activation en cours...';
+            activateBtn.textContent = this.i18nService.translate('main.expeditions.activating');
         }
 
         try {
             const result = await window.electronAPI.activateExpedition(this.selectedExpeditionId);
             
             if (result.success) {
-                this.showMessage(`Expédition "${result.metadata?.displayName || result.expeditionId}" activée avec succès !`, 'success');
+                const expeditionName = result.metadata?.displayName || result.expeditionId;
+                this.showMessage(this.i18nService.translate('main.messages.expeditionActivated', { expeditionName }), 'success');
                 await this.refreshExpeditionState();
             } else {
                 this.showMessage(`Erreur: ${result.error}`, 'error');
             }
         } catch (error) {
             console.error('Error activating expedition:', error);
-            this.showMessage('Erreur lors de l\'activation de l\'expédition', 'error');
+            this.showMessage(this.i18nService.translate('main.messages.activationError'), 'error');
         }
 
         if (activateBtn) {
             activateBtn.disabled = false;
-            activateBtn.textContent = '🚀 Activer cette Expédition';
+            activateBtn.textContent = this.i18nService.translate('main.expeditions.activate');
         }
     }
 
@@ -542,26 +548,26 @@ class NMSExpeditionManager {
         const restoreBtn = document.getElementById('restore-original-btn');
         if (restoreBtn) {
             restoreBtn.disabled = true;
-            restoreBtn.textContent = '🔄 Restauration en cours...';
+            restoreBtn.textContent = this.i18nService.translate('main.expeditions.restoring');
         }
 
         try {
             const result = await window.electronAPI.restoreOriginal();
             
             if (result.success) {
-                this.showMessage('Retour au mode online effectué avec succès !', 'success');
+                this.showMessage(this.i18nService.translate('main.messages.restoredSuccess'), 'success');
                 await this.refreshExpeditionState();
             } else {
                 this.showMessage(`Erreur: ${result.error}`, 'error');
             }
         } catch (error) {
             console.error('Error restoring original:', error);
-            this.showMessage('Erreur lors de la restauration', 'error');
+            this.showMessage(this.i18nService.translate('main.messages.restorationError'), 'error');
         }
 
         if (restoreBtn) {
             restoreBtn.disabled = false;
-            restoreBtn.textContent = '🔄 Retour Mode Online';
+            restoreBtn.textContent = this.i18nService.translate('main.expeditions.restore');
         }
     }
 
@@ -587,10 +593,10 @@ class NMSExpeditionManager {
         if (indicator && text) {
             if (isRunning) {
                 indicator.className = 'status-indicator running';
-                text.textContent = 'No Man\'s Sky en cours d\'exécution';
+                text.textContent = this.i18nService.translate('main.expeditions.nmsStatus.running');
             } else {
                 indicator.className = 'status-indicator stopped';
-                text.textContent = 'No Man\'s Sky arrêté';
+                text.textContent = this.i18nService.translate('main.expeditions.nmsStatus.stopped');
             }
         }
 
@@ -608,14 +614,15 @@ class NMSExpeditionManager {
             if (btn) {
                 if (isRunning) {
                     btn.disabled = true;
-                    btn.title = 'Fermez No Man\'s Sky pour effectuer cette action';
+                    btn.title = this.i18nService.translate('main.tooltips.nmsRunning');
                 } else {
                     if (buttonId === 'activate-expedition-btn') {
                         btn.disabled = !this.selectedExpeditionId;
+                        btn.title = this.selectedExpeditionId ? '' : this.i18nService.translate('main.tooltips.selectExpedition');
                     } else {
                         btn.disabled = false;
+                        btn.title = '';
                     }
-                    btn.title = '';
                 }
             }
         });
