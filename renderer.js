@@ -1,5 +1,7 @@
 class NMSExpeditionManager {
-    constructor() {
+    constructor(i18nService) {
+        this.i18nService = i18nService;
+        this.translator = new DOMTranslator(i18nService);
         this.selectedPlatform = null;
         this.selectedSteamId = null;
         this.config = null;
@@ -86,16 +88,16 @@ class NMSExpeditionManager {
         const detectBtn = document.getElementById('detect-steam-btn');
         const resultsDiv = document.getElementById('steam-results');
         
-        detectBtn.textContent = '🔍 Détection en cours...';
+        detectBtn.textContent = this.i18nService.translate('setup.steamSection.detectingBtn');
         detectBtn.disabled = true;
         
         try {
             const steamIds = await window.electronAPI.detectSteamIds();
             
             if (steamIds.length === 0) {
-                resultsDiv.innerHTML = '<p style="color: #dc3545;">Aucun Steam ID trouvé. Vérifiez que No Man\'s Sky est installé via Steam.</p>';
+                resultsDiv.innerHTML = `<p style="color: #dc3545;">${this.i18nService.translate('setup.steamSection.noSteamId')}</p>`;
             } else {
-                resultsDiv.innerHTML = '<p>Steam IDs détectés :</p>';
+                resultsDiv.innerHTML = `<p>${this.i18nService.translate('setup.steamSection.steamIdsFound')}</p>`;
                 
                 steamIds.forEach((steamData, index) => {
                     const option = document.createElement('div');
@@ -121,10 +123,10 @@ class NMSExpeditionManager {
             }
         } catch (error) {
             console.error('Erreur détection Steam:', error);
-            resultsDiv.innerHTML = '<p style="color: #dc3545;">Erreur lors de la détection Steam.</p>';
+            resultsDiv.innerHTML = `<p style="color: #dc3545;">${this.i18nService.translate('setup.steamSection.detectionError')}</p>`;
         }
         
-        detectBtn.textContent = '🔍 Détecter automatiquement';
+        detectBtn.textContent = this.i18nService.translate('setup.steamSection.autoDetectBtn');
         detectBtn.disabled = false;
     }
 
@@ -166,11 +168,11 @@ class NMSExpeditionManager {
                 this.config = newConfig;
                 this.showMainScreen();
             } else {
-                alert('Erreur lors de la sauvegarde de la configuration.');
+                alert(this.i18nService.translate('setup.errors.configSave'));
             }
         } catch (error) {
             console.error('Erreur sauvegarde config:', error);
-            alert('Erreur lors de la sauvegarde de la configuration.');
+            alert(this.i18nService.translate('setup.errors.configSave'));
         }
     }
 
@@ -269,7 +271,7 @@ class NMSExpeditionManager {
             
         } catch (error) {
             console.error('Error initializing expedition manager:', error);
-            this.showError('Erreur lors de l\'initialisation du gestionnaire d\'expéditions');
+            this.showError(this.i18nService.translate('main.messages.initError'));
         }
     }
 
@@ -285,7 +287,7 @@ class NMSExpeditionManager {
             }
         } catch (error) {
             console.error('Error loading expeditions:', error);
-            this.showError('Erreur lors du chargement des expéditions');
+            this.showError(this.i18nService.translate('main.messages.loadExpeditionsError'));
         }
     }
 
@@ -293,12 +295,13 @@ class NMSExpeditionManager {
         const select = document.getElementById('expedition-select');
         if (!select) return;
 
-        select.innerHTML = '<option value="">-- Choisir une expédition --</option>';
+        select.innerHTML = `<option value="">${this.i18nService.translate('main.expeditions.selectExpedition')}</option>`;
         
         this.availableExpeditions.forEach(expedition => {
             const option = document.createElement('option');
             option.value = expedition.id;
-            option.textContent = `${expedition.displayName || expedition.id} (${expedition.releaseDate || 'Date inconnue'})`;
+            const unknownDate = this.i18nService.translate('main.expedition.unknownDate');
+            option.textContent = `${expedition.displayName || expedition.id} (${expedition.releaseDate || unknownDate})`;
             select.appendChild(option);
         });
     }
@@ -313,7 +316,7 @@ class NMSExpeditionManager {
             
         } catch (error) {
             console.error('Error refreshing state:', error);
-            this.showError('Erreur lors de la vérification de l\'état');
+            this.showError(this.i18nService.translate('main.messages.stateCheckError'));
         }
     }
 
