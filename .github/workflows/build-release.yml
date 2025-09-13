@@ -1,0 +1,81 @@
+name: Build and Release Windows
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run tests
+      run: npm test
+      
+    - name: Build Windows application
+      run: npm run build:win
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+    - name: Upload installer artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: windows-installer
+        path: |
+          dist/*.exe
+          dist/*.blockmap
+        retention-days: 30
+        
+    - name: Upload portable artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: windows-portable
+        path: |
+          dist/*.exe
+          !dist/*Setup*.exe
+        retention-days: 30
+        
+    - name: Create Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v2
+      with:
+        files: |
+          dist/*.exe
+          dist/*.blockmap
+        draft: false
+        prerelease: false
+        generate_release_notes: true
+        body: |
+          ## 🚀 Installation Windows
+          
+          Si vous voyez "Windows a protégé votre PC" :
+          1. Cliquez "Plus d'informations"  
+          2. Cliquez "Exécuter quand même"
+          
+          C'est normal - l'app n'a pas de certificat Microsoft payant (300€/an).
+          
+          ## 📥 Fichiers
+          - `NMS Expedition Manager Setup 1.0.0.exe` - Installeur complet
+          - Version portable disponible dans les artifacts
+          
+          ## ✨ Changements
+          
+          Voir les notes de version générées automatiquement ci-dessous.
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
