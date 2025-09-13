@@ -54,8 +54,8 @@ jobs:
           C'est normal - l'app n'a pas de certificat Microsoft payant (300€/an).
           
           ## 📥 Fichiers
-          - `NMS Expedition Manager Setup 1.0.0.exe` - Installeur complet
-          - Version portable disponible dans les artifacts
+          - `NMS-Expedition-Manager-Setup-X.X.X.exe` - **Installeur** (recommandé)
+          - `NMS-Expedition-Manager-X.X.X.exe` - **Version portable** (pas d'installation)
           
           ## ✨ Changements
           
