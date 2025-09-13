@@ -1,0 +1,122 @@
+{
+  "app": {
+    "title": "NMS Expedition Manager"
+  },
+  "setup": {
+    "title": "NMS Expedition Manager",
+    "description": "Let's configure your gaming platform to get started",
+    "selectPlatform": "Select your platform:",
+    "platforms": {
+      "steam": {
+        "name": "Steam",
+        "description": "Steam version of No Man's Sky"
+      },
+      "msstore": {
+        "name": "Microsoft Store", 
+        "description": "Windows Store version"
+      },
+      "gog": {
+        "name": "GOG",
+        "description": "GOG version of No Man's Sky"
+      },
+      "gamepass": {
+        "name": "Xbox Game Pass",
+        "description": "Game Pass PC version"
+      }
+    },
+    "steamSection": {
+      "title": "Steam Configuration:",
+      "detectBtn": "🔍 Auto-detect",
+      "detectingBtn": "🔍 Detecting...",
+      "autoDetectBtn": "🔍 Auto-detect",
+      "noSteamId": "No Steam ID found. Check that No Man's Sky is installed via Steam.",
+      "steamIdsFound": "Steam IDs detected:",
+      "detectionError": "Error during Steam detection."
+    },
+    "continueBtn": "Continue",
+    "errors": {
+      "configSave": "Error saving configuration."
+    }
+  },
+  "main": {
+    "title": "NMS Expedition Manager",
+    "changePlatform": "⚙️ Change Platform",
+    "platform": "Platform: {{platform}}",
+    "loading": "Loading...",
+    "status": {
+      "title": "Current Status",
+      "refresh": "🔄",
+      "checking": "Checking status...",
+      "online": {
+        "title": "Online Mode",
+        "description": "Original file active. Ready for expedition activation."
+      },
+      "expedition": {
+        "title": "Active Expedition Mode",
+        "description": "Close No Man's Sky and launch it offline to play.",
+        "active": "Active expedition: {{expeditionName}}"
+      },
+      "error": {
+        "title": "Configuration Error"
+      },
+      "noCache": {
+        "title": "Cache File Not Found",
+        "description": "SEASON_DATA_CACHE.JSON missing. Launch No Man's Sky once to create necessary files."
+      }
+    },
+    "expeditions": {
+      "title": "Expedition Management",
+      "selectExpedition": "-- Choose an expedition --",
+      "selectPlaceholder": "-- Choose an expedition --",
+      "loading": "Loading expeditions...",
+      "activate": "🚀 Activate this Expedition",
+      "activating": "🚀 Activating...",
+      "restore": "🔄 Return to Online Mode",
+      "restoring": "🔄 Restoring...",
+      "switch": "🔀 Switch Expedition",
+      "rewards": "Rewards",
+      "unknownExpedition": "Unknown expedition",
+      "noSelection": "Select an expedition to see details.",
+      "nmsStatus": {
+        "checking": "Checking...",
+        "running": "No Man's Sky running",
+        "stopped": "No Man's Sky stopped"
+      }
+    },
+    "error": {
+      "title": "⚠️ Configuration Problem",
+      "retry": "Retry"
+    },
+    "tooltips": {
+      "nmsRunning": "Close No Man's Sky to perform this action",
+      "selectExpedition": "Select an expedition"
+    },
+    "messages": {
+      "expeditionActivated": "Expedition \"{{expeditionName}}\" activated successfully!",
+      "restoredSuccess": "Successfully returned to online mode!",
+      "activationError": "Error activating expedition",
+      "restorationError": "Error during restoration",
+      "initError": "Error initializing expedition manager",
+      "loadExpeditionsError": "Error loading expeditions",
+      "stateCheckError": "Error checking status"
+    },
+    "expedition": {
+      "active": "ACTIVE",
+      "description": "Description:",
+      "difficulty": "Difficulty:",
+      "releaseDate": "Release date:",
+      "rewards": "Rewards:",
+      "noDescription": "No description",
+      "noDifficulty": "Not specified",
+      "unknownDate": "Unknown"
+    }
+  },
+  "loading": {
+    "title": "NMS Expedition Manager", 
+    "text": "Loading configuration..."
+  },
+  "language": {
+    "french": "🇫🇷 Français",
+    "english": "🇬🇧 English"
+  }
+}

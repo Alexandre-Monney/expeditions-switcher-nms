@@ -29,6 +29,10 @@ class NMSExpeditionManager {
         if (this.i18nService) {
             this.i18nService.subscribe(() => {
                 this.translateStaticContent();
+                if (this.config && !this.config.firstSetup) {
+                    this.loadExpeditions();
+                    this.refreshState();
+                }
             });
         }
     }
