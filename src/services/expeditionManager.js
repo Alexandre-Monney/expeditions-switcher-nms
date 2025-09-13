@@ -111,7 +111,16 @@ class ExpeditionManager {
    */
   async _getExpeditionMetadata(expeditionId) {
     try {
-      const metadataPath = path.join(this.expeditionsDataPath, 'expeditions-metadata-fr.json');
+      const config = this.configManager.loadConfig();
+      const language = config.language || 'fr';
+      const metadataPath = path.join(this.expeditionsDataPath, `expeditions-metadata-${language}.json`);
+      
+      if (!fs.existsSync(metadataPath)) {
+        const fallbackPath = path.join(this.expeditionsDataPath, 'expeditions-metadata-fr.json');
+        const metadata = JSON.parse(fs.readFileSync(fallbackPath, 'utf8'));
+        return metadata[expeditionId] || {};
+      }
+      
       const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf8'));
       return metadata[expeditionId] || {};
     } catch (error) {
