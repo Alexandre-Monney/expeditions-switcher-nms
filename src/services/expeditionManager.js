@@ -80,7 +80,7 @@ class ExpeditionManager {
     try {
       const currentContent = fs.readFileSync(seasonFilePath, 'utf8');
       const expeditionFiles = fs.readdirSync(this.expeditionsDataPath)
-        .filter(file => file.endsWith('.json') && file !== 'expeditions-metadata.json');
+        .filter(file => file.endsWith('.json') && !file.startsWith('expeditions-metadata'));
 
       for (const expeditionFile of expeditionFiles) {
         const expeditionPath = path.join(this.expeditionsDataPath, expeditionFile);
@@ -111,7 +111,7 @@ class ExpeditionManager {
    */
   async _getExpeditionMetadata(expeditionId) {
     try {
-      const metadataPath = path.join(this.expeditionsDataPath, 'expeditions-metadata.json');
+      const metadataPath = path.join(this.expeditionsDataPath, 'expeditions-metadata-fr.json');
       const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf8'));
       return metadata[expeditionId] || {};
     } catch (error) {
@@ -282,7 +282,7 @@ class ExpeditionManager {
   async getAvailableExpeditions() {
     try {
       const expeditionFiles = fs.readdirSync(this.expeditionsDataPath)
-        .filter(file => file.endsWith('.json') && file !== 'expeditions-metadata.json')
+        .filter(file => file.endsWith('.json') && !file.startsWith('expeditions-metadata'))
         .sort();
 
       const expeditions = [];
