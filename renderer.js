@@ -648,5 +648,13 @@ class NMSExpeditionManager {
 
 // Initialize the app
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize Language Switcher
+    const languageSwitcher = new LanguageSwitcher();
+    const container = document.getElementById('language-switcher-container');
+    if (container) {
+        container.appendChild(languageSwitcher.getElement());
+    }
+
+    // Initialize main app
     window.nmsManager = new NMSExpeditionManager();
 });
