@@ -115,6 +115,16 @@
     "title": "NMS Expedition Manager", 
     "text": "Chargement de la configuration..."
   },
+  "steam": {
+    "status": {
+      "offline": "Steam : Mode hors ligne",
+      "online": "Steam : Mode en ligne",
+      "unavailable": "Statut Steam indisponible"
+    },
+    "messages": {
+      "offlineRecommendation": "⚠️ Steam est en mode en ligne. Pensez à passer Steam hors ligne pour jouer à cette expédition."
+    }
+  },
   "language": {
     "french": "🇫🇷 Français",
     "english": "🇬🇧 English"

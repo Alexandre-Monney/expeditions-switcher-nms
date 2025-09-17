@@ -7,6 +7,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   
   detectSteamIds: () => ipcRenderer.invoke('steam:detect'),
   getMainSteamId: () => ipcRenderer.invoke('steam:getMain'),
+  isSteamOffline: () => ipcRenderer.invoke('steam:isOffline'),
+  getSteamStatus: () => ipcRenderer.invoke('steam:getStatus'),
   
   isNMSRunning: () => ipcRenderer.invoke('process:isNMSRunning'),
   getNMSProcessInfo: () => ipcRenderer.invoke('process:getNMSProcessInfo'),
