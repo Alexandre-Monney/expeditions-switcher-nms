@@ -4,6 +4,7 @@ const ConfigManager = require('./src/services/configManager');
 const SteamDetection = require('./src/services/steamDetection');
 const ProcessMonitor = require('./src/services/processMonitor');
 const ExpeditionManager = require('./src/services/expeditionManager');
+const SteamOfflineDetector = require('./src/services/steamOfflineDetector');
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
@@ -56,8 +57,18 @@ ipcMain.handle('steam:getMain', () => {
   return SteamDetection.getMainSteamId();
 });
 
+ipcMain.handle('steam:isOffline', () => {
+  return steamOfflineDetector.isSteamOffline();
+});
+
+ipcMain.handle('steam:getStatus', () => {
+  return steamOfflineDetector.getSteamStatus();
+});
+
 const processMonitor = new ProcessMonitor();
 let monitoringIntervalId = null;
+
+const steamOfflineDetector = new SteamOfflineDetector();
 
 ipcMain.handle('process:isNMSRunning', async () => {
   return processMonitor.isNMSRunning();
