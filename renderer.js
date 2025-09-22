@@ -31,7 +31,7 @@ class NMSExpeditionManager {
                 this.translateStaticContent();
                 if (this.config && !this.config.firstSetup) {
                     this.loadExpeditions();
-                    this.refreshState();
+                    this.updateDynamicTranslations();
                 }
             });
         }
@@ -83,6 +83,13 @@ class NMSExpeditionManager {
         if (this.config) {
             this.updatePlatformInfo();
         }
+    }
+
+    updateDynamicTranslations() {
+        if (this.currentState) {
+            this.updateStatusSection(this.currentState);
+        }
+        this.updateSteamStatus();
     }
 
     async loadConfig() {
@@ -375,10 +382,101 @@ class NMSExpeditionManager {
             
             this.updateStatusSection(state);
             this.updateControlSections(state);
+            this.updateSteamStatus();
             
         } catch (error) {
             console.error('Error refreshing state:', error);
             this.showError(this.i18nService.translate('main.messages.stateCheckError'));
+        }
+    }
+
+    async updateSteamStatus() {
+        const steamStatusEl = document.getElementById('steam-status');
+        const steamStatusIndicator = document.getElementById('steam-status-indicator');
+        const steamStatusText = document.getElementById('steam-status-text');
+        
+        if (!steamStatusEl || !steamStatusIndicator || !steamStatusText) return;
+        
+        if (!this.config || this.config.platform !== 'steam') {
+            steamStatusEl.classList.add('hidden');
+            this.updateActivateButtonState();
+            return;
+        }
+        
+        try {
+            const steamStatus = await window.electronAPI.getSteamStatus();
+            
+            if (!steamStatus.available) {
+                steamStatusEl.classList.add('hidden');
+                this.updateActivateButtonState();
+                return;
+            }
+            
+            steamStatusEl.classList.remove('hidden');
+            steamStatusEl.className = `steam-status ${steamStatus.offline ? 'offline' : 'online'}`;
+            
+            const statusKey = steamStatus.offline ? 'steam.status.offline' : 'steam.status.online';
+            steamStatusText.textContent = this.i18nService.translate(statusKey);
+            
+            this.updateActivateButtonState();
+            
+        } catch (error) {
+            console.error('Error updating Steam status:', error);
+            steamStatusEl.classList.add('hidden');
+            this.updateActivateButtonState();
+        }
+    }
+
+    async updateActivateButtonState() {
+        const activateBtn = document.getElementById('activate-expedition-btn');
+        if (!activateBtn) return;
+        
+        if (!this.selectedExpeditionId) {
+            activateBtn.disabled = true;
+            return;
+        }
+        
+        if (!this.config || this.config.platform !== 'steam') {
+            activateBtn.disabled = false;
+            return;
+        }
+        
+        try {
+            const steamStatus = await window.electronAPI.getSteamStatus();
+            
+            if (!steamStatus.available) {
+                activateBtn.disabled = false;
+                return;
+            }
+            
+            activateBtn.disabled = !steamStatus.offline;
+            
+        } catch (error) {
+            console.error('Error checking Steam status for button state:', error);
+            activateBtn.disabled = false;
+        }
+    }
+
+    async checkAndShowSteamWarning() {
+        const warningEl = document.getElementById('steam-offline-warning');
+        if (!warningEl) return;
+        
+        if (!this.config || this.config.platform !== 'steam') {
+            warningEl.classList.add('hidden');
+            return;
+        }
+        
+        try {
+            const steamStatus = await window.electronAPI.getSteamStatus();
+            
+            if (steamStatus.available && !steamStatus.offline) {
+                warningEl.classList.remove('hidden');
+            } else {
+                warningEl.classList.add('hidden');
+            }
+        } catch (error) {
+            console.error('Error checking Steam status for warning:', error);
+            warningEl.classList.add('hidden');
         }
     }
 
@@ -415,10 +513,14 @@ class NMSExpeditionManager {
                             <strong>${this.i18nService.translate('main.status.expedition.title')}</strong>
                             <p>${this.i18nService.translate('main.status.expedition.active', { expeditionName })}</p>
                             <p>${this.i18nService.translate('main.status.expedition.description')}</p>
+                            <div id="steam-offline-warning" class="steam-warning hidden">
+                                <p style="color: #ffc107; margin-top: 10px;">${this.i18nService.translate('steam.messages.offlineRecommendation')}</p>
+                            </div>
                         </div>
                     </div>
                 `;
                 statusClass = 'expedition';
+                this.checkAndShowSteamWarning();
                 break;
                 
             case 'no_cache':
@@ -516,10 +618,7 @@ class NMSExpeditionManager {
     selectExpedition(expeditionId) {
         this.selectedExpeditionId = expeditionId;
         
-        const activateBtn = document.getElementById('activate-expedition-btn');
-        if (activateBtn) {
-            activateBtn.disabled = !expeditionId;
-        }
+        this.updateActivateButtonState();
 
         if (expeditionId) {
             const expedition = this.availableExpeditions.find(e => e.id === expeditionId);

@@ -435,11 +435,33 @@ body {
     margin: 0;
 }
 
-.nms-status {
+.status-indicators {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.nms-status, .steam-status {
     display: flex;
     align-items: center;
     gap: 8px;
     font-size: 14px;
+}
+
+.steam-status {
+    color: #4a9eff;
+}
+
+.steam-status .status-indicator {
+    color: #4a9eff;
+}
+
+.steam-status.offline .status-indicator {
+    color: #28a745;
+}
+
+.steam-status.online .status-indicator {
+    color: #ffc107;
 }
 
 .status-indicator {
