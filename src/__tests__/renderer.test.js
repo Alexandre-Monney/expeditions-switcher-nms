@@ -1366,4 +1366,5 @@ describe('NMS Expedition Manager UI - Expedition Management', () => {
       expect(uiManager.selectedExpeditionId).toBe('non_existent');
     });
   });
+
 });

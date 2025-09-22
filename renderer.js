@@ -31,7 +31,7 @@ class NMSExpeditionManager {
                 this.translateStaticContent();
                 if (this.config && !this.config.firstSetup) {
                     this.loadExpeditions();
-                    this.refreshExpeditionState();
+                    this.updateDynamicTranslations();
                 }
             });
         }
@@ -83,6 +83,13 @@ class NMSExpeditionManager {
         if (this.config) {
             this.updatePlatformInfo();
         }
+    }
+
+    updateDynamicTranslations() {
+        if (this.currentState) {
+            this.updateStatusSection(this.currentState);
+        }
+        this.updateSteamStatus();
     }
 
     async loadConfig() {
@@ -392,6 +399,7 @@ class NMSExpeditionManager {
         
         if (!this.config || this.config.platform !== 'steam') {
             steamStatusEl.classList.add('hidden');
+            this.updateActivateButtonState();
             return;
         }
         
@@ -400,6 +408,7 @@ class NMSExpeditionManager {
             
             if (!steamStatus.available) {
                 steamStatusEl.classList.add('hidden');
+                this.updateActivateButtonState();
                 return;
             }
             
@@ -409,9 +418,42 @@ class NMSExpeditionManager {
             const statusKey = steamStatus.offline ? 'steam.status.offline' : 'steam.status.online';
             steamStatusText.textContent = this.i18nService.translate(statusKey);
             
+            this.updateActivateButtonState();
+            
         } catch (error) {
             console.error('Error updating Steam status:', error);
             steamStatusEl.classList.add('hidden');
+            this.updateActivateButtonState();
+        }
+    }
+
+    async updateActivateButtonState() {
+        const activateBtn = document.getElementById('activate-expedition-btn');
+        if (!activateBtn) return;
+        
+        if (!this.selectedExpeditionId) {
+            activateBtn.disabled = true;
+            return;
+        }
+        
+        if (!this.config || this.config.platform !== 'steam') {
+            activateBtn.disabled = false;
+            return;
+        }
+        
+        try {
+            const steamStatus = await window.electronAPI.getSteamStatus();
+            
+            if (!steamStatus.available) {
+                activateBtn.disabled = false;
+                return;
+            }
+            
+            activateBtn.disabled = !steamStatus.offline;
+            
+        } catch (error) {
+            console.error('Error checking Steam status for button state:', error);
+            activateBtn.disabled = false;
         }
     }
 
@@ -576,10 +618,7 @@ class NMSExpeditionManager {
     selectExpedition(expeditionId) {
         this.selectedExpeditionId = expeditionId;
         
-        const activateBtn = document.getElementById('activate-expedition-btn');
-        if (activateBtn) {
-            activateBtn.disabled = !expeditionId;
-        }
+        this.updateActivateButtonState();
 
         if (expeditionId) {
             const expedition = this.availableExpeditions.find(e => e.id === expeditionId);
